@@ -2825,9 +2825,9 @@ class D2gConnect_Shortcodes {
 									$pageData 		= $d2gAdmin::d2g_page_url($currLang, 'appointments', true);
 									$redirectURL    = '&redirect_url='.urlencode($pageData['url'].'?app=').$appointment->_id;
 									
-									$payment_info = '<div class="payment_needed">
-									<div class="error"><strong>'. esc_html__('The following appointment requires an upfront payment. Unfortunately, online appointments not paid within 24h after your reservation, will be canceled.', 'doctor2go-connect').'</strong></div>
-									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'doctor2go-connect').'</a></div>
+									$payment_info = '<div class="payment_needed error">
+									<div class=""><strong>'. esc_html__('A payment is required for this appointment. You can either do it upofront or when entering the waiting room', 'd2g-connect').'</strong></div>
+									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'd2g-connect').'</a></div>
 									</div>';
 								}
 
@@ -2845,7 +2845,7 @@ class D2gConnect_Shortcodes {
 											<div class="btn_wrap">'.$docLink.' '.$delBtn.'</div>
 										</div>'.$questionnaireLink.'</div></div>';
 								} else {
-									$structuredAppointments[$appointment->date] = '<div class="outer_app_wrapper card mb-3"><div id="app-'.$appointment->_id.'" class="app_row">
+									$structuredAppointments[$appointment->date] = '<div class="outer_app_wrapper card mb-3">'.$payment_info.'<div id="app-'.$appointment->_id.'" class="app_row">
 										<div class="feat_pic"><img src="'.$feat_pic.'"></div>
 										<div class="content_outer">
 											<div class="content">
@@ -3160,9 +3160,9 @@ class D2gConnect_Shortcodes {
 									$pageData 		= $d2gAdmin::d2g_page_url($currLang, 'appointments', true);
 									$redirectURL    = '&redirect_url='.urlencode($pageData['url'].'?app=').$appointment->_id;
 									
-									$payment_info = '<div class="payment_needed">
-									<div class="error"><strong>'. esc_html__('You may cancel this appointment anytime, up to 24 hours before the scheduled time. You will be asked to pay before entering the online consultation room.', 'doctor2go-connect').'</strong></div>
-									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'doctor2go-connect').'</a></div>
+									$payment_info = '<div class="payment_needed error">
+									<div class=""><strong>'. esc_html__('A payment is required for this appointment. You can either do it upofront or when entering the waiting room', 'd2g-connect').'</strong></div>
+									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'd2g-connect').'</a></div>
 									</div>';
 								}
 
@@ -3181,7 +3181,7 @@ class D2gConnect_Shortcodes {
 										<div class="btn_wrap">'.$delBtn.'</div>
 										</div></div>';
 								} else {
-									$structuredAppointments[$appointment->date] = '<div class="outer_app_wrapper"><div id="app-'.$appointment->_id.'" class="app_row">
+									$structuredAppointments[$appointment->date] = '<div class="outer_app_wrapper">'.$payment_info.'<div id="app-'.$appointment->_id.'" class="app_row">
 										<div class="feat_pic"><img src="'.$feat_pic.'"></div>
 										<div class="content_outer">
 											<div class="content">

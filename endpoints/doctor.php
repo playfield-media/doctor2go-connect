@@ -30,6 +30,7 @@ $timestamp          = new DateTime();
 $hashChecker = hash('sha256', $user_data['timestamp']."_".$user_data['user_key']."_".$superKey);
 
 if($hashChecker != $user_data['hash']){
+    error_log('IMPORT ERROR: Hash is incorrect for doctor creation request.'); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Import error logging.
     die('The hash is incorrect for the doctor creation request.');
 }
 $tariffs    = $user_data['tariffs'];
