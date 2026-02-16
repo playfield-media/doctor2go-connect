@@ -18,7 +18,7 @@ class D2gConnect_Public {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      D2gConnect_Loader    $shortcode_loader    Maintains and registers all shortcode hooks for the plugin.
+	 * @var      \D2gConnect_Loader    $shortcode_loader    Maintains and registers all shortcode hooks for the plugin.
 	 */
 	protected $shortcode_loader;
 
@@ -27,7 +27,7 @@ class D2gConnect_Public {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      D2gConnect_Loader    $ajax_loader    Maintains and registers all ajax hooks for the plugin.
+	 * @var      \D2gConnect_Loader    $ajax_loader    Maintains and registers all ajax hooks for the plugin.
 	 */
 	protected $ajax_loader;
 
@@ -78,7 +78,7 @@ class D2gConnect_Public {
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/d2g-connect-shortcodes.php';
 
-		$this->shortcode_loader = new D2gConnect_Shortcodes($this->plugin_name, $this->version);
+		$this->shortcode_loader = new \D2gConnect_Shortcodes($this->plugin_name, $this->version);
 	}
 	
 
@@ -404,10 +404,10 @@ class D2gConnect_Public {
 			$args = array(
 				'post_type' => 'd2g_doctor',
 				'p'         => $post_id,
-			);
+			);	
 		}
 
-		$doctor_query = new WP_Query( $args );
+		$doctor_query = new \WP_Query( $args );
 		$count        = $doctor_query->found_posts;
 
 		echo esc_html( $count );
@@ -432,7 +432,7 @@ class D2gConnect_Public {
 	//this overwrites the reset password mail to return the url to the custom password reset form
 	public function d2g_retrieve_password_message( $retrieve_password_message, $key, $user_login, $user_data ) {
 		$currLang 		= explode('_', get_locale())[0];
-		$d2gAdmin 		= new D2G_doc_user_profile();
+		$d2gAdmin 		= new \D2G_doc_user_profile();
 		$pageData 		= $d2gAdmin::d2g_page_url($currLang, 'reset_password', true);
 
 		

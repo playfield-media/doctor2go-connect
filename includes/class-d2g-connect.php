@@ -35,7 +35,7 @@ class D2gConnect {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      D2gConnect_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      \D2gConnect_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -82,9 +82,9 @@ class D2gConnect {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - D2gConnect_Loader. Orchestrates the hooks of the plugin.
-	 * - D2gConnect_Admin. Defines all hooks for the admin area.
-	 * - D2gConnect_Public. Defines all hooks for the public side of the site.
+	 * - \D2gConnect_Loader. Orchestrates the hooks of the plugin.
+	 * - \D2gConnect_Admin. Defines all hooks for the admin area.
+	 * - \D2gConnect_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -118,7 +118,7 @@ class D2gConnect {
 		//creates a full doctor profile data obj.
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-d2g-profile-data.php';
 
-		$this->loader = new D2gConnect_Loader();
+		$this->loader = new \D2gConnect_Loader();
 
 	}
 
@@ -142,7 +142,7 @@ class D2gConnect {
             'doctor-specialty'
         );
 
-		$plugin_admin = new D2gConnect_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new \D2gConnect_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		//functions to add scripts
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
@@ -282,7 +282,7 @@ class D2gConnect {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new D2gConnect_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new \D2gConnect_Public( $this->get_plugin_name(), $this->get_version() );
 
 		
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
@@ -341,7 +341,7 @@ class D2gConnect {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    D2gConnect_Loader    Orchestrates the hooks of the plugin.
+	 * @return    \D2gConnect_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
