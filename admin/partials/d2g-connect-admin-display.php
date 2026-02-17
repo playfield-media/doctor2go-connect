@@ -63,6 +63,11 @@ if ( ! defined( 'WPINC' ) ) {
                 <p><?php echo esc_html__('You can deactivate the following css file if your theme already contains a bootstrap css grid.', 'doctor2go-connect')?></p>        
                 <input type="checkbox" name="d2g_css_grid" id="d2g_css_grid" value="1"  <?php echo (get_option('d2g_css_grid') == '1')?'checked':''?>><label for="d2g_css_grid"><?php echo esc_html__('Deactivate bootstrap css grid', 'doctor2go-connect')?></label>    
             </div>
+            <h3 class="section_title opener"><?php echo esc_html__('Overview page settings', 'd2g-connect')?></h3>
+            <div class="section_wrapper simple_hide">
+                <h4><?php echo esc_html__('Load availability information', 'd2g-connect')?></h4>
+                <input type="checkbox" name="d2g_load_availability_info" id="d2g_load_availability_info" value="1"  <?php echo (get_option('d2g_load_availability_info') == '1')?'checked':''?>><label for="d2g_load_availability_info"><?php echo esc_html__('Load availability information on overview page', 'd2g-connect')?></label>
+            </div>
             <h3 class="section_title opener"><?php echo esc_html__('Detail page settings', 'doctor2go-connect')?></h3>
             <div class="section_wrapper simple_hide">
                 <h4><?php echo esc_html__('Layout', 'doctor2go-connect')?></h4>

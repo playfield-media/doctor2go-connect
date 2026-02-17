@@ -563,34 +563,35 @@ class D2gConnect_Admin {
     */
     public function register_d2g_settings() {
         $settings_with_callbacks = array(
-            'd2g_overview_template'     => 'sanitize_text_field',
-            'd2g_single_template'       => 'sanitize_text_field',
-            'd2g_theme_css'             => 'sanitize_text_field', // maybe allow full CSS, no sanitization
-            'd2g_css_grid'              => 'absint',
-            'wcc_token'                 => 'sanitize_text_field',
-            'api_url_short'             => 'esc_url_raw',
-            'waiting_room_url'          => 'esc_url_raw',
-            'wcc_base_url'              => 'sanitize_text_field',
-            'admin_mail'                => 'sanitize_email',
-            'd2g_local_user'            => 'absint',
-            'd2g_placeholder'           => 'sanitize_text_field',
-            'd2g_detail_page_view'      => 'sanitize_text_field',
-            'd2g_privacy_url'           => 'esc_url_raw',
-            'd2g_terms_url'             => 'esc_url_raw',
-            'd2g_recaptcha_site_key'    => 'sanitize_text_field',
-            'd2g_recaptcha_secret_key'  => 'sanitize_text_field',
-            'd2g_admin_access'          => 'absint',
-            'd2g_single_header_footer'  => 'absint',
-            'deactivate_recapctha_script' => 'absint',
-            'activate_2fa_link'         => 'absint',
-            'under_construction'        => 'absint',
-            'd2g_logo'                  => 'sanitize_text_field',
-            'd2g_sender_address'        => 'sanitize_email',
-            'd2g_recipient_address'     => 'sanitize_email',
-            'd2g_sender_name'           => 'sanitize_text_field',
-            'd2g_pseudo_translations'   => 'absint',
-            'd2g_use_imgix'             => 'absint',
-            'd2g_use_default_questionnaire'             => 'absint'
+            'd2g_overview_template'             => 'sanitize_text_field',
+            'd2g_single_template'               => 'sanitize_text_field',
+            'd2g_theme_css'                     => 'sanitize_text_field', // maybe allow full CSS, no sanitization
+            'd2g_css_grid'                      => 'absint',
+            'wcc_token'                         => 'sanitize_text_field',
+            'api_url_short'                     => 'esc_url_raw',
+            'waiting_room_url'                  => 'esc_url_raw',
+            'wcc_base_url'                      => 'sanitize_text_field',
+            'admin_mail'                        => 'sanitize_email',
+            'd2g_local_user'                    => 'absint',
+            'd2g_placeholder'                   => 'sanitize_text_field',
+            'd2g_detail_page_view'              => 'sanitize_text_field',
+            'd2g_privacy_url'                   => 'esc_url_raw',
+            'd2g_terms_url'                     => 'esc_url_raw',
+            'd2g_recaptcha_site_key'            => 'sanitize_text_field',
+            'd2g_recaptcha_secret_key'          => 'sanitize_text_field',
+            'd2g_admin_access'                  => 'absint',
+            'd2g_single_header_footer'          => 'absint',
+            'deactivate_recapctha_script'       => 'absint',
+            'activate_2fa_link'                 => 'absint',
+            'under_construction'                => 'absint',
+            'd2g_logo'                          => 'sanitize_text_field',
+            'd2g_sender_address'                => 'sanitize_email',
+            'd2g_recipient_address'             => 'sanitize_email',
+            'd2g_sender_name'                   => 'sanitize_text_field',
+            'd2g_pseudo_translations'           => 'absint',
+            'd2g_use_imgix'                     => 'absint',
+            'd2g_use_default_questionnaire'     => 'absint',
+            'd2g_load_availability_info'        => 'absint'
         );
         //registration for the short code activation options
         foreach ( $settings_with_callbacks as $setting => $callback ) {
@@ -623,7 +624,7 @@ class D2gConnect_Admin {
         if (in_array(get_post_type($post_id), $included_cpts)  ) {
 
             $currLang           = get_locale();
-            $d2gAdmin           = new D2G_doc_user_profile();
+            $d2gAdmin           = new \D2G_doc_user_profile();
 		    $new_url            = $d2gAdmin::d2g_page_url();
 
             update_post_meta($post_id, 'd2g_edit_url', '<a target="_blank" href="'.$new_url.'?edit='.$post_id.'">edit</a>');

@@ -1074,8 +1074,6 @@ class D2gConnect_Shortcodes {
 				<script>
 					jQuery(document).ready(function($){
 						$('.more_doctors').click(function(){
-							$('.load_more_btn_wrapper').addClass('loading');
-							$('#doctor_wrapper_outer').addClass('loading');
 							$('body').scrollTo('#end', {duration: 'slow', offset: -200});
 							var pageNr = parseInt($(this).attr('data-page'));
 							var ajax_url = '<?php echo esc_js(admin_url('admin-ajax.php')); ?>';
@@ -1112,10 +1110,8 @@ class D2gConnect_Shortcodes {
 	
 							// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
 							jQuery.post(ajax_url, data, function(response) {
-								$('.load_more_btn_wrapper').removeClass('loading');
 								
 								var newPageNr = pageNr + 1;
-								
 	
 								if(newPageNr <= maxPage ){
 									$('#newPageNr').val(newPageNr);
@@ -1126,7 +1122,9 @@ class D2gConnect_Shortcodes {
 								}
 								$('#doctor_wrapper').append(response);
 
-								loadAvailabilityData(availibilityData);
+								<?php if(get_option('d2g_load_availability_info') == 1){ ?>
+									loadAvailabilityData(availibilityData);
+								<?php } ?>
 							});
 						});
 					});
@@ -1459,7 +1457,6 @@ class D2gConnect_Shortcodes {
 						$('.more_doctors').attr('data-page', 2);
 						$('#doctor_filters').css('opacity', '0.5');
 						$('#doctor_wrapper').fadeOut();
-						$('#doctor_wrapper_outer').addClass('loading_doctors');
 						$('#search_error').css('display', 'none');
 	
 						<?php if($a['stand_alone'] == 'false'){ ?>
@@ -1538,7 +1535,9 @@ class D2gConnect_Shortcodes {
 								}
 								$('#doctor_wrapper_outer').removeClass('loading_doctors');
 								$('#doctor_wrapper').html(response).promise().done(function () {
-      								loadAvailabilityData();
+      								<?php if(get_option('d2g_load_availability_info') == 1){ ?>
+										loadAvailabilityData(availibilityData);
+									<?php } ?>
 								});
 								$('#doctor_wrapper').fadeIn();
 								
@@ -1590,7 +1589,6 @@ class D2gConnect_Shortcodes {
 						change: function (event, ui) {
 							$('#doctor_filter_wrapper').css('opacity', '0.5');
 							$('#doctor_wrapper').fadeOut();
-							$('#doctor_wrapper_outer').addClass('loading_doctors');
 							var ajax_url = '<?php echo esc_js(admin_url('admin-ajax.php')); ?>';
 	
 							var intake_val = 0;
@@ -1622,7 +1620,6 @@ class D2gConnect_Shortcodes {
 								if(response == 0){
 									response = '<h2><?php echo esc_html__('We are sorry, but we could not find any doctors for your search criteria, please refine your search.', 'doctor2go-connect')?></h2>'
 								}
-								$('#doctor_wrapper_outer').removeClass('loading_doctors');
 								$('#doctor_wrapper').html(response).fadeIn();
 							});
 	

@@ -143,14 +143,16 @@ class D2gConnect_Public {
 			'nonce' => wp_create_nonce('like_nonce'),
 		]);
 
-		//like button
-		wp_enqueue_script( $this->plugin_name.'-availibility', plugin_dir_url( __FILE__ ) . 'js/availibility.js', array( 'jquery' ), $this->version, array('in_footer' => true, 'strategy'  => 'defer') );
-		wp_localize_script($this->plugin_name.'-availibility', 'availibilityData', [
-			'restUrl' => esc_url_raw( rest_url( 'd2g-connect/v1/' ) ),
-    		'nonce'   => wp_create_nonce( 'wp_rest' ),
-			'string1' => esc_html__('walk-in consult', 'doctor2go-connect'),
-			'string2' => esc_html__('not available', 'doctor2go-connect')		
-		]);
+		//load availability info on overview page
+		if(get_option('d2g_load_availability_info') == 1){
+			wp_enqueue_script( $this->plugin_name.'-availibility', plugin_dir_url( __FILE__ ) . 'js/availibility.js', array( 'jquery' ), $this->version, array('in_footer' => true, 'strategy'  => 'defer') );
+			wp_localize_script($this->plugin_name.'-availibility', 'availibilityData', [
+				'restUrl' => esc_url_raw( rest_url( 'd2g-connect/v1/' ) ),
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
+				'string1' => esc_html__('walk-in consult', 'd2g-connect'),
+				'string2' => esc_html__('not available', 'd2g-connect')		
+			]);
+		}
 
 		//custom js needs tom come last
 		wp_enqueue_script( $this->plugin_name.'-public', plugin_dir_url( __FILE__ ) . 'js/d2g-public.js', array( 'jquery' ), $this->version, true );
