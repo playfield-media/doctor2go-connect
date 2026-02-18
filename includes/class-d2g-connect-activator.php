@@ -42,7 +42,7 @@ class D2gConnect_Activator {
 			
 		);
 		
-		/*
+		
 		foreach($protectedPages as $title => $content){
 			// Create post object
 			$my_post = array(
@@ -93,7 +93,7 @@ class D2gConnect_Activator {
 			$page_type 		= strtolower(str_replace(' ', '_', $title));
 			update_post_meta( $post_id, 'd2g_page_identifier', $page_type);
 		}
-*/
+
 		
 		flush_rewrite_rules();
 

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Timezone saved:', data);
+        //console.log('Timezone saved:', data);
     })
     .catch(error => {
         console.error('Error saving timezone:', error);

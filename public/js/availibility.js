@@ -21,12 +21,14 @@ window.loadAvailabilityData = function () {
         const template = jQuery(this).data('template');
         const colClass = template === 'list' ? 'col-sm-6' : '';
 
+        /*
         console.log(
             'Doctor', postID,
             'icon_list:', jQuery('#icon_list_' + postID).length,
             'doc:', jQuery('#doc_' + postID).length
         );
-
+        */
+       
         const req = fetch(availibilityData.restUrl + 'availabilities', {
             method: 'POST',
             headers: {

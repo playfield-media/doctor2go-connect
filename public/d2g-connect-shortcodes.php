@@ -1049,7 +1049,7 @@ class D2gConnect_Shortcodes {
 		if ( $the_query->have_posts() ) {
 			$maxPage = $the_query->max_num_pages;
 			?>
-			<div id="doctor_wrapper_outer" class="loading <?php echo esc_html($a['wrapper_class'])?>">
+			<div id="doctor_wrapper_outer" class=" <?php echo esc_html($a['wrapper_class'])?>">
 				<div id="doctor_wrapper" class="row <?php echo esc_html($a['template'])?> ">
 					<?php
 					while ( $the_query->have_posts() ) {
