@@ -14,6 +14,7 @@
  * @package d2g-connect
  * @since   1.0.0
  */
+if ( ! defined( 'ABSPATH' ) ) exit;
 global $d2g_profile_data;
 //////////////////
 //patient data

@@ -1,5 +1,7 @@
 <?php
-
+if ( defined( 'ABSPATH' ) ) {
+    return;
+}
 $currDir        = dirname(__DIR__);
 
 $rootDir = '';
@@ -23,17 +25,30 @@ $d2gAdmin = new D2G_doc_user_profile();
 $error = '';
 $user_data = json_decode(file_get_contents('php://input'), true);
 
+$superKey = get_option( 'wcc_token' );
 
-
-$superKey           = get_option('wcc_token');
-$timestamp          = new DateTime();
-$hashChecker = hash('sha256', $user_data['timestamp']."_".$user_data['user_key']."_".$superKey);
-
-if($hashChecker != $user_data['hash']){
-    error_log('IMPORT ERROR: Hash is incorrect for doctor creation request.'); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Import error logging.
-    die('The hash is incorrect for the doctor creation request.');
+if ( empty( $superKey ) ) {
+    wp_die( 'Server configuration error.', 500 );
 }
-$tariffs    = $user_data['tariffs'];
+
+$timestamp = (int) $user_data['timestamp'];
+
+if ( abs( time() - $timestamp ) > 300 ) {
+    wp_die( 'Request expired.', 403 );
+}
+
+$payload = $user_data['timestamp'] . '_' . $user_data['user_key'];
+
+$expected_hash = hash_hmac(
+    'sha256',
+    $payload,
+    $superKey
+);
+
+if ( ! hash_equals( $expected_hash, $user_data['hash'] ) ) {
+    error_log( 'IMPORT ERROR: Invalid hash.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Import error logging.
+    wp_die( 'Invalid signature.', 403 );
+}
 
 
 

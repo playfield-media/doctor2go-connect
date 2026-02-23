@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  *
  * This template can be overridden by copying it to yourtheme/d2-gconnect/single-d2g_doctor.php.

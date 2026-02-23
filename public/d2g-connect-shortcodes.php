@@ -1,5 +1,5 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * The public-facing functionality of the plugin.
  *
@@ -63,7 +63,7 @@ class D2gConnect_Shortcodes {
 			
 		), $atts);
 
-		$d2gAdmin = new D2G_doc_user_profile();
+		$d2gAdmin = new \D2G_doc_user_profile();
 
 		
 
@@ -2211,19 +2211,28 @@ class D2gConnect_Shortcodes {
 						programmatic_login( $username );
 
 						if ( isset( $_GET['redirect_to'] ) ) {
-							// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-							$redirect_to = wp_unslash( $_GET['redirect_to'] ); // ✅ unslash once
 
-							if ( strpos( $redirect_to, '?' ) !== false ) {
-								$redirect_to .= '&signup=completed';
-							} else {
-								$redirect_to .= '?signup=completed';
-							}
+							// Unslash once
+							$redirect_to = wp_unslash( $_GET['redirect_to'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
-							wp_redirect( esc_url_raw( $redirect_to ) );
+							// Validate URL (ensure it's safe)
+							$redirect_to = wp_validate_redirect( $redirect_to, home_url() );
+
+							// Append parameter safely
+							$redirect_to = add_query_arg( 'signup', 'completed', $redirect_to );
+
+							wp_safe_redirect( $redirect_to );
 							exit;
+
 						} else {
-							wp_redirect( esc_url_raw( $pageData['url'] . '?signup=completed' ) );
+
+							$redirect_url = add_query_arg(
+								'signup',
+								'completed',
+								$pageData['url']
+							);
+
+							wp_safe_redirect( $redirect_url );
 							exit;
 						}
 
@@ -2823,8 +2832,8 @@ class D2gConnect_Shortcodes {
 									$redirectURL    = '&redirect_url='.urlencode($pageData['url'].'?app=').$appointment->_id;
 									
 									$payment_info = '<div class="payment_needed error">
-									<div class=""><strong>'. esc_html__('A payment is required for this appointment. You can either do it upofront or when entering the waiting room', 'd2g-connect').'</strong></div>
-									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'd2g-connect').'</a></div>
+									<div class=""><strong>'. esc_html__('A payment is required for this appointment. You can either do it upofront or when entering the waiting room', 'doctor2go-connect').'</strong></div>
+									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'doctor2go-connect').'</a></div>
 									</div>';
 								}
 
@@ -3158,8 +3167,8 @@ class D2gConnect_Shortcodes {
 									$redirectURL    = '&redirect_url='.urlencode($pageData['url'].'?app=').$appointment->_id;
 									
 									$payment_info = '<div class="payment_needed error">
-									<div class=""><strong>'. esc_html__('A payment is required for this appointment. You can either do it upofront or when entering the waiting room', 'd2g-connect').'</strong></div>
-									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'd2g-connect').'</a></div>
+									<div class=""><strong>'. esc_html__('A payment is required for this appointment. You can either do it upofront or when entering the waiting room', 'doctor2go-connect').'</strong></div>
+									<div class="btn_wrap"><a class="btn btn-default payment_btn" target="_blank" href="'.get_option('waiting_room_url').'payment/' .$appointment->_id. '?locale='. explode('_',get_locale())[0].$redirectURL.'">'. esc_html__('pay now', 'doctor2go-connect').'</a></div>
 									</div>';
 								}
 

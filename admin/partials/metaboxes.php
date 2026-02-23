@@ -1,4 +1,14 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * The template for displaying the doctor meta boxes in the admin.
+ *
+ * @link       https://www.webcamconsult.com
+ * @since      1.0.0
+ *
+ * @package    doctor2go-connect
+ * @subpackage doctor2go-connect/admin/partials
+ */
 function d2g_meta_box_personal_cb($post){
     $values = get_post_meta( $post->ID );
     

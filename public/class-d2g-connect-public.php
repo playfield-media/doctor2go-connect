@@ -1,5 +1,5 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * The public-facing functionality of the plugin.
  *
@@ -149,8 +149,8 @@ class D2gConnect_Public {
 			wp_localize_script($this->plugin_name.'-availibility', 'availibilityData', [
 				'restUrl' => esc_url_raw( rest_url( 'd2g-connect/v1/' ) ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
-				'string1' => esc_html__('walk-in consult', 'd2g-connect'),
-				'string2' => esc_html__('not available', 'd2g-connect')		
+				'string1' => esc_html__('walk-in consult', 'doctor2go-connect'),
+				'string2' => esc_html__('not available', 'doctor2go-connect')		
 			]);
 		}
 
@@ -617,58 +617,64 @@ class D2gConnect_Public {
 		$d2gAdmin 		= new D2G_doc_user_profile();
 		
 		
-		if (is_wp_error($user)) {
-			//Login failed, find out why...
-			$error_types = array_keys($user->errors);
-			//Error type seems to be empty if none of the fields are filled out
-			$error_type = 'both_empty';
-			//Otherwise just get the first error (as far as I know there
-			//will only ever be one)
-			if (is_array($error_types) && !empty($error_types)) {
-				
-				if(count($error_types) > 1){
-					wp_redirect( home_url('/login').'?logout=1'); 
-					exit;
-				}
-				
+		if ( is_wp_error( $user ) ) {
+
+			$error_types = array_keys( $user->errors );
+
+			if ( is_array( $error_types ) && count( $error_types ) > 1 ) {
+				wp_safe_redirect( home_url( '/login?logout=1' ) );
+				exit;
 			}
 
-			$message = "?login=failed";
-			wp_redirect( $redirect_to . $message); 
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$redirect_to = isset( $_GET['redirect_to'] )
+				? wp_validate_redirect( wp_unslash( $_GET['redirect_to'] ), home_url() ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+				: home_url();
+
+			$redirect_url = add_query_arg(
+				'login',
+				'failed',
+				$redirect_to
+			);
+
+			wp_safe_redirect( $redirect_url );
+			exit;
+
 		} else {
-			$pageData 		= $d2gAdmin::d2g_page_url($currLang, 'login', true);
-			
-			
-			$redirect_to = isset($_GET['redirect_to']) ? wp_unslash($_GET['redirect_to']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
-			if ($redirect_to != '' && urldecode($redirect_to) != $pageData['url']) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				wp_redirect(urldecode($redirect_to)); 
+			$pageData = $d2gAdmin::d2g_page_url( $currLang, 'login', true );
+
+			
+			$redirect_to = isset( $_GET['redirect_to'] )// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+				? wp_validate_redirect( wp_unslash( $_GET['redirect_to'] ), '' )// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+				: '';
+
+			// Valid custom redirect (not login page itself)
+			if ( ! empty( $redirect_to ) && $redirect_to !== $pageData['url'] ) {
+				wp_safe_redirect( $redirect_to );
 				exit;
 			}
 
-			if (in_array('patient', $user->roles)) {
-				$pageData = $d2gAdmin::d2g_page_url($currLang, 'patient_dashboard', true);
-				wp_redirect($pageData['url']); 
+			if ( in_array( 'patient', $user->roles, true ) ) {
+
+				$pageData = $d2gAdmin::d2g_page_url( $currLang, 'patient_dashboard', true );
+
+				wp_safe_redirect( $pageData['url'] );
 				exit;
-			} elseif (in_array('administrator', $user->roles)) {
-				wp_redirect(get_site_url().'/wp-admin/'); 
+
+			} elseif ( in_array( 'administrator', $user->roles, true ) ) {
+
+				wp_safe_redirect( admin_url() );
 				exit;
+
 			} else {
-				$pageData = $d2gAdmin::d2g_page_url($currLang, 'login', true);
-				wp_redirect($pageData['url']); 
-				exit;
-			}
 
-			if (strpos($redirect_to, 'doctor') !== false) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				wp_redirect($redirect_to.'?book=1'); 
+				$pageData = $d2gAdmin::d2g_page_url( $currLang, 'login', true );
+
+				wp_safe_redirect( $pageData['url'] );
 				exit;
 			}
-			
-			
 		}
-
-		
-		exit;
 	}
 
 	//ajax function for handeling liked posts
