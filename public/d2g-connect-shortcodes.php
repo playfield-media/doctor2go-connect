@@ -69,7 +69,7 @@ class D2gConnect_Shortcodes {
 
 		$currLang           = explode('_', get_locale())[0];
 		$currUser           = wp_get_current_user();
-		$permalink 			= d2g_curPageURL();
+		$permalink = esc_url( get_permalink() . '?edit=' . ( isset( $_GET['edit'] ) ? absint( $_GET['edit'] ) : 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if(is_user_logged_in() && (in_array( 'editor', (array) $currUser->roles ) || in_array( 'administrator', (array) $currUser->roles ))){ // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce not required for this internal action.
 			$pubProfileID = isset( $_GET['edit'] ) ? absint( wp_unslash( $_GET['edit'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- load-only for logged in users, no form processing.
@@ -2255,7 +2255,7 @@ class D2gConnect_Shortcodes {
 		?>
 		<div class="d2g_form_wrapper">
 			<?php // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash?>
-			<form id="custom-registration-form" method="post" action="<?php d2g_curPageURL(false); ?>?create_account=1<?php echo ( isset( $_GET['redirect_to'] ) ) ? '&redirect_to=' . urlencode( wp_unslash( $_GET['redirect_to'] ) ) : ''; ?>">
+			<form id="custom-registration-form" method="post" action="?create_account=1<?php echo ( isset( $_GET['redirect_to'] ) ) ? '&redirect_to=' . urlencode( wp_unslash( $_GET['redirect_to'] ) ) : ''; ?>">
 				<?php wp_nonce_field( 'd2g_registration_action', 'd2g_reg_nonce' ); ?>
 				<div id="error" class="error"></div>
 
@@ -3501,16 +3501,30 @@ class D2gConnect_Shortcodes {
 					<?php 
 					// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 					if ( isset( $_GET['url'] ) ) {
-						// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-						$iframe_url = isset( $_GET['url'] ) ? wp_unslash( $_GET['url'] ) : '';
-						// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-						$title      = isset( $_GET['title'] ) ? wp_unslash( $_GET['title'] ) : '';
-					?>
-						<h2><?php echo esc_html__( 'Patient portal:', 'doctor2go-connect' ) . ' ' . esc_html( $title ); ?></h2>
-						<p><?php echo esc_html__( 'This secure portal lets you send and receive messages from your doctor and access any documents they\'ve shared with you.', 'doctor2go-connect' ); ?></p>
-						<iframe id="patient_portal" style="width:100%; border:none; height:1200px; overflow-y:scroll;" src="<?php echo esc_url( $iframe_url ); ?>"></iframe>
+						// Sanitize GET parameters
+						$iframe_url = isset( $_GET['url'] ) ? esc_url_raw( wp_unslash( $_GET['url'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+						$title      = isset( $_GET['title'] ) ? sanitize_text_field( wp_unslash( $_GET['title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+
+						?>
+						<h2>
+							<?php 
+							echo esc_html__( 'Patient portal:', 'doctor2go-connect' ) . ' ' . esc_html( $title ); 
+							?>
+						</h2>
+						<p>
+							<?php 
+							echo esc_html__( "This secure portal lets you send and receive messages from your doctor and access any documents they've shared with you.", 'doctor2go-connect' ); 
+							?>
+						</p>
+						<iframe 
+							id="patient_portal" 
+							style="width:100%; border:none; height:1200px; overflow-y:scroll;" 
+							src="<?php echo esc_url( $iframe_url ); ?>">
+						</iframe>
 					<?php } else { ?>
-						<h2 class="error"><?php esc_html_e( 'No doctor has been selected yet. Please choose one to proceed.', 'doctor2go-connect' ); ?></h2>
+						<h2 class="error">
+							<?php esc_html_e( 'No doctor has been selected yet. Please choose one to proceed.', 'doctor2go-connect' ); ?>
+						</h2>
 					<?php } ?>
 
 

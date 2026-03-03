@@ -86,21 +86,26 @@ class D2G_ProfileData {
     }
 
     private function d2g_unserialzer_checker($meta_field = ''){
-        if($meta_field != ''){
-            $meta_values = unserialize($meta_field[0]);
-            $checker = false;
-            
-            foreach($meta_values[0] as $meta_value){
-                if($meta_value != ''){
-                    $checker = true;
-                }
-            }
-            if($checker == true){
-                return $meta_values;
-            } else {
-                return false;
+        if ( empty( $meta_field ) || ! isset( $meta_field[0] ) ) {
+            return false;
+        }
+
+        // Unserialize safely
+        $meta_values = @unserialize( $meta_field[0] );
+        if ( ! is_array( $meta_values ) || ! isset( $meta_values[0] ) || ! is_array( $meta_values[0] ) ) {
+            return false;
+        }
+
+        // Check if any value is non-empty
+        $checker = false;
+        foreach ( $meta_values[0] as $meta_value ) {
+            if ( $meta_value !== '' ) {
+                $checker = true;
+                break; // stop early if one non-empty found
             }
         }
+
+        return $checker ? $meta_values : false;
     }
 
 

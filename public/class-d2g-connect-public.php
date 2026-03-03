@@ -680,13 +680,12 @@ class D2gConnect_Public {
 	//ajax function for handeling liked posts
 	function d2g_handle_like() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$nonce = isset($_POST['nonce']) ? wp_unslash($_POST['nonce']) : '';
+		$nonce = isset($_POST['nonce']) ? sanitize_key( wp_unslash( $_POST['nonce'] ) ) : '';
 
-		if (!$nonce || !wp_verify_nonce($nonce, 'like_nonce')) {
-			wp_send_json_error(['message' => 'Invalid nonce']);
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'like_nonce' ) ) {
+			wp_send_json_error( ['message' => 'Invalid nonce'] );
 			wp_die();
 		}
-
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$post_id = isset($_POST['post_id']) ? absint($_POST['post_id']) : 0;
 		if (!$post_id || !get_post($post_id)) {

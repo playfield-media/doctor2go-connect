@@ -228,24 +228,32 @@ class D2G_doc_user_profile{
     }
 
     /**
-     * update from a doctor profile post
+     * Update a doctor profile post.
      */
-    public static function d2g_update_doc(){
-		
-		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ), 'doc-update' ) ) {
+    public static function d2g_update_doc() {
+
+        // Verify nonce for security
+        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'doc-update' ) ) {
             return false;
         }
-		
-		
+
         global $success;
 
-        $doc_data_meta = isset( $_POST['meta'] ) && is_array( $_POST['meta'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['meta'] ) ) : [];
-        $doc_tax       = isset( $_POST['tax'] ) && is_array( $_POST['tax'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['tax'] ) ) : [];
-        $update_id     = isset( $_POST['update_id'] ) ? absint( wp_unslash( $_POST['update_id'] ) ) : 0;
-        $currLang      = isset( $_POST['d2g_lang'] ) ? sanitize_key( wp_unslash( $_POST['d2g_lang'] ) ) : '';
+        // Sanitize POST inputs
+        $doc_data_meta = isset( $_POST['meta'] ) && is_array( $_POST['meta'] ) 
+            ? array_map( 'sanitize_text_field', wp_unslash( $_POST['meta'] ) ) 
+            : [];
+        $doc_tax       = isset( $_POST['tax'] ) && is_array( $_POST['tax'] ) 
+            ? array_map( 'sanitize_text_field', wp_unslash( $_POST['tax'] ) ) 
+            : [];
+        $update_id     = isset( $_POST['update_id'] ) 
+            ? absint( wp_unslash( $_POST['update_id'] ) ) 
+            : 0;
+        $currLang      = isset( $_POST['d2g_lang'] ) 
+            ? sanitize_key( wp_unslash( $_POST['d2g_lang'] ) ) 
+            : '';
 
-
-        /*************essential info*********/
+        // Prepare post update
         $my_update = array(
             'post_title'   => isset( $_POST['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['post_title'] ) ) : '',
             'post_content' => isset( $_POST['docdesc'] ) ? wp_kses_post( wp_unslash( $_POST['docdesc'] ) ) : '',
@@ -253,129 +261,148 @@ class D2G_doc_user_profile{
             'ID'           => $update_id,
         );
 
-        /** update post */
-        $insertID = wp_update_post($my_update);
+        // Update the post
+        $insertID = wp_update_post( $my_update );
 
-		if(is_int($insertID)){
-			/** update post meta */
-			foreach ($doc_data_meta as $meta_key => $meta_value) {
-				update_post_meta($update_id, $meta_key, $meta_value);
-			}
-	
-            $new_url        = self::d2g_page_url($currLang);
-			update_post_meta($update_id, 'd2g_edit_url', '<a target="_blank" href="'.$new_url.'?edit='.$update_id.'">edit</a>');
-				
-			/** update post taxonomies used for filtering */
-			if(isset($_POST['tax'])){
-				self::updateDocTerms($doc_tax, $update_id);
-			}
-	
-			/** sets the profile image */
-			if(isset($_FILES)){
-				global $_FILES;
-				
-				self::set_doc_images($update_id);
-			}
-	
-			$success = true;
-            do_action('breeze_clear_all_cache');
-			echo 'updated';
-		} else {
-            echo 'error';
-			//var_dump($insertID);
-		}
-  
-		wp_die();
-    }
+        if ( is_int( $insertID ) ) {
 
-    /**
-     * @param $taxonomies
-     * @param $post_id
-     */
-    public static function updateDocTerms($taxonomies, $post_id){
-        foreach ($taxonomies as $taxonomy => $value){
-            wp_set_object_terms( $post_id, is_array($value)?$value:(array)$value, $taxonomy);
-        }
-    }
-
-
-    /**
-     * @param $user_id
-     */
-    public static function set_doc_images($post_ID) {
-        global $_FILES; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce not required for this internal action.
-
-        foreach ($_FILES as $field_name => $file_data) {// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce not required for this internal action.
-    
-            if(is_array($file_data['tmp_name'])){
-                $count = count($file_data['tmp_name']);
-                for ($x = 0; $x <= $count; $x++) {
-                    if ($file_data['error'][$x] == 0 && $file_data['size'][$x] > 0) {
-                        self::add_user_image($post_ID, $file_data['tmp_name'][$x], $file_data['name'][$x], $field_name);
-                    }
-                }
-            } else {
-                if ($file_data['error'] == 0 && $file_data['size'] > 0) {
-                    self::add_user_image($post_ID, $file_data['tmp_name'], $file_data['name'], $field_name);
-                }
+            // Update post meta
+            foreach ( $doc_data_meta as $meta_key => $meta_value ) {
+                update_post_meta( $update_id, $meta_key, $meta_value );
             }
-    
-        }
-    }
-    
 
-    /**
-     * @param $post_id
-     * @param $source_path
-     * @param $original_name
-     * @param string $is_featured
-     * @return bool
-     */
-    protected static function add_user_image ($post_id, $source_path, $original_name, $field = '') {
+            // Update edit URL
+            $new_url = self::d2g_page_url( $currLang );
+            update_post_meta( $update_id, 'd2g_edit_url', '<a target="_blank" href="' . esc_url( $new_url ) . '?edit=' . absint( $update_id ) . '">edit</a>' );
 
-        $original_name = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $original_name);
-        $original_name = str_replace(' ', '-', $original_name);
-        $original_name = strtolower($original_name);
-        $filename = wp_upload_dir()['path'] . '/' . basename ($original_name);
-    
-        file_put_contents ($filename, file_get_contents ($source_path));
-
-        if (file_exists($filename)) {
-            //self::messages[] 	= date('d.m.Y H:i:s')." add image ".$http_filename." into ".$filename;
-            // Check the type of file. We'll use this as the 'post_mime_type'.
-            $filetype = wp_check_filetype( basename( $filename ), null );
-    
-            // Get the path to the upload directory.
-            $wp_upload_dir = wp_upload_dir();
-    
-            // Prepare an array of post data for the attachment.
-            $attachment = array(
-                'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
-                'post_mime_type' => $filetype['type'],
-                'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename )),
-                'post_content'   => '',
-                'post_author'    => get_current_user_id(),
-                'post_status'    => 'inherit'
-            );
-    
-            // Insert the attachment.
-            $attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
-    
-            // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-            require_once(ABSPATH . 'wp-admin/includes/image.php');
-    
-            // Generate the metadata for the attachment, and update the database record.
-            $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-            wp_update_attachment_metadata( $attach_id, $attach_data );
-    
-            //set featured image
-            if ($field == 'picture_1') {
-                update_post_meta($post_id, '_thumbnail_id', $attach_id);
+            // Update post taxonomies
+            if ( ! empty( $doc_tax ) ) {
+                self::updateDocTerms( $doc_tax, $update_id );
             }
-    
-            return true;
+
+            // Handle file uploads
+            if ( ! empty( $_FILES ) ) {
+                self::set_doc_images( $update_id );
+            }
+
+            $success = true;
+            do_action( 'breeze_clear_all_cache' );
+            echo 'updated';
+
         } else {
-            return false;
+            echo 'error';
+        }
+
+        wp_die();
+    }
+
+    /**
+     * Update object terms for the post.
+     *
+     * @param array $taxonomies
+     * @param int   $post_id
+     */
+    public static function updateDocTerms( $taxonomies, $post_id ) {
+        foreach ( $taxonomies as $taxonomy => $value ) {
+            wp_set_object_terms( $post_id, is_array( $value ) ? $value : (array) $value, $taxonomy );
+        }
+    }
+
+    /**
+     * Securely handle doctor image uploads.
+     *
+     * @param int $post_id
+     */
+    private static function set_doc_images( $post_id ) {
+
+        // Internal function called only by d2g_update_doc() which is nonce-protected
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        if ( ! current_user_can( 'edit_post', $post_id ) || empty( $_FILES ) || ! is_array( $_FILES ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+            return;
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        foreach ( $_FILES as $field_name => $file_data ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+
+            // Handle multiple uploads
+            if ( is_array( $file_data['name'] ) ) {
+
+                foreach ( $file_data['name'] as $index => $name ) {
+
+                    if ( empty( $name ) || $file_data['error'][ $index ] !== UPLOAD_ERR_OK ) {
+                        continue;
+                    }
+
+                    $single_file = array(
+                        'name'     => sanitize_file_name( $file_data['name'][ $index ] ),
+                        'type'     => $file_data['type'][ $index ],
+                        'tmp_name' => $file_data['tmp_name'][ $index ],
+                        'error'    => $file_data['error'][ $index ],
+                        'size'     => $file_data['size'][ $index ],
+                    );
+
+                    self::handle_single_upload( $single_file, $post_id, $field_name );
+
+                }
+
+            } else {
+
+                if ( empty( $file_data['name'] ) || $file_data['error'] !== UPLOAD_ERR_OK ) {
+                    continue;
+                }
+
+                $single_file = array(
+                    'name'     => sanitize_file_name( $file_data['name'] ),
+                    'type'     => $file_data['type'],
+                    'tmp_name' => $file_data['tmp_name'],
+                    'error'    => $file_data['error'],
+                    'size'     => $file_data['size'],
+                );
+
+                self::handle_single_upload( $single_file, $post_id, $field_name );
+
+            }
+        }
+    }
+
+
+    /**
+     * Process a single uploaded file securely using WordPress API.
+     *
+     * @param array  $file
+     * @param int    $post_id
+     * @param string $field_name
+     */
+    private static function handle_single_upload( $file, $post_id, $field_name ) {
+        // Restrict to images only
+        $allowed_mimes = array(
+            'jpg|jpeg|jpe' => 'image/jpeg',
+            'png'          => 'image/png',
+            'gif'          => 'image/gif',
+            'webp'         => 'image/webp',
+        );
+
+        add_filter(
+            'upload_mimes',
+            function() use ( $allowed_mimes ) {
+                return $allowed_mimes;
+            }
+        );
+
+        // Use WordPress core upload handling
+        $attachment_id = media_handle_sideload( $file, $post_id );
+
+        if ( is_wp_error( $attachment_id ) ) {
+            return;
+        }
+
+        // If this field is meant to be featured image
+        if ( $field_name === 'picture_1' ) {
+            set_post_thumbnail( $post_id, $attachment_id );
         }
     }
 

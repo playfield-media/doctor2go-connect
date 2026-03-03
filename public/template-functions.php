@@ -5,10 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package d2g-connect
  */
-//fires hooks
-//general hooks for D2G-Connect
-add_action('init', 'start_session');
-// Register AJAX handler for saving timezone
+// Register AJAX callback + script for saving timezone
 add_action('wp_ajax_save_user_timezone', 'save_user_timezone');
 add_action('wp_ajax_nopriv_save_user_timezone', 'save_user_timezone');
 add_action('wp_enqueue_scripts', 'enqueue_timezone_script');
@@ -224,28 +221,6 @@ function nice_dump($dump){
     echo '</pre>';
 }
 
-/*
-* return the URL from the current page / post
-* this function will sonn be removed as WP functions or other methods will be used, thats why all pcp warnings are surpressed
-*/
-// phpcs:disable WordPress.Security.ValidatedSanitizedInput
-function d2g_curPageURL($returnRequestURI = true) {
-    $pageURL = 'http';
-    if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") { $pageURL .= "s"; }
-    $pageURL .= "://";
-    $requestURI = $_SERVER["REQUEST_URI"];
-    if (!$returnRequestURI) {
-        $splitURI   = explode("?", $requestURI);
-        $requestURI = $splitURI[0];
-    }
-    if ($_SERVER["SERVER_PORT"] != "80") {
-        $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $requestURI;
-    } else {
-        $pageURL .= $_SERVER["SERVER_NAME"] . $requestURI;
-    }
-    return $pageURL;
-}
-// phpcs:enable WordPress.Security.ValidatedSanitizedInput
 
 
 function d2g_fetch_availability_data($post_id, $template = ''){ ?>
@@ -1243,9 +1218,12 @@ function confirmation_checkboxes($form = ''){
 
 //this creates the back to overview button for on the doctor detail pages
 function show_back_btn(){
+    $currLang 		= explode('_', get_locale())[0];
+    $d2gAdmin 		= new D2G_doc_user_profile();
+    $doctorsURL 	= $d2gAdmin::d2g_page_url($currLang, 'doctors', false);
     ?>
     <div class="btn_wrapper center mb-l mt-l">    
-        <a id="backLink" class="btn btn-default wp-block-button__link" href="<?php echo esc_url(d2g_curPageURL())?>"><?php echo esc_html__('back to overview', 'doctor2go-connect')?></a>
+        <a id="backLink" class="btn btn-default wp-block-button__link" href="<?php echo esc_url($doctorsURL)?>"><?php echo esc_html__('back to overview', 'doctor2go-connect')?></a>
     </div>
     
     <?php
@@ -2072,33 +2050,32 @@ function sort_terms_hierarchicaly(Array $cats, $parentId = 0)
     return $into;
 }
 
-// Start session in WordPress
-function start_session() {
-    if (!session_id()) {
-        session_start();
-    }
-  
-}
-
 
 function save_user_timezone() {
-    // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-    $timezone = isset($_POST['timezone']) ? sanitize_text_field(wp_unslash($_POST['timezone'])) : '';
+
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing
+    $timezone = isset($_POST['timezone']) 
+        ? sanitize_text_field(wp_unslash($_POST['timezone'])) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        : '';
 
     if ($timezone !== '') {
-        // Save the timezone to the session
-        $_SESSION['user_timezone'] = $timezone;
 
-        // Return a success response
+        // Store in cookie for 30 days
+        setcookie(
+            'd2g_user_timezone',
+            $timezone,
+            time() + MONTH_IN_SECONDS,
+            COOKIEPATH,
+            COOKIE_DOMAIN
+        );
+
         wp_send_json_success([
             'message'  => 'Timezone saved successfully!',
             'timezone' => $timezone,
         ]);
-    } else {
-        wp_send_json_error(['message' => 'Timezone not provided.']);
     }
 
-    wp_die(); // Terminate the AJAX request properly
+    wp_send_json_error(['message' => 'Timezone not provided.']);
 }
 
 
@@ -2112,12 +2089,8 @@ function enqueue_timezone_script() {
 
 // retrive user timezone in php
 function get_user_timezone() {
-    if (!session_id()) {
-        session_start();
-    }
-
-    if (!empty($_SESSION['user_timezone'])) {
-        return sanitize_text_field($_SESSION['user_timezone']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+    if ( isset($_COOKIE['d2g_user_timezone']) ) {
+        return sanitize_text_field( wp_unslash( $_COOKIE['d2g_user_timezone'] ) );
     }
 
     return '';

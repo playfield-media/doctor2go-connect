@@ -563,28 +563,25 @@ class D2gConnect_Admin {
     */
     public function register_d2g_settings() {
         $settings_with_callbacks = array(
-            'd2g_overview_template'             => 'sanitize_text_field',
-            'd2g_single_template'               => 'sanitize_text_field',
-            'd2g_theme_css'                     => 'sanitize_text_field', // maybe allow full CSS, no sanitization
+            'd2g_detail_page_view'              => array( $this, 'sanitize_detail_page_view' ),
+            'd2g_theme_css'                     => array( $this, 'sanitize_theme_css' ),
             'd2g_css_grid'                      => 'absint',
-            'wcc_token'                         => 'sanitize_text_field',
+            'wcc_token'                         => array( $this, 'd2g_sanitize_token' ),
             'api_url_short'                     => 'esc_url_raw',
             'waiting_room_url'                  => 'esc_url_raw',
-            'wcc_base_url'                      => 'sanitize_text_field',
+            'wcc_base_url'                      => 'esc_url_raw',
             'admin_mail'                        => 'sanitize_email',
             'd2g_local_user'                    => 'absint',
-            'd2g_placeholder'                   => 'sanitize_text_field',
-            'd2g_detail_page_view'              => 'sanitize_text_field',
-            'd2g_privacy_url'                   => 'esc_url_raw',
-            'd2g_terms_url'                     => 'esc_url_raw',
-            'd2g_recaptcha_site_key'            => 'sanitize_text_field',
-            'd2g_recaptcha_secret_key'          => 'sanitize_text_field',
+            'd2g_placeholder'                   => 'absint',
+            'd2g_detail_page_view'              => array( $this, 'sanitize_detail_page_view' ),
+            'd2g_recaptcha_site_key'            => array( $this, 'd2g_sanitize_token' ),
+            'd2g_recaptcha_secret_key'          => array( $this, 'd2g_sanitize_token' ),
             'd2g_admin_access'                  => 'absint',
             'd2g_single_header_footer'          => 'absint',
             'deactivate_recapctha_script'       => 'absint',
             'activate_2fa_link'                 => 'absint',
             'under_construction'                => 'absint',
-            'd2g_logo'                          => 'sanitize_text_field',
+            'd2g_logo'                          => 'absint',
             'd2g_sender_address'                => 'sanitize_email',
             'd2g_recipient_address'             => 'sanitize_email',
             'd2g_sender_name'                   => 'sanitize_text_field',
@@ -601,6 +598,58 @@ class D2gConnect_Admin {
         }
     
     } 
+
+    public function d2g_sanitize_token( $value ) {
+        $value = trim( $value );
+
+        if ( ! preg_match( '/^[a-f0-9]{64}$/i', $value ) ) {
+            add_settings_error(
+                'wcc_token',
+                'invalid_token',
+                __( 'Invalid API token format.', 'doctor2go-connect' )
+            );
+            return '';
+        }
+
+        return $value;
+    }
+
+    /**
+     * Sanitize theme CSS dropdown value.
+     */
+    public function sanitize_theme_css( $value ) {
+
+        $allowed = array(
+            'light',
+            'dark',
+            'no-style',
+        );
+
+        if ( in_array( $value, $allowed, true ) ) {
+            return $value;
+        }
+
+        // Default fallback
+        return 'light';
+    }
+
+    /**
+     * Sanitize detail page template dropdown.
+     */
+    public function sanitize_detail_page_view( $value ) {
+
+        $allowed = array(
+            'single-v1',
+            'single-v2',
+        );
+
+        if ( in_array( $value, $allowed, true ) ) {
+            return $value;
+        }
+
+        // Safe fallback
+        return 'single-v1';
+    }
 
     //function adds metaboxes with callback function where the html is defined
     public function d2g_meta_box_add(){
