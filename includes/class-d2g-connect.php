@@ -76,6 +76,7 @@ class D2gConnect {
 		$this->load_dependencies();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_cron_hooks();
 	}
 
 	/**
@@ -113,11 +114,14 @@ class D2gConnect {
 		// functions needed for the view
 		require_once plugin_dir_path( __DIR__ ) . 'public/template-functions.php';
 
-		// block functions
-		// require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/d2g-blocks.php';
-
 		// creates a full doctor profile data obj.
 		require_once plugin_dir_path( __DIR__ ) . 'public/class-d2g-profile-data.php';
+
+		// this is the class responsible for handling the cron functions of the plugin
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-d2g-connect-cron.php';
+
+		// this is the class responsible for handling the worker functions of the plugin
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-d2g-connect-worker.php';
 
 		$this->loader = new \D2gConnect_Loader();
 	}
@@ -234,6 +238,22 @@ class D2gConnect {
 		// send d2gc email
 		$this->loader->add_action( 'wp_ajax_send_ajax_d2g_email', $plugin_public, 'send_ajax_d2g_email' );
 		$this->loader->add_action( 'wp_ajax_nopriv_send_ajax_d2g_email', $plugin_public, 'send_ajax_d2g_email' );
+	}
+
+
+	// this function defines the cron hooks for the plugin
+	private function define_cron_hooks() {
+		$cron   = new D2gConnect_Cron();
+		$worker = new D2gConnect_Worker();
+
+		// Add custom cron interval
+		$this->loader->add_filter('cron_schedules', $cron, 'add_cron_schedules');
+
+		// Queue all doctors (main cron)
+		$this->loader->add_action('d2g_sync_doctors', $cron, 'queue_doctors');
+
+		// Background worker: 1 doctor = 1 job
+		$this->loader->add_action('d2g_sync_single_doctor', $worker, 'sync_single_doctor', 10, 1);
 	}
 
 	/**

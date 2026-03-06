@@ -60,7 +60,7 @@ function d2g_redirect_single_template( $template ) {
 	global $post;
 
 	if ( $post->post_type == 'd2g_doctor' && ( 'single.php' == basename( $template ) || 'template-canvas.php' == basename( $template ) ) ) {
-		$template = WP_PLUGIN_DIR . '/d2g-connect/public/templates/single-d2g_doctor.php';
+		$template = WP_PLUGIN_DIR . '/doctor2go-connect/public/templates/single-d2g_doctor.php';
 	}
 
 	return $template;
@@ -1985,7 +1985,8 @@ function load_availability_data() {
 		update_post_meta( $doc_id, 'd2g_availibility_check', 0 );
 		update_post_meta( $doc_id, 'd2g_first_availibility', 0 );
 		update_post_meta( $doc_id, 'd2g_walk_in', 0 ); 
-		update_post_meta( $doc_id, 'd2g_tariffs', 0 );	
+		update_post_meta( $doc_id, 'd2g_tariffs', 0 );
+		update_post_meta( $doc_id, 'd2g_last_synced', 0 );	
 	}
 
 	$availibily_data_set = array(

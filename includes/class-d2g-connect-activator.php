@@ -29,8 +29,8 @@ class D2gConnect_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
-		$protectedPages = array(
+	public static function activate(){		
+ 		$protectedPages = array(
 			'My profile'            => '[d2g_profile_edit]',
 			'Patient dashboard'     => '[d2g_patient_dashbaord]',
 			'Appointments'          => '[d2g_patient_appointments]',
@@ -93,6 +93,17 @@ class D2gConnect_Activator {
 		}
 
 		flush_rewrite_rules();
+
+		/*
+		* Schedule doctor availability sync
+		*/
+		if (!wp_next_scheduled('d2g_sync_doctors')) {
+			wp_schedule_event(
+				time(),
+				'fifteen_minutes',
+				'd2g_sync_doctors'
+			);
+		}
 
 		add_role(
 			'doctor',
