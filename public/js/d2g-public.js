@@ -25,6 +25,57 @@ function checkStrength(password) {
     return d2gPublicData.password.strong;
 }
 
+// Helper: compress images client side
+function compressImage(file, maxWidth = 1024, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            let { width, height } = img;
+            
+            if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+            }
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Map original MIME type to canvas-supported output
+            let mimeType = file.type;
+            if (mimeType === 'image/png') {
+                mimeType = 'image/png';  // PNG supports transparency
+            } else if (mimeType === 'image/webp') {
+                mimeType = 'image/webp';
+            } else {
+                mimeType = 'image/jpeg';  // Default fallback
+            }
+            
+            canvas.toBlob(blob => {
+                // Keep original extension or adapt
+                let newName = file.name;
+                if (mimeType === 'image/jpeg' && !newName.toLowerCase().endsWith('.jpg')) {
+                    newName = newName.replace(/\.[^/.]+$/, '') + '_compressed.jpg';
+                } else if (mimeType === 'image/png' && !newName.toLowerCase().endsWith('.png')) {
+                    newName = newName.replace(/\.[^/.]+$/, '') + '_compressed.png';
+                }
+                
+                const compressedFile = new File([blob], newName, {
+                    type: mimeType,
+                    lastModified: Date.now()
+                });
+                resolve(compressedFile);
+            }, mimeType, quality);
+        };
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file);
+    });
+}
+
+
+
 // Helper: add dynamic form rows (edu/exp/publications)
 // uses d2gPublicData.str.* keys
 function add_form_row(type, rowID) {
@@ -800,39 +851,60 @@ jQuery(document).ready(function ($) {
             }
 
             if (checker === false) {
+                // Compress images asynchronously
+                const imageInputs = ['image_1', 'image_2', 'image_3'];
+                const promises = imageInputs.map(id => {
+                    const file = $('#' + id)[0].files[0];
+                    if (!file || !file.type.startsWith('image/')) return Promise.resolve(null);
+                    return compressImage(file);
+                });
 
-                var myformData = new FormData($("#written_con_form")[0]);
-                myformData.append('action', 'd2g_create_wcc_written_cosnsult');
-
-            
-               $.ajax({
-                type: "POST",
-                data: myformData,
-                url: d.ajax.url,
-                processData: false,
-                contentType: false,
-                beforeSend: function() {
-                    $("#loader").show(); // show loader before request
-                },
-                success: function (response) {
-                    console.log(response);
-
-                    if (response && response.data && response.data.redirect_url) {
-                       //window.location.href = response.data.redirect_url;
-                    }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    $("#written_consult").toggleClass('loading');
-                    console.log(errorThrown);
-                },
-                complete: function() {
-                    $("#loader").hide(); // hide loader after request finishes
-                }
-            });
+                Promise.all(promises).then(compressedFiles => {
+                    // Create FormData
+                    var myformData = new FormData($("#written_con_form")[0]);
+                    myformData.append('action', 'd2g_create_wcc_written_cosnsult');
+                    
+                    // Replace original images with compressed ones
+                    imageInputs.forEach((id, index) => {
+                        const compressed = compressedFiles[index];
+                        if (compressed) {
+                            myformData.set(id, compressed);
+                        }
+                    });
+                    
+                    // Your existing AJAX (show loader already handled in beforeSend)
+                    $.ajax({
+                        type: "POST",
+                        data: myformData,
+                        url: d.ajax.url,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function() {
+                            $("#loader").show();
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if (response && response.data && response.data.redirect_url) {
+                                window.location.href = response.data.redirect_url;
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            $("#written_consult").toggleClass('loading');
+                            console.log(errorThrown);
+                        },
+                        complete: function() {
+                            $("#loader").hide();
+                        }
+                    });
+                }).catch(error => {
+                    console.error('Image compression failed:', error);
+                    $("#loader").hide();
+                });
             } else {
                 $('#written_con_error').html(checker_message).toggleClass('simple_hide');
                 return false;
             }
+
 
             return false;
         });

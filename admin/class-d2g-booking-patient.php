@@ -434,9 +434,6 @@ class D2G_booking_wcc_user {
 	// if success user gets redirected to the doctor waiting room
 	public static function d2g_create_wcc_written_cosnsult() {
 
-		nice_dump($_POST);
-		die();
-
 		if ( ! isset( $_POST['email_advice_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['email_advice_form_nonce'] ) ), 'email_advice_form_action' ) ) {
 			return false; // stop processing immediately
 		}
@@ -475,13 +472,20 @@ class D2G_booking_wcc_user {
 			}
 		}
 
-		$wpDocID      	= isset( $_POST['wp_doc_id'] ) ? absint( wp_unslash( $_POST['wp_doc_id'] ) ) : 0;
-		$first_name   	= isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
-		$last_name    	= isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
-		$client_email 	= isset( $_POST['client_email'] ) ? sanitize_email( wp_unslash( $_POST['client_email'] ) ) : '';
-		$client_gender  = isset( $_POST['client_gender'] ) ? sanitize_text_field( wp_unslash( $_POST['client_gender'] ) ) : '';
-		$complaint		= isset( $_POST['complaint_description'] ) ? sanitize_text_field( wp_unslash( $_POST['complaint_description'] ) ) : '';
-		$client_bday 	= isset($_POST['option_bday']) ? sanitize_text_field(wp_unslash($_POST['option_bday'])) : '';
+		$wpDocID      		= isset( $_POST['wp_doc_id'] ) ? absint( wp_unslash( $_POST['wp_doc_id'] ) ) : 0;
+		$first_name   		= isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
+		$last_name    		= isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
+		$client_email 		= isset( $_POST['client_email'] ) ? sanitize_email( wp_unslash( $_POST['client_email'] ) ) : '';
+		$client_gender  	= isset( $_POST['client_gender'] ) ? sanitize_text_field( wp_unslash( $_POST['client_gender'] ) ) : '';
+		$complaint			= isset( $_POST['complaint_description'] ) ? sanitize_text_field( wp_unslash( $_POST['complaint_description'] ) ) : '';
+		$client_bday 		= isset($_POST['option_bday']) ? sanitize_text_field(wp_unslash($_POST['option_bday'])) : '';
+		$itch_check 		= isset($_POST['itch_check']) ? sanitize_text_field(wp_unslash($_POST['itch_check'])) : '';
+		$blood_check 		= isset($_POST['blood_check']) ? sanitize_text_field(wp_unslash($_POST['blood_check'])) : '';
+		$medical_history 	= isset($_POST['medical_history']) ? sanitize_text_field(wp_unslash($_POST['medical_history'])) : '';
+		$first_noticed 		= isset($_POST['first_noticed']) ? sanitize_text_field(wp_unslash($_POST['first_noticed'])) : '';
+		$location 			= isset($_POST['location']) ? sanitize_text_field(wp_unslash($_POST['location'])) : '';
+		$has_changed		= isset($_POST['has_changed']) ? sanitize_text_field(wp_unslash($_POST['has_changed'])) : '';
+		
 		if ($client_bday && ($dt = DateTime::createFromFormat('d/m/Y', $client_bday))) $client_bday = $dt->format('Y-m-d'); else $client_bday = '';
 
 		//images
@@ -497,6 +501,7 @@ class D2G_booking_wcc_user {
 				}
 			}
 		}
+
 
 		/*maybe for later
 		$type         = isset( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : '';
@@ -533,6 +538,12 @@ class D2G_booking_wcc_user {
 			'optie_geboortedatum'	=> $client_bday,
 			'language'           	=> $currLang,
 			'complaint_desc'        => $complaint,
+			'itch_check'        	=> $itch_check,
+			'blood_check'        	=> $blood_check,
+			'medical_history'		=> $medical_history,
+			'first_noticed'			=> $first_noticed ,
+			'has_changed'			=> $has_changed,
+			'location'				=> $location,
 			'image_1' 				=> $image_1,
 			'image_2' 				=> $image_2,
 			'image_3' 				=> $image_3,

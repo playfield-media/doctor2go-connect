@@ -1565,7 +1565,7 @@ class D2gConnect_Shortcodes {
 	<div class="d2g_form_wrapper  mt-4">
 		<div class="row justify-content-center">
 			<div class="col-md-6 col-lg-5 col-xl-4">
-				<form method="post" action="<?php echo esc_url( wp_login_url( $redirect_to ) ); ?>" id="custom-loginform">
+				<form method="post" class="w-100 w-md-50 mx-auto border rounded-3 p-4 bg-light shadow-sm" action="<?php echo esc_url( wp_login_url( $redirect_to ) ); ?>" id="custom-loginform">
 					<?php
 					// Add nonce field to the form.
 					wp_nonce_field( 'd2g_login_action', 'd2g_login_nonce' );
