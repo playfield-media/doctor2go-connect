@@ -430,6 +430,14 @@ class D2gConnect_Public {
 				'compare' => '=',
 			);
 		}
+
+		if ( 'walkin' === $consult_type ) {
+			$args['meta_query'][] = array(
+				'key'     => 'd2g_walk_in',
+				'value'   => '1',
+				'compare' => '=',
+			);
+		}
 		
 		if ( $post_id !== 0 ) {
 			$args = array(
@@ -546,6 +554,14 @@ class D2gConnect_Public {
 		if ( 'video' === $consult_type ) {
 			$args['meta_query'][] = array(
 				'key'     => 'd2g_availability_check',
+				'value'   => '1',
+				'compare' => '=',
+			);
+		}
+
+		if ( 'walkin' === $consult_type ) {
+			$args['meta_query'][] = array(
+				'key'     => 'd2g_walk_in',
 				'value'   => '1',
 				'compare' => '=',
 			);

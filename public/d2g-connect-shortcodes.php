@@ -903,6 +903,14 @@ class D2gConnect_Shortcodes {
 			);
 		}
 
+		if ( 'walkin' === $consult_type ) {
+			$args['meta_query'][] = array(
+				'key'     => 'd2g_walk_in',
+				'value'   => '1',
+				'compare' => '=',
+			);
+		}
+
 		$checker = 0;
 
 		if ( $specialty != '' && $specialty != '0' ) {
@@ -1133,6 +1141,14 @@ class D2gConnect_Shortcodes {
 			);
 		}
 
+		if ( 'walkin' === $consult_type ) {
+			$args['meta_query'][] = array(
+				'key'     => 'd2g_walk_in',
+				'value'   => '1',
+				'compare' => '=',
+			);
+		}
+
 		$checker = 0;
 
 		if ( $doctor_specialty != '' && $doctor_specialty != '0' ) {
@@ -1261,6 +1277,9 @@ class D2gConnect_Shortcodes {
 							</option>
 							<option value="video" <?php selected( isset( $_GET['consult_type'] ) ? $_GET['consult_type'] : '', 'video' ); ?>>
 								<?php echo esc_html__( 'video consult', 'doctor2go-connect' ); ?>
+							</option>
+							<option value="walkin" <?php selected( isset( $_GET['consult_type'] ) ? $_GET['consult_type'] : '', 'walkin' ); ?>>
+								<?php echo esc_html__( 'walkin video consult', 'doctor2go-connect' ); ?>
 							</option>
 						</select>
 					</li>

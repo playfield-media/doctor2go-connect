@@ -50,9 +50,6 @@ jQuery(document).ready(function($){
             }
             $('#doctor_wrapper').append(response);
 
-            if(myShortcodeData.loading_checker == 1){
-                loadAvailabilityData(availibilityData);
-            }
         });
 
         setTimeout(function(){
@@ -159,11 +156,7 @@ jQuery(document).ready(function($){
                     response = myShortcodeDataFilters.str_no_doctors_found;
                 }
                 $('#doctor_wrapper_outer').removeClass('loading_doctors');
-                $('#doctor_wrapper').html(response).promise().done(function () {
-                    if ( myShortcodeDataFilters.loading_checker == 1 ) { 
-                        loadAvailabilityData(availibilityData);
-                    }
-                });
+                $('#doctor_wrapper').html(response);
                 $('#doctor_wrapper').fadeIn();
                 
             });
