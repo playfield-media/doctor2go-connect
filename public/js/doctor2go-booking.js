@@ -104,17 +104,13 @@
                     },
                     success: function(response){
                         console.log(response);
-
+                        //classic layout    
                         if( d2gBookingVars.only_cal === false ){
                             if( response.data.walkin_check === true ){
-                                var walkin = '<span class="walkin">' + d2gBookingVars.i18n.walk_in_consult + '</span>';
                                 $('.walk_in_button').removeClass('simple_hide');
-                                void(walkin);
                             }
 
                             if( response.data.tariffs !== '' ){
-                                var tariffs = '<li class="icon-cc-mastercard col-sm-6 list-group-item"> ' + response.data.tariffs + '</li>';
-                                $('#icon_list_' + docId).append(tariffs);
                                 $('.fillup_' + docId).each(function(){
                                     $(this).html(response.data.tariffs);
                                 });
@@ -126,16 +122,13 @@
                             }
 
                             if( response.data.first_availibility !== '' ){
-                                var first_availability = '<li class="icon-clock col-sm-6 list-group-item"> ' + response.data.first_availibility + '</li>';
-                                $('#icon_list_' + docId).append(first_availability);
                                 $('.calendar_button').removeClass('simple_hide');
                             } else {
                                 $('#calendar_wrapper').css('display', 'none');
                             }
                         }
 
-                        console.log(response.data);
-
+                        // for consultation tabs    
                         if( d2gBookingVars.in_tabs === true ){
                             if( response.data.walkin_check === true ){
                                 $('.walk_in_button').removeClass('simple_hide');

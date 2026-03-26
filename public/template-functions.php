@@ -255,22 +255,24 @@ function cb_d2g_info_box( $temp_file, $version, $post = '' ) {
 		$rowClass = 'row';
 		$liClass  = 'col-sm-6';
 	}
-
+	$currUser  = wp_get_current_user();
+	$user_meta = get_user_meta( $currUser->data->ID );
 	?>
 	
-	<ul class="icon_list specs <?php echo ($temp_file != 'detail')?'list-group':''?>  <?php echo esc_html( $rowClass ); ?>" id="icon_list_<?php echo esc_html( $d2g_profile_data->doctor_profile_ID ); ?>">
-        <?php if ( $d2g_profile_data->doctor_meta['d2g_zip'][0] . $d2g_profile_data->doctor_meta['d2g_city'][0] != '' ) { ?>
-            <li class="icon-home list-group-item <?php echo esc_html( $liClass ); ?>">
-                <span>
-                    <?php echo esc_html( $d2g_profile_data->doctor_meta['d2g_zip'][0] ); ?> <?php echo esc_html( $d2g_profile_data->doctor_meta['d2g_city'][0] ); ?> -
-                    <?php if ( $d2g_profile_data->countries !== false ) { ?>
-                        <?php foreach ( $d2g_profile_data->countries as $country ) { ?>
-                            <?php echo esc_html( $country->name ); ?>
-                        <?php } ?>
-                    <?php } ?>
-                </span>
-            </li>
-        <?php } ?>
+	<ul class="icon_list specs <?php echo ($temp_file != 'detail')?'list-group mb-3':''?>  <?php echo esc_html( $rowClass ); ?>" id="icon_list_<?php echo esc_html( $d2g_profile_data->doctor_profile_ID ); ?>">
+		<li class="icon-home list-group-item <?php echo esc_html( $liClass ); ?>">
+			<span>
+				<?php echo esc_html( $d2g_profile_data->doctor_meta['d2g_zip'][0] ); ?> <?php echo esc_html( $d2g_profile_data->doctor_meta['d2g_city'][0] ); ?> 
+				<?php if ( $d2g_profile_data->doctor_meta['d2g_zip'][0] . $d2g_profile_data->doctor_meta['d2g_city'][0] != '' ) { ?>
+					-
+				<?php } ?>
+				<?php if ( $d2g_profile_data->countries !== false ) { ?>
+					<?php foreach ( $d2g_profile_data->countries as $country ) { ?>
+						<?php echo esc_html( $country->name ); ?>
+					<?php } ?>
+				<?php } ?>
+			</span>
+		</li>
         <?php if ( $d2g_profile_data->languages !== false ) { ?>
             <li class="icon-globe list-group-item <?php echo esc_html( $liClass ); ?>">
                 <?php foreach ( $d2g_profile_data->languages as $language ) { ?>
@@ -288,33 +290,62 @@ function cb_d2g_info_box( $temp_file, $version, $post = '' ) {
                 <?php echo esc_html__( 'Reg. country', 'doctor2go-connect' ); ?>: <?php echo esc_html( $d2g_profile_data->doctor_meta['reg_country'][0] ); ?>
             </li>
         <?php } ?>
-        <?php if ( $d2g_profile_data->doctor_meta['avg_price'][0] ) { ?>
-            <li class="icon-cc-mastercard list-group-item <?php echo esc_html( $liClass ); ?>">
-                <?php echo esc_html__( 'Average price:', 'doctor2go-connect' ); ?> <?php echo esc_html( $d2g_profile_data->doctor_meta['avg_price'][0] ); ?>
-            </li>
-        <?php } ?>
-        <?php if ( $d2g_profile_data->firstAvailibility != '' ) { ?>
-            <li class="icon-clock list-group-item <?php echo esc_html( $liClass ); ?>"><?php echo ( $d2g_profile_data->firstAvailibility != '01/01/1970 @ 01:00' ) ? esc_html( $d2g_profile_data->firstAvailibility ) . '<p class="small">' . esc_html__( 'next best availibilty', 'doctor2go-connect' ) : esc_html__( 'no availibilities', 'doctor2go-connect' ); ?> </p></li>
-        <?php } ?>
-        <?php if ( is_array( $d2g_profile_data->locations ) ) { ?>
-            <?php if ( count( $d2g_profile_data->locations ) > 0 && $temp_file != 'detail' ) { ?>
-                <li class="icon-shop list-group-item <?php echo esc_html( $liClass ); ?>">
-                    <a href="#locations-<?php echo esc_html( $d2g_profile_data->doctor_profile_ID ); ?>" class="fancybox"><?php echo esc_html( 'show all locations', 'doctor2go-connect' ); ?></a>
-                    <div id="locations-<?php echo esc_html( $d2g_profile_data->doctor_profile_ID ); ?>" class="simple_hide locations_popup">
-                        <h4><?php echo esc_html( 'All locations from: ', 'doctor2go-connect' ); ?> <?php the_title(); ?></h4>
-                        <ul>
-                            <?php foreach ( $d2g_profile_data->locations as $location ) { ?>
-                                <li class="list-group-item"><?php echo esc_html( $location['name'] . ' (' . $location['city'] . ' - ' . $location['country'] . ')' ); ?></li>
-                            <?php } ?>
-                        </ul>
-                    </div>   
-                </li>
-            <?php } ?>
-        <?php } ?>
-        
-    </ul>
+	</ul>   
+	<?php 
+	if($temp_file != 'detail'){
+		if($d2g_profile_data->doctor_meta['d2g_first_availability'][0] != '' && $d2g_profile_data->doctor_meta['d2g_first_availability'][0] != 0){
+			$datetimeObj = DateTime::createFromFormat( 'Y-m-d\TH:i:s+', $d2g_profile_data->doctor_meta['d2g_first_availability'][0] );
+			$timezone    = ( get_user_timezone() != '' ) ? get_user_timezone() : 'Europe/Amsterdam';
 
-	<?php
+			if ( $user_meta['p_timezone'][0] ) {
+				$timezone = $user_meta['p_timezone'][0];
+			}
+
+			$timeZoneChange = new DateTimeZone( $timezone );
+			$datetimeObj->setTimezone( $timeZoneChange );
+			$firstAvailibility = $datetimeObj->format( 'd/m/Y' ) . ' ' . esc_html__( ' - ', 'doctor2go-connect' ) . ' ' . $datetimeObj->format( 'H:i' ) . '  (' . explode( '/', $timezone )[1] . ')';
+
+		} else {
+			$firstAvailibility = '';
+		}
+		?>
+		<ul class="icon_list specs consult_list <?php echo ($temp_file != 'detail')?'list-group':''?>  <?php echo esc_html( $rowClass ); ?>" id="icon_list_<?php echo esc_html( $d2g_profile_data->doctor_profile_ID ); ?>">
+			<li class="bg-light list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
+				<strong><?php echo esc_html__('Consultation offers');?></strong>
+				<a href="#info_content" class="fancybox info_link">
+					<span class="icon-info"></span>
+				</a>
+			</li>
+			<li class="flaticon-wcc flaticon-meeting-schedule list-group-item d-flex justify-content-between align-items-center <?php echo esc_html( $liClass ); ?>">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold"><?php echo esc_html__('Video consult on appointment', 'doctor-2go-connect')?></div>
+						<?php echo ( $d2g_profile_data->doctor_meta['d2g_tariffs'][0] != '' && $d2g_profile_data->doctor_meta['d2g_tariffs'][0] != 0 ) ?'<span class="text-success">&#10004;</span> '.esc_html__('first availability: ', 'doctor-2go-connect').wp_kses_post( $firstAvailibility ):'<span class="text-danger">&#10060;</span>   '.esc_html__('not available', 'doctor2go-connect')?>
+				</div>
+				<span class="badge text-bg-primary rounded-pill">
+					<?php echo ( $d2g_profile_data->doctor_meta['d2g_tariffs'][0] != '' && $d2g_profile_data->doctor_meta['d2g_tariffs'][0] != 0 ) ? wp_kses_post( $d2g_profile_data->doctor_meta['d2g_tariffs'][0] ):esc_html__('n/a')?>
+				</span>
+				
+			</li>
+			<li class="icon-mail-1 list-group-item d-flex justify-content-between align-items-center <?php echo esc_html( $liClass ); ?>">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold"><?php echo esc_html__('E-mail advice', 'doctor-2go-connect')?></div>
+					<?php echo ( $d2g_profile_data->doctor_meta['written_con_price'][0] != '' )?'<span class="text-success">&#10004;</span> '.esc_html__('available at any time', 'doctor2go-connect'):'<span class="text-danger">&#10060;</span>   '.esc_html__('not available', 'doctor2go-connect')  ?>
+				</div>
+				<span class="badge text-bg-primary rounded-pill">
+					<?php echo ( $d2g_profile_data->doctor_meta['written_con_price'][0] != '' && $d2g_profile_data->doctor_meta['written_con_price'][0] != 0 ) ? esc_html( $d2g_profile_data->doctor_meta['written_con_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['written_con_price'][0] ):esc_html__('n/a')?>
+				</span>
+			</li>
+			<li class="flaticon-online-meeting flaticon-wcc list-group-item d-flex justify-content-between align-items-center <?php echo esc_html( $liClass ); ?>">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold"><?php echo esc_html__('Walkin video consult', 'doctor-2go-connect')?></div>
+					<?php echo ( $d2g_profile_data->doctor_meta['d2g_walk_in'][0] != '' && $d2g_profile_data->doctor_meta['d2g_walk_in'][0] != 0 && $d2g_profile_data->doctor_meta['walk_in_price'][0] != '' )?'<span class="text-success">&#10004;</span> '.esc_html__('now available', 'doctor2go-connect'):'<span class="text-danger">&#10060;</span>   '.esc_html__('not available', 'doctor2go-connect')  ?>
+				</div>
+				<span class="badge text-bg-primary rounded-pill">
+					<?php echo ( $d2g_profile_data->doctor_meta['walk_in_price'][0] != '' && $d2g_profile_data->doctor_meta['walk_in_price'][0] != 0 && $d2g_profile_data->doctor_meta['d2g_walk_in'][0] != '' && $d2g_profile_data->doctor_meta['d2g_walk_in'][0] != 0) ? esc_html( $d2g_profile_data->doctor_meta['walk_in_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['walk_in_price'][0] ):esc_html__('n/a')?>
+				</span>
+			</li>
+		</ul>
+	<?php }
 }
 
 
@@ -2035,18 +2066,6 @@ function d2g_get_liked_posts() {
 }
 
 
-
-
-// Hook into 'init' to register a new menu location
-function d2g_register_extra_menu_location() {
-	register_nav_menus(
-		array(
-			'd2g-help-menu' => __( 'D2G patient menu (used on the appointments page for patients without an account).', 'doctor2go-connect' ),
-		)
-	);
-}
-add_action( 'init', 'd2g_register_extra_menu_location' );
-
 // Enable shortcode processing in menu items
 add_filter( 'wp_nav_menu_items', 'd2g_run_shortcodes_in_menu', 10, 2 );
 function d2g_run_shortcodes_in_menu( $items, $args ) {
@@ -2067,7 +2086,7 @@ function d2g_user_name_shortcode() {
 add_shortcode( 'd2g_user_name', 'd2g_user_name_shortcode' );
 
 
-// old ajax call in calendar loads the availability data from the D2G-software
+// ajax callback funcrtion for loading the availability data in the calendar on the detail page
 function d2g_load_availability_data() {
 	// Get doctor ID safely, suppress nonce warning
 	$doc_id = isset( $_POST['doc_id'] ) ? absint( wp_unslash( $_POST['doc_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -2089,15 +2108,16 @@ function d2g_load_availability_data() {
 	if ( isset( $availabilityDataObj->availabilities ) || isset( $availabilityDataObj->user_has_inloop ) ) {
 		if ( ! isset( $availabilityDataObj->availabilities->message ) && count( $availabilityDataObj->availabilities ) > 0 ) {
 			update_post_meta( $doc_id, 'd2g_availability_check', 1 );
-			$docSlotsArray     = $availabilityDataObj->availabilities;
-			$firstAvailibility = $profileClass->get_first_avialibility( $docSlotsArray );
+			$docSlotsArray     		= $availabilityDataObj->availabilities;
+			$firstAvailibilityStr 	= $profileClass->get_first_avialibility( $docSlotsArray );
+			$firstAvailibility 		= $profileClass->get_first_avialibility( $docSlotsArray, 'date' );
 			update_post_meta( $doc_id, 'd2g_first_availability', $firstAvailibility );
-			$tariffs           = $profileClass->get_tariffs( $docSlotsArray );
-			$tariffStr         = d2g_get_tariff_string( $tariffs );
+			$tariffs           		= $profileClass->get_tariffs( $docSlotsArray );
+			$tariffStr         		= d2g_get_tariff_string( $tariffs );
 			update_post_meta( $doc_id, 'd2g_tariffs', $tariffStr );
 			
 		}
-		 if ( isset( $availabilityDataObj->user_has_inloop ) && $availabilityDataObj->user_has_inloop == true ) {
+		 if ( isset( $availabilityDataObj->user_has_inloop ) && $availabilityDataObj->user_has_inloop == true && isset( $availabilityDataObj->user_is_active ) && $availabilityDataObj->user_is_active == true ) {
 			$walk_in_check     = true;
 			update_post_meta( $doc_id, 'd2g_walk_in', 1 );
 		} else {
@@ -2117,7 +2137,7 @@ function d2g_load_availability_data() {
 	$availibily_data_set = array(
 		'walkin_check'       => $walk_in_check ?: '',
 		'tariffs'            => $tariffStr ?: '',
-		'first_availibility' => $firstAvailibility ?: '',
+		'first_availibility' => $firstAvailibilityStr ?: '',
 		'doc_slots'          => $docSlotsArray,
 	);
 
@@ -2142,135 +2162,3 @@ function d2g_get_post_text( $key ) {
         ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) )
         : '';
 }
-
-
-// REST API endpoint to get doctor availabilities
-// Important note: This function is similar to the d2g_load_availability_data() function used in the old ajax call in the calendar, but adapted for REST API usage. 
-// This will become deprecated as loading in the overview will not be needed anymore once avilibilities are fetched and saved by a chron job.
-// A wrapper ID #doctor_wrapper is needed around the doctor loop for this to work properly.
-add_action(
-	'rest_api_init',
-	function () {
-		register_rest_route(
-			'd2g-connect/v1',
-			'/availabilities',
-			array(
-				'methods'             => 'POST',
-				'callback'            => 'd2g_get_availabilities',
-				'permission_callback' => '__return_true', // lock this down if needed
-			)
-		);
-	}
-);
-
-// Callback function for the REST API endpoint (this is used in the doc overview page and other loops to load availability data)
-function d2g_get_availabilities( WP_REST_Request $request ) {
-
-	// Get params from JS
-	$docKey = sanitize_text_field( $request->get_param( 'doc_key' ) );
-	$docId  = absint( $request->get_param( 'doc_id' ) );
-
-	if ( empty( $docKey ) || empty( $docId ) ) {
-		return new WP_REST_Response(
-			array(
-				'error' => 'Missing doc_key or doc_id',
-			),
-			400
-		);
-	}
-
-	// Instantiate profile class
-	$profileClass = new D2G_ProfileData( $docId );
-
-	// Prepare handshake
-	$unixTime = time();
-	$superKey = get_option( 'wcc_token' );
-	$myHash   = hash( 'sha256', $unixTime . '_' . $docKey . '_' . $superKey );
-
-	$url = get_option( 'api_url_short' ) . 'doclisting/availabilities';
-
-	$body = array(
-		'handshake' => array(
-			'time'  => (string) $unixTime,
-			'token' => $docKey,
-			'hash'  => $myHash,
-			'type'  => 'user',
-		),
-		'calendar'  => 'super',
-	);
-
-	$args = array(
-		'method'      => 'POST',
-		'timeout'     => 30,
-		'headers'     => array(
-			'Content-Type' => 'application/json',
-		),
-		'body'        => wp_json_encode( $body ),
-		'data_format' => 'body',
-	);
-
-	$response = wp_remote_request( $url, $args );
-
-	if ( is_wp_error( $response ) ) {
-		return new WP_REST_Response(
-			array(
-				'error'   => 'API request failed',
-				'message' => $response->get_error_message(),
-			),
-			500
-		);
-	}
-
-	$response_body       = wp_remote_retrieve_body( $response );
-	$availabilityDataObj = json_decode( $response_body );
-
-	// -----------------------------
-	// BUSINESS LOGIC FOR AVAILABILITY DATA
-	// -----------------------------
-	$walk_in_check     = '';
-	$tariffStr         = '';
-	$firstAvailibility = '';
-	$docSlotsArray     = array();
-
-	if ( isset( $availabilityDataObj->availabilities ) ) {
-
-		if (
-			! isset( $availabilityDataObj->availabilities->message ) &&
-			is_array( $availabilityDataObj->availabilities ) &&
-			count( $availabilityDataObj->availabilities ) > 0
-		) {
-
-			$docSlotsArray     = $availabilityDataObj->availabilities;
-			$firstAvailibility = $profileClass->get_first_avialibility( $docSlotsArray );
-
-			$tariffs   = $profileClass->get_tariffs( $docSlotsArray );
-			$tariffStr = d2g_get_tariff_string( $tariffs );
-
-			if (
-				! empty( $availabilityDataObj->user_has_inloop ) &&
-				! empty( $availabilityDataObj->user_is_active )
-			) {
-				$walk_in_check = true;
-			} else {
-				$walk_in_check = false;
-			}
-		}
-	}
-
-	$availability_data_set = array(
-		'walkin_check'       => $walk_in_check ?: '',
-		'tariffs'            => $tariffStr ?: '',
-		'first_availibility' => $firstAvailibility ?: '',
-		'doc_slots'          => $docSlotsArray,
-	);
-
-	return new WP_REST_Response(
-		array(
-			'success' => true,
-			'data'    => $availability_data_set,
-		),
-		200
-	);
-}
-
-

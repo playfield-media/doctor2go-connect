@@ -22,7 +22,7 @@
                         <h3 class="member-name mb-2 text-center text-primary font-weight-bold"><?php the_title(); ?></h3>
                     </a>
                     <?php if($specialties !== false){ ?>
-                        <h4 class="mb-4 text-center">
+                        <h4 class="mb-4 text-center spcialties">
                             <?php foreach ($d2g_profile_data->specialties as $specialty){ ?>
                                 <span><?php echo esc_html($specialty->name)?></span>
                             <?php } ?>
@@ -32,7 +32,7 @@
                 <div class="inner_content mb-3">
                     <?php do_action( 'd2g_info_box', 'overview', 'col-1' ); ?>
                 </div>
-                <a class="btn btn-primary w-100" href="<?php echo esc_html(get_the_permalink())?>"><?php esc_html_e('start a consult', 'wcc-doclisting')?></a>
+                <a class="btn btn-outline-primary w-100" href="<?php echo esc_html(get_the_permalink())?>"><?php esc_html_e('start a consult', 'wcc-doclisting')?></a>
             </div>
         </div>
         <div class="card-footer theme-bg-primary border-0 text-center">

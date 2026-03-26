@@ -160,7 +160,7 @@ class D2G_ProfileData {
 	}
 
 
-	public function get_first_avialibility( $docSlots ) {
+	public function get_first_avialibility( $docSlots, $return = '' ) {
 		if ( $docSlots ) {
 			$currUser  = wp_get_current_user();
 			$user_meta = get_user_meta( $currUser->data->ID );
@@ -173,6 +173,10 @@ class D2G_ProfileData {
 					return strcmp( $a->start, $b->start );
 				}
 			);
+
+			if($return == 'date'){
+				return $docSlotsArray[0]->start;
+			}
 
 			$datetimeObj = DateTime::createFromFormat( 'Y-m-d\TH:i:s+', $docSlotsArray[0]->start );
 			$timezone    = ( get_user_timezone() != '' ) ? get_user_timezone() : 'Europe/Amsterdam';

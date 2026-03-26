@@ -65,18 +65,13 @@ if ( ! defined( 'WPINC' ) ) {
 				<p><?php echo esc_html__( 'You can deactivate the following JS file if your theme already contains a bootstrap5 JS file.', 'doctor2go-connect' ); ?></p>        
 				<input type="checkbox" name="d2g_bootstrap_js" id="d2g_bootstrap_js" value="1"  <?php echo ( get_option( 'd2g_bootstrap_js' ) == '1' ) ? 'checked' : ''; ?>><label for="d2g_bootstrap_js"><?php echo esc_html__( 'Deactivate bootstrap JS', 'doctor2go-connect' ); ?></label>    
 			</div>
-			<h3 class="section_title opener"><?php echo esc_html__( 'Overview page settings', 'doctor2go-connect' ); ?></h3>
-			<div class="section_wrapper simple_hide">
-				<h4><?php echo esc_html__( 'Load availability information', 'doctor2go-connect' ); ?></h4>
-				<input type="checkbox" name="d2g_load_availability_info" id="d2g_load_availability_info" value="1"  <?php echo ( get_option( 'd2g_load_availability_info' ) == '1' ) ? 'checked' : ''; ?>><label for="d2g_load_availability_info"><?php echo esc_html__( 'Load availability information on overview page', 'doctor2go-connect' ); ?></label>
-			</div>
 			<h3 class="section_title opener"><?php echo esc_html__( 'Detail page settings', 'doctor2go-connect' ); ?></h3>
 			<div class="section_wrapper simple_hide">
 				<h4><?php echo esc_html__( 'Layout', 'doctor2go-connect' ); ?></h4>
 				<select id="d2g_detail_page_view" name="d2g_detail_page_view">
 					<option <?php echo ( get_option( 'd2g_detail_page_view' ) == 'single-v1' || get_option( 'd2g_detail_page_view' ) == '' ) ? 'selected' : ''; ?> value="single-v1"><?php echo esc_html__( 'With sidebar (anchor links, hidden forms in fancybox)', 'doctor2go-connect' ); ?></option>
 					<option <?php echo ( get_option( 'd2g_detail_page_view' ) == 'single-v2' ) ? 'selected' : ''; ?> value="single-v2"><?php echo esc_html__( 'Full width (no sidebar, hidden forms in fancybox)', 'doctor2go-connect' ); ?></option>
-					<option <?php echo ( get_option( 'd2g_detail_page_view' ) == 'single-v3' ) ? 'selected' : ''; ?> value="single-v3"><?php echo esc_html__( 'Full width (no sidebar, consultation tabs)', 'doctor2go-connect' ); ?></option>
+					<option <?php echo ( get_option( 'd2g_detail_page_view' ) == 'single-v3' ) ? 'selected' : ''; ?> value="single-v3"><?php echo esc_html__( 'Full width (no sidebar, consultation tabs, for this template you will need to install WP Mobile Detect)', 'doctor2go-connect' ); ?></option>
 				</select>
 				<h4><?php echo esc_html__( 'Header & footer', 'doctor2go-connect' ); ?></h4>
 				<p><?php echo esc_html__( 'If you are using a base file in your theme, where you load the footer and header, than you can deactivate loading those in youre single-d2g_doctor.php file.', 'doctor2go-connect' ); ?></p>

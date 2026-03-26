@@ -80,12 +80,13 @@ $location_check = $d2g_profile_data->doctor_meta['locations_to_go'];
 							do_action( 'd2g_doctor_written_con_form' );
 					}
 					?>
-					<!--ACTION HOOK BOOKING CALENDAR-->
-					<?php do_action( 'd2g_booking_calendar' ); ?>
+					
 					<div id="bio" class="bio section mb-5">
 						<h3 class="section_title"><?php echo esc_html__( 'About', 'doctor2go-connect' ); ?></h3>
 						<div class="text_wrapper"><?php the_content(); ?></div>
 					</div>
+					<!--ACTION HOOK BOOKING CALENDAR-->
+					<?php do_action( 'd2g_booking_calendar' ); ?>
 					<div class="mb-5">
 						<!--ACTION HOOK LOCATIONS-->
 						<?php

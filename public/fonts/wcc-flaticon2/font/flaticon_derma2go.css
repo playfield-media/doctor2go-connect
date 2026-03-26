@@ -29,6 +29,10 @@ i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before, span[class^="flatic
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.flaticon-wcc:before{
+	font-family: flaticon_derma2go !important;
+}
+
 .flaticon-research:before {
 	content: "\f101";
 }

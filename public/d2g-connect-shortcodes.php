@@ -1110,8 +1110,6 @@ class D2gConnect_Shortcodes {
 		$consult_type 			= isset( $_GET['consult_type'] ) ? sanitize_text_field( wp_unslash( $_GET['consult_type'] ) ) : '';
 		$post_id_filter   = isset( $_GET['post_id'] ) ? absint( wp_unslash( $_GET['post_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- GET filters only (view/search), no state change.
 
-		echo $consult_type;
-
 		// prepare meta_query if you already have one
 		if ( empty( $args['meta_query'] ) ) {
 			$args['meta_query'] = array();
