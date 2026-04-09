@@ -692,94 +692,106 @@ class D2gConnect_Public {
 	//
 	// single sign on login (this is called when user clicks link in WCC software)
 	public function d2g_sso() {
-		// Set cookie for WP language
 		if ( ! is_admin() ) {
 			setcookie( 'wp_lang', get_locale(), time() + 3600, '/' );
 		}
 
 		global $post;
 
-		$redirect_url = isset( $_GET['redirect_url'] ) ? sanitize_text_field( wp_unslash( $_GET['redirect_url'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$wcc_redirect = isset( $_GET['wcc_redirect'] ) ? sanitize_text_field( wp_unslash( $_GET['wcc_redirect'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$lang         = isset( $_GET['lang'] ) ? sanitize_text_field( wp_unslash( $_GET['lang'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$redirect_to  = isset( $_GET['redirect_to'] ) ? sanitize_text_field( wp_unslash( $_GET['redirect_to'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$user_key     = isset( $_GET['user_key'] ) ? wp_unslash( $_GET['user_key'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$time         = isset( $_GET['time'] ) ? absint( wp_unslash( $_GET['time'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$hash         = isset( $_GET['hash'] ) ? wp_unslash( $_GET['hash'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$app_id       = isset( $_GET['app'] ) ? absint( wp_unslash( $_GET['app'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$client_token = isset( $_GET['client_token'] ) ? sanitize_text_field( wp_unslash( $_GET['client_token'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$redirect_url = isset( $_GET['redirect_url'] ) ? sanitize_text_field( wp_unslash( $_GET['redirect_url'] ) ) : '';
+		$wcc_redirect = isset( $_GET['wcc_redirect'] ) ? sanitize_text_field( wp_unslash( $_GET['wcc_redirect'] ) ) : '';
+		$lang         = isset( $_GET['lang'] ) ? sanitize_text_field( wp_unslash( $_GET['lang'] ) ) : '';
+		$redirect_to  = isset( $_GET['redirect_to'] ) ? sanitize_text_field( wp_unslash( $_GET['redirect_to'] ) ) : '';
+		$user_key     = isset( $_GET['user_key'] ) ? sanitize_text_field( wp_unslash( $_GET['user_key'] ) ) : '';
+		$time         = isset( $_GET['time'] ) ? absint( wp_unslash( $_GET['time'] ) ) : 0;
+		$hash         = isset( $_GET['hash'] ) ? sanitize_text_field( wp_unslash( $_GET['hash'] ) ) : '';
+		$app_id       = isset( $_GET['app'] ) ? absint( wp_unslash( $_GET['app'] ) ) : 0;
+		$client_token = isset( $_GET['client_token'] ) ? sanitize_text_field( wp_unslash( $_GET['client_token'] ) ) : '';
 
-		/*** programmatic login */
 		if ( $user_key ) {
-			$superKey = get_option( 'wcc_token' );
-			$unixTime = ( new DateTime() )->format( 'U' );
+			$super_key = (string) get_option( 'wcc_token' );
+			$unix_time = time();
 
-			if ( $unixTime - $time <= 300000 ) {
-				$hashChecker = hash( 'sha256', $time . '_' . $user_key . '_' . $superKey );
-
-				if ( $hashChecker === $hash ) {
-					$myUser = get_users(
-						array(
-							'meta_key'   => 'user_key',
-							'meta_value' => $user_key,
-						)
-					);
-
-					if ( isset( $myUser[0] ) ) {
-						$userName = $myUser[0]->data->user_login;
-						$response = d2g_programmatic_login( $userName );
-
-						if ( $response === true ) {
-							$currLang = explode( '_', get_locale() )[0];
-							$d2gAdmin = new D2G_doc_user_profile();
-							$pageData = $d2gAdmin::d2g_page_url( $currLang, 'my_profile', true );
-							header( 'Location:' . $pageData['url'] );
-							exit;
-						}
-					}
-				} else {
-					echo esc_html__( 'A wrong login hash has been sent', 'doctor2go-connect' );
-				}
-			} else {
-				echo esc_html__( 'The link is not valid anymore', 'doctor2go-connect' );
+			if ( ! $time || $unix_time - $time > 300000 ) {
+				wp_die( esc_html__( 'The link is not valid anymore', 'doctor2go-connect' ) );
 			}
+
+			$hash_checker = hash( 'sha256', $time . '_' . $user_key . '_' . $super_key );
+
+			if ( ! hash_equals( $hash_checker, $hash ) ) {
+				wp_die( esc_html__( 'A wrong login hash has been sent', 'doctor2go-connect' ) );
+			}
+
+			$my_user = get_users(
+				array(
+					'meta_key'   => 'user_key',
+					'meta_value' => $user_key,
+					'number'     => 1,
+				)
+			);
+
+			if ( ! empty( $my_user[0] ) ) {
+				$response = d2g_programmatic_login( $my_user[0]->user_login );
+
+				if ( true === $response ) {
+					$currLang = explode( '_', get_locale() )[0];
+					$d2gAdmin = new D2G_doc_user_profile();
+					$pageData = $d2gAdmin::d2g_page_url( $currLang, 'my_profile', true );
+					wp_safe_redirect( $pageData['url'] );
+					exit;
+				}
+			}
+
+			wp_die( esc_html__( 'Login failed', 'doctor2go-connect' ) );
 		}
 
-		// Handle redirects to protected pages or specific pages (confirmation after booking)
 		if ( $redirect_url && ! $wcc_redirect ) {
+			if ( ! isset( $_GET['load_data_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['load_data_nonce'] ) ), 'load_data_nonce' ) ) {
+				wp_die( esc_html__( 'Invalid security token.', 'doctor2go-connect' ), 403 );
+			}
+
 			$d2gAdmin  = new D2G_doc_user_profile();
 			$pageData  = $d2gAdmin::d2g_page_url( $lang, 'login', true );
 			$pageData2 = $d2gAdmin::d2g_page_url( $lang, $redirect_to, true );
 
-			// Special case for appointment confirmation
 			if ( $redirect_url === 'appointment_confirmation' ) {
 				$url = $d2gAdmin::d2g_page_url( $lang, $redirect_url, false );
-				header( 'Location:' . $url . '?app=' . $app_id . '&client_token=' . $client_token );
+				$url = add_query_arg(
+					array(
+						'app'          => $app_id,
+						'client_token' => $client_token,
+					),
+					$url
+				);
+				wp_safe_redirect( $url );
 				exit;
 			}
 
 			if ( is_user_logged_in() ) {
-				header( 'Location:' . $pageData2['url'] );
+				wp_safe_redirect( $pageData2['url'] );
 			} else {
-				header( 'Location:' . $pageData['url'] . '?redirect_to=' . urlencode( $pageData2['url'] ) );
+				wp_safe_redirect( add_query_arg( 'redirect_to', rawurlencode( $pageData2['url'] ), $pageData['url'] ) );
 			}
 
 			exit;
 		}
 
+		if ( ! $post || empty( $post->ID ) ) {
+			return;
+		}
+
 		$post_meta = get_post_meta( $post->ID );
 
-		if ( isset( $post_meta['d2g_page_accessebility'][0] ) && $post_meta['d2g_page_accessebility'][0] === 'protected' && ! is_user_logged_in() ) {
+		if ( isset( $post_meta['d2g_page_accessebility'][0] ) && 'protected' === $post_meta['d2g_page_accessebility'][0] && ! is_user_logged_in() ) {
 			$currLang = explode( '_', get_locale() )[0];
 			$d2gAdmin = new D2G_doc_user_profile();
 			$pageData = $d2gAdmin::d2g_page_url( $currLang, 'login', true );
-			header( 'Location:' . $pageData['url'] );
+			wp_safe_redirect( $pageData['url'] );
 			exit;
 		}
 
-		if ( isset( $post_meta['d2g_page_accessebility'][0] ) && $post_meta['d2g_page_accessebility'][0] === 'protected_uc' && ! is_user_logged_in() && get_option( 'under_construction' ) == 1 ) {
-			$new_url = '/under-construction';
-			header( 'Location:' . $new_url );
+		if ( isset( $post_meta['d2g_page_accessebility'][0] ) && 'protected_uc' === $post_meta['d2g_page_accessebility'][0] && ! is_user_logged_in() && 1 == get_option( 'under_construction' ) ) {
+			wp_safe_redirect( home_url( '/under-construction' ) );
 			exit;
 		}
 	}
