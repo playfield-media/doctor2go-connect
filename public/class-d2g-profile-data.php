@@ -50,10 +50,10 @@ class D2G_ProfileData {
 				$this->feat_pic        = wp_get_attachment_image_src( $thumb_id, 'd2g-doc-pic' )[0];
 				$this->feat_pic_square = wp_get_attachment_image_src( $thumb_id, 'd2g-doc-pic-square' )[0];
 				$this->feat_pic_full   = wp_get_attachment_image_src( $thumb_id, 'full' )[0];
-			} elseif ( get_option( 'd2g_placeholder' ) != '' ) {
-					$this->feat_pic        = wp_get_attachment_image_src( get_option( 'd2g_placeholder' ), 'd2g-doc-pic' )[0];
-					$this->feat_pic_square = wp_get_attachment_image_src( get_option( 'd2g_placeholder' ), 'd2g-doc-pic-square' )[0];
-					$this->feat_pic_full   = wp_get_attachment_image_src( get_option( 'd2g_placeholder' ), 'full' )[0];
+			} elseif ( get_option( 'd2gc_placeholder' ) != '' ) {
+					$this->feat_pic        = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'd2g-doc-pic' )[0];
+					$this->feat_pic_square = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'd2g-doc-pic-square' )[0];
+					$this->feat_pic_full   = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'full' )[0];
 			} else {
 				$this->feat_pic = plugin_dir_url( __FILE__ ) . 'images/doctor-placeholder.jpg';
 			}
@@ -112,10 +112,10 @@ class D2G_ProfileData {
 	public function d2g_get_availability_data( $docKey ) {
 		$myTime   = new DateTime();
 		$unixTime = $myTime->format( 'U' );
-		$superKey = get_option( 'wcc_token' );
+		$superKey = get_option( 'd2gc_wcc_token' );
 		$myHash   = hash( 'sha256', $unixTime . '_' . $docKey . '_' . $superKey );
 
-		$url = get_option( 'api_url_short' ) . 'doclisting/availabilities';
+		$url = get_option( 'd2gc_api_url_short' ) . 'doclisting/availabilities';
 
 		$body = array(
 			'handshake' => array(

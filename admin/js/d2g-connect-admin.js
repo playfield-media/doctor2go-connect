@@ -124,7 +124,7 @@ function add_form_row( type, rowID){
 jQuery(document).ready(function($){
 	var custom_uploader
 	, click_elem = jQuery('.wpse-228085-upload')
-	, target = jQuery('.wrap input[name="d2g_placeholder"]')
+	, target = jQuery('.wrap input[name="d2gc_placeholder"]')
 
 	click_elem.click(function(e) {
 		e.preventDefault();
@@ -156,7 +156,7 @@ jQuery(document).ready(function($){
 jQuery(document).ready(function($){
 	var custom_uploader2
 	, click_elem = jQuery('.wpse-upload')
-	, target = jQuery('.wrap input[name="d2g_logo"]')
+	, target = jQuery('.wrap input[name="d2gc_logo"]')
 
 	click_elem.click(function(e) {
 		e.preventDefault();

@@ -57,7 +57,7 @@ class D2gConnect_Shortcodes {
 	/*
 	* shortcode to show the doctor profile edit form
 	*/
-	public function d2g_profile_edit( $atts ) {
+	public function d2gc_profile_edit( $atts ) {
 		$a = shortcode_atts(
 			array(),
 			$atts
@@ -92,7 +92,7 @@ class D2gConnect_Shortcodes {
 			'order'      => 'ASC',
 			'hide_empty' => false,
 		);
-		if ( get_option( 'd2g_pseudo_translations' ) == 1 && $currLang != 'en' ) {
+		if ( get_option( 'd2gc_pseudo_translations' ) == 1 && $currLang != 'en' ) {
 			$argsSpecialty = array(
 				'taxonomy'   => 'doctor-specialty',
 				'hide_empty' => true,
@@ -114,7 +114,7 @@ class D2gConnect_Shortcodes {
 			'order'      => 'ASC',
 			'hide_empty' => false,
 		);
-		if ( get_option( 'd2g_pseudo_translations' ) == 1 && $currLang != 'en' ) {
+		if ( get_option( 'd2gc_pseudo_translations' ) == 1 && $currLang != 'en' ) {
 			$argsLanguage = array(
 				'taxonomy'   => 'doctor-language',
 				'hide_empty' => true,
@@ -135,7 +135,7 @@ class D2gConnect_Shortcodes {
 			'order'      => 'ASC',
 			'hide_empty' => false,
 		);
-		if ( get_option( 'd2g_pseudo_translations' ) == 1 && $currLang != 'en' ) {
+		if ( get_option( 'd2gc_pseudo_translations' ) == 1 && $currLang != 'en' ) {
 			$argsCountry = array(
 				'taxonomy'   => 'country-origin',
 				'hide_empty' => true,
@@ -270,7 +270,7 @@ class D2gConnect_Shortcodes {
 														?>
 														<option <?php echo esc_html( $selected ); ?> value="<?php echo esc_html( $country->slug ); ?>">
 															<?php
-															if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+															if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 																echo ( $currLang == 'en' ) ? esc_html( $country->name ) : esc_html( get_term_meta( $country->term_id, 'rudr_text_' . $currLang, true ) );
 															} else {
 																echo esc_html( $country->name );
@@ -313,7 +313,7 @@ class D2gConnect_Shortcodes {
 											<input type="text" class="form-control" id="reg_country" value="<?php echo esc_html( $doctor_meta['reg_country'][0] ); ?>" tabindex="1" name="meta[reg_country]" placeholder="<?php echo esc_html__( 'Country of registration', 'doctor2go-connect' ); ?>"/>
 										</div>
 
-										<?php if ( get_option( 'd2g_local_user' ) == 1 ) { ?>
+										<?php if ( get_option( 'd2gc_local_user' ) == 1 ) { ?>
 											<h3 class="mt-5">
 												<?php echo esc_html__( 'Code for booking calendar', 'doctor2go-connect' ); ?>
 											</h3>
@@ -450,7 +450,7 @@ class D2gConnect_Shortcodes {
 													?>
 													<option <?php echo esc_html( $selected ); ?> value="<?php echo esc_html( $language->slug ); ?>">
 														<?php
-														if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+														if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 															echo ( $currLang == 'en' ) ? esc_html( $language->name ) : esc_html( get_term_meta( $language->term_id, 'rudr_text_' . $currLang, true ) );
 														} else {
 															echo esc_html( $language->name );
@@ -484,7 +484,7 @@ class D2gConnect_Shortcodes {
 													?>
 													<option <?php echo esc_html( $selected ); ?> value="<?php echo esc_html( $speciality->slug ); ?>">
 														<?php
-														if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+														if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 															echo ( $currLang == 'en' ) ? esc_html( $speciality->name ) : esc_html( get_term_meta( $speciality->term_id, 'rudr_text_' . $currLang, true ) );
 														} else {
 															echo esc_html( $speciality->name );
@@ -841,7 +841,7 @@ class D2gConnect_Shortcodes {
 	/*
 	* shortcode to show the doctor listing
 	*/
-	public function d2g_doctors_listing( $atts ) {
+	public function d2gc_doctors_listing( $atts ) {
 
 		global $cssClass;
 
@@ -1010,7 +1010,7 @@ class D2gConnect_Shortcodes {
 					'_wpnonce' 	=> wp_create_nonce( 'doc_call' ),
 					'ajax_url' 	=> admin_url( 'admin-ajax.php' ),
 					'posts_per_page' => $a['posts_per_page'],
-					'loading_checker' => get_option( 'd2g_load_availability_info' ) == 1 ? 1 : 0
+					'loading_checker' => get_option( 'd2gc_load_availability_info' ) == 1 ? 1 : 0
 				)
 			);
 			
@@ -1037,7 +1037,7 @@ class D2gConnect_Shortcodes {
 
 	//
 	// SC displays the search mask, the SC needs to be in the same page as the doc list SC
-	public function d2g_search_mask( $atts ) {
+	public function d2gc_search_mask( $atts ) {
 
 		$a = shortcode_atts(
 			array(
@@ -1060,7 +1060,7 @@ class D2gConnect_Shortcodes {
 			'order'    => 'ASC',
 		);
 
-		if ( get_option( 'd2g_pseudo_translations' ) == 1 && 'en' !== $currLang ) {
+		if ( get_option( 'd2gc_pseudo_translations' ) == 1 && 'en' !== $currLang ) {
 			$argsSpecialty = array(
 				'taxonomy'   => 'doctor-specialty',
 				'hide_empty' => true,
@@ -1084,7 +1084,7 @@ class D2gConnect_Shortcodes {
 			'order'    => 'ASC',
 		);
 
-		if ( get_option( 'd2g_pseudo_translations' ) == 1 && 'en' !== $currLang ) {
+		if ( get_option( 'd2gc_pseudo_translations' ) == 1 && 'en' !== $currLang ) {
 			$argsLanguage = array(
 				'taxonomy'   => 'doctor-language',
 				'hide_empty' => true,
@@ -1103,7 +1103,7 @@ class D2gConnect_Shortcodes {
 			'order'    => 'ASC',
 		);
 
-		if ( get_option( 'd2g_pseudo_translations' ) == 1 && 'en' !== $currLang ) {
+		if ( get_option( 'd2gc_pseudo_translations' ) == 1 && 'en' !== $currLang ) {
 			$argsCountry = array(
 				'taxonomy'   => 'country-origin',
 				'hide_empty' => true,
@@ -1242,7 +1242,7 @@ class D2gConnect_Shortcodes {
 							<?php foreach ( $specialties as $specialty ) { ?>
 								<option <?php selected( $doctor_specialty, $specialty->term_id ); ?> value="<?php echo esc_attr( $specialty->term_id ); ?>">
 									<?php
-									if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+									if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 										echo ( 'en' === $currLang )
 											? esc_html( $specialty->name )
 											: esc_html( get_term_meta( $specialty->term_id, 'rudr_text_' . $currLang, true ) );
@@ -1261,7 +1261,7 @@ class D2gConnect_Shortcodes {
 							<?php foreach ( $countries as $country ) { ?>
 								<option <?php selected( $country_origin, $country->term_id ); ?> value="<?php echo esc_attr( $country->term_id ); ?>">
 									<?php
-									if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+									if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 										echo ( 'en' === $currLang )
 											? esc_html( $country->name )
 											: esc_html( get_term_meta( $country->term_id, 'rudr_text_' . $currLang, true ) );
@@ -1280,7 +1280,7 @@ class D2gConnect_Shortcodes {
 							<?php foreach ( $languages as $language ) { ?>
 								<option <?php selected( $doctor_language, $language->term_id ); ?> value="<?php echo esc_attr( $language->term_id ); ?>">
 									<?php
-									if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+									if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 										echo ( 'en' === $currLang )
 											? esc_html( $language->name )
 											: esc_html( get_term_meta( $language->term_id, 'rudr_text_' . $currLang, true ) );
@@ -1362,7 +1362,7 @@ class D2gConnect_Shortcodes {
 				'posts_per_page'       => $a['posts_per_page'],
 				'standalone_checker'   => $a['stand_alone'],
 				'page_url'             => $pageDoc,
-				'loading_checker'      => get_option( 'd2g_load_availability_info' ) == 1 ? 1 : 0,
+				'loading_checker'      => get_option( 'd2gc_load_availability_info' ) == 1 ? 1 : 0,
 				'str_no_doctors_found' => esc_html__( 'We are sorry, but we could not find any doctors for your search criteria, please refine your search.', 'doctor2go-connect' ),
 			)
 		);
@@ -1379,7 +1379,7 @@ class D2gConnect_Shortcodes {
 	/*
 	* shortcode to show the doctor info box
 	*/
-	public function d2g_single_doctor_info( $atts ) {
+	public function d2gc_single_doctor_info( $atts ) {
 
 		$a                = shortcode_atts(
 			array(
@@ -1391,8 +1391,8 @@ class D2gConnect_Shortcodes {
 		$d2g_profile_data = new D2G_ProfileData( $post, true );
 		if ( get_post_thumbnail_id( $a['doc_id'] ) ) {
 			$feat_pic = wp_get_attachment_image_src( get_post_thumbnail_id( $a['doc_id'] ), 'd2g-doc-pic' )[0];
-		} elseif ( get_option( 'd2g_placeholder' ) != '' ) {
-				$feat_pic = wp_get_attachment_image_src( get_option( 'd2g_placeholder' ), 'd2g-doc-pic' )[0];
+		} elseif ( get_option( 'd2gc_placeholder' ) != '' ) {
+				$feat_pic = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'd2g-doc-pic' )[0];
 		} else {
 			$feat_pic = plugin_dir_url( __FILE__ ) . 'images/doctor-placeholder.jpg';
 		}
@@ -1435,7 +1435,7 @@ class D2gConnect_Shortcodes {
 	/*
 	* shortcode to show the doctor locations
 	*/
-	public function d2g_single_doctor_locations( $atts ) {
+	public function d2gc_single_doctor_locations( $atts ) {
 
 		$a    = shortcode_atts(
 			array(
@@ -1475,7 +1475,7 @@ class D2gConnect_Shortcodes {
 	/*
 	* shortcode to show the doctor info box`
 	*/
-	public function d2g_single_doctor_calendar( $atts ) {
+	public function d2gc_single_doctor_calendar( $atts ) {
 
 		$a    = shortcode_atts(
 			array(
@@ -1514,7 +1514,7 @@ class D2gConnect_Shortcodes {
 	/*
 	* shortcode to show the doctor info box`
 	*/
-	public function d2g_single_doctor_consultancy_tabs( $atts ) {
+	public function d2gc_single_doctor_consultancy_tabs( $atts ) {
 
 		$a    = shortcode_atts(
 			array(
@@ -1552,7 +1552,7 @@ class D2gConnect_Shortcodes {
 	//
 	// custom login form shortcode
 	//
-	public function d2g_login_form() {
+	public function d2gc_login_form() {
 		ob_start();
 
 		// Check if the user is already logged in.
@@ -1590,7 +1590,7 @@ class D2gConnect_Shortcodes {
 		}
 
 		// Your reCAPTCHA site key.
-		$recaptcha_site_key = get_option( 'd2g_recaptcha_site_key' );
+		$recaptcha_site_key = get_option( 'd2gc_recaptcha_site_key' );
 		?>
 	<div class="d2g_form_wrapper  mt-4">
 		<div class="row justify-content-center">
@@ -1612,7 +1612,7 @@ class D2gConnect_Shortcodes {
 					</div>
 
 					<!-- reCAPTCHA Widget -->
-					<?php if ( get_option( 'd2g_recaptcha_site_key' ) ) { ?>
+					<?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
 						<div class="mb-3">
 							<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( $recaptcha_site_key ); ?>"></div>
 							<div id="captcha_login"></div>
@@ -1661,7 +1661,7 @@ class D2gConnect_Shortcodes {
 
 	//
 	// custom lost password form
-	public function d2g_lost_password_form() {
+	public function d2gc_lost_password_form() {
 		ob_start();
 
 		// Already logged in → bail early.
@@ -1732,7 +1732,7 @@ class D2gConnect_Shortcodes {
 
 	//
 	// custom reset password form logic
-	public function d2g_reset_password_form() {
+	public function d2gc_reset_password_form() {
 
 		if ( is_user_logged_in() ) {
 			return '<p>' . esc_html__( 'You are already logged in.', 'doctor2go-connect' ) . '</p>';
@@ -1836,54 +1836,44 @@ class D2gConnect_Shortcodes {
 
 	//
 	// custom registration form
-	function d2g_registration_form() {
+	function d2gc_registration_form() {
 
 		if ( is_user_logged_in() ) {
 			return '<p>You are already registered and logged in.</p>';
 		}
 
-		$recaptcha_site_key = get_option( 'd2g_recaptcha_site_key' );
-		$secret_key         = get_option( 'd2g_recaptcha_secret_key' );
+		$recaptcha_site_key = get_option( 'd2gc_recaptcha_site_key' );
+		$secret_key         = get_option( 'd2gc_recaptcha_secret_key' );
 		$timezones          = d2g_timezones();
 
-		// Process form submission
-		if (
-			isset( $_SERVER['REQUEST_METHOD'] ) &&
-			$_SERVER['REQUEST_METHOD'] === 'POST' &&
-			isset( $_POST['custom_registration'] )
-		) {
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['custom_registration'] ) ) {
 
 			$errors = array();
 
-			// Nonce verification
-			if ( ! isset( $_POST['d2g_reg_nonce'] ) || ! wp_verify_nonce( isset( $_POST['d2g_reg_nonce'] ) ? sanitize_key( wp_unslash( $_POST['d2g_reg_nonce'] ) ) : '', 'd2g_registration_action' ) ) {
+			if ( ! isset( $_POST['d2g_reg_nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['d2g_reg_nonce'] ) ), 'd2g_registration_action' ) ) {
 				$errors[] = __( 'Security check failed. Please refresh the page.', 'doctor2go-connect' );
 			} else {
 
-				$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-				$username = ! empty( $email ) && is_email( $email ) ? explode( '@', $email )[0] . time() : '';
-				$password = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
-				$confirm_password = isset( $_POST['confirm_password'] ) ? sanitize_text_field( wp_unslash( $_POST['confirm_password'] ) ) : '';
+				$email              = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+				$username           = ( ! empty( $email ) && is_email( $email ) ) ? explode( '@', $email )[0] . time() : '';
+				$password           = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
+				$confirm_password   = isset( $_POST['confirm_password'] ) ? sanitize_text_field( wp_unslash( $_POST['confirm_password'] ) ) : '';
 				$recaptcha_response = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : '';
 
-
-				if ( get_option( 'd2g_recaptcha_site_key' ) != '' ) {
+				if ( get_option( 'd2gc_recaptcha_site_key' ) ) {
 					$recaptcha_verify = wp_remote_post(
 						'https://www.google.com/recaptcha/api/siteverify',
 						array(
 							'body' => array(
 								'secret'   => $secret_key,
 								'response' => $recaptcha_response,
-								'remoteip' => isset( $_SERVER['REMOTE_ADDR'] )
-									? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) )
-									: '',
+								'remoteip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
 							),
 						)
 					);
 
 					$recaptcha_result = json_decode( wp_remote_retrieve_body( $recaptcha_verify ) );
-
-					if ( empty( $recaptcha_result ) || ! $recaptcha_result->success ) {
+					if ( empty( $recaptcha_result ) || empty( $recaptcha_result->success ) ) {
 						$errors[] = __( 'CAPTCHA verification failed. Please try again.', 'doctor2go-connect' );
 					}
 				}
@@ -1910,32 +1900,27 @@ class D2gConnect_Shortcodes {
 						'user_login' => $username,
 						'user_pass'  => $password,
 						'user_email' => $email,
-						'first_name' => isset( $_POST['meta']['first_name'] )
-							? sanitize_text_field( wp_unslash( $_POST['meta']['first_name'] ) )
-							: '',
-						'last_name'  => isset( $_POST['meta']['last_name'] )
-							? sanitize_text_field( wp_unslash( $_POST['meta']['last_name'] ) )
-							: '',
+						'first_name' => isset( $_POST['meta']['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['meta']['first_name'] ) ) : '',
+						'last_name'  => isset( $_POST['meta']['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['meta']['last_name'] ) ) : '',
 						'role'       => 'patient',
 					);
 
 					$user_id = wp_insert_user( $user_input );
 
 					if ( ! is_wp_error( $user_id ) ) {
-						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-						$meta = wp_unslash( $_POST['meta'] ); // ✅ unslash once for all values
 
-						if ( isset( $meta ) && is_array( $meta ) ) {
+						$meta = isset( $_POST['meta'] ) ? wp_unslash( $_POST['meta'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+						if ( is_array( $meta ) ) {
 							foreach ( $meta as $key => $value ) {
-								update_user_meta($user_id, sanitize_key( $key ), sanitize_text_field( $value ));
+								update_user_meta( $user_id, sanitize_key( $key ), sanitize_text_field( $value ) );
 							}
 						}
 
 						d2g_user_email(
 							'registration',
 							$email,
-							(isset( $_POST['meta']['first_name'] )? sanitize_text_field( wp_unslash( $_POST['meta']['first_name'] ) ): '') . ' ' . (isset( $_POST['meta']['last_name'] )? sanitize_text_field( wp_unslash( $_POST['meta']['last_name'] ) ): ''),
-							get_option( 'd2g_sender_address' )
+							( isset( $_POST['meta']['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['meta']['first_name'] ) ) : '' ) . ' ' . ( isset( $_POST['meta']['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['meta']['last_name'] ) ) : '' ),
+							get_option( 'd2gc_sender_address' )
 						);
 
 						$currLang = explode( '_', get_locale() )[0];
@@ -1944,24 +1929,20 @@ class D2gConnect_Shortcodes {
 
 						d2g_programmatic_login( $username );
 
-						if ( isset( $_GET['redirect_to'] ) ) {
+						$redirect_url = add_query_arg( 'signup', 'completed', $pageData['url'] );
 
-							// Unslash once
-							$redirect_to = wp_unslash( $_GET['redirect_to'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-							// Validate URL (ensure it's safe)
-							$redirect_to = wp_validate_redirect( $redirect_to, home_url() );
-							// Append parameter safely
-							$redirect_to = add_query_arg( 'signup', 'completed', $redirect_to );
-							wp_safe_redirect( $redirect_to );
-							exit;
-
-						} else {
-
-							$redirect_url = add_query_arg('signup', 'completed', $pageData['url']);
-							wp_safe_redirect( $redirect_url );
+						if (
+							isset( $_GET['redirect_to'], $_GET['redirect_to_nonce'] ) &&
+							wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['redirect_to_nonce'] ) ), 'd2g_redirect_to' )
+						) {
+							$raw_redirect = wp_unslash( $_GET['redirect_to'] );
+							$safe_redirect = wp_validate_redirect( $raw_redirect, $redirect_url );
+							$safe_redirect = add_query_arg( 'signup', 'completed', $safe_redirect );
+							wp_safe_redirect( $safe_redirect );
 							exit;
 						}
 
+						wp_safe_redirect( $redirect_url );
 						exit;
 
 					} else {
@@ -1981,14 +1962,21 @@ class D2gConnect_Shortcodes {
 
 		if ( isset( $_GET['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( wp_unslash( $_GET['redirect_to'] ) );
-			$action_url  = add_query_arg( 'redirect_to', $redirect_to, $action_url );
+			if ( $redirect_to ) {
+				$action_url = add_query_arg(
+					array(
+						'redirect_to'       => $redirect_to,
+						'redirect_to_nonce' => wp_create_nonce( 'd2g_redirect_to' ),
+					),
+					$action_url
+				);
+			}
 		}
 
 		ob_start();
 		?>
-		<div class="d2g_form_wrapper  py-5">
+		<div class="d2g_form_wrapper py-5">
 			<form id="custom-registration-form" method="post" action="<?php echo esc_url( $action_url ); ?>" class="w-100 w-md-75 w-lg-50 mx-auto border rounded-3 p-4 bg-light shadow-sm needs-validation" novalidate>
-
 				<?php wp_nonce_field( 'd2g_registration_action', 'd2g_reg_nonce' ); ?>
 
 				<div id="error" class="alert alert-danger d-none"></div>
@@ -2058,7 +2046,7 @@ class D2gConnect_Shortcodes {
 					<input class="form-control myrequired" type="password" name="confirm_password" id="pass2" required>
 				</div>
 
-				<?php if ( get_option( 'd2g_recaptcha_site_key' ) ) { ?>
+				<?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
 					<div class="mb-3">
 						<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( $recaptcha_site_key ); ?>"></div>
 						<div id="captcha_registration" class="form-text text-danger"></div>
@@ -2084,19 +2072,19 @@ class D2gConnect_Shortcodes {
 				</div>
 			</form>
 		</div>
-
 		<?php
+
 		wp_localize_script(
 			'd2g-public',
 			'd2gRegistrationVars',
 			array(
-				'msg_required'     => esc_html__( 'Please fill in all marked fields. ', 'doctor2go-connect' ),
-				'msg_pass_short'   => esc_html__( 'Your password is too short. ', 'doctor2go-connect' ),
-				'msg_pass_match'   => esc_html__( 'Your passwords do not match. ', 'doctor2go-connect' ),
-				'msg_email_invalid'=> esc_html__( 'You have entered an invalid e-mail. ', 'doctor2go-connect' ),
-				'msg_privacy'      => esc_html__( 'You must accept the privacy rules. ', 'doctor2go-connect' ),
-				'msg_terms'        => esc_html__( 'You must accept the terms and conditions. ', 'doctor2go-connect' ),
-				'msg_disclaimer'   => esc_html__( 'You must accept the disclaimer. ', 'doctor2go-connect' ),
+				'msg_required'      => esc_html__( 'Please fill in all marked fields. ', 'doctor2go-connect' ),
+				'msg_pass_short'    => esc_html__( 'Your password is too short. ', 'doctor2go-connect' ),
+				'msg_pass_match'    => esc_html__( 'Your passwords do not match. ', 'doctor2go-connect' ),
+				'msg_email_invalid' => esc_html__( 'You have entered an invalid e-mail. ', 'doctor2go-connect' ),
+				'msg_privacy'       => esc_html__( 'You must accept the privacy rules. ', 'doctor2go-connect' ),
+				'msg_terms'         => esc_html__( 'You must accept the terms and conditions. ', 'doctor2go-connect' ),
+				'msg_disclaimer'    => esc_html__( 'You must accept the disclaimer. ', 'doctor2go-connect' ),
 			)
 		);
 
@@ -2107,7 +2095,7 @@ class D2gConnect_Shortcodes {
 
 	
 	// shortcode patient dashbaord
-	public function d2g_patient_dashbaord() {
+	public function d2gc_patient_dashbaord() {
 		$d2gAdmin = new D2G_doc_user_profile();
 		$currLang = explode( '_', get_locale() )[0];
 		$pages    = array(
@@ -2160,7 +2148,7 @@ class D2gConnect_Shortcodes {
 
 
 	// shortcode patient menu
-	public function d2g_patient_menu() {
+	public function d2gc_patient_menu() {
 		$d2gAdmin = new D2G_doc_user_profile();
 		$currLang = explode( '_', get_locale() )[0];
 		$pages    = array(
@@ -2200,7 +2188,7 @@ class D2gConnect_Shortcodes {
 
 	//
 	// shortcode patient appointments
-	public function d2g_patient_appointments() {
+	public function d2gc_patient_appointments() {
 		// initialize class to get dynamic links
 		$d2gAdmin = new D2G_doc_user_profile();
 		$currLang = explode( '_', get_locale() )[0];
@@ -2250,7 +2238,7 @@ class D2gConnect_Shortcodes {
 
 								if ( isset( $appointment->answer_set_id ) ) {
 									// url to load in iframe
-									$questionnaireURLSimple = get_option( 'waiting_room_url' ) . 'answer_set/' . $appointment->answer_set_id . '?client_auth=' . $client_token;
+									$questionnaireURLSimple = get_option( 'd2gc_waiting_room_url' ) . 'answer_set/' . $appointment->answer_set_id . '?client_auth=' . $client_token;
 								}
 
 								$d2g_single_appointment = d2g_single_appointment($appointment, $docObj, $client_token, $timezone, $currLang, $d2gAdmin, true, $doc_email);
@@ -2281,7 +2269,7 @@ class D2gConnect_Shortcodes {
 
 	//
 	// shortcode patient appointments
-	public function d2g_appointment_confirmation() {
+	public function d2gc_appointment_confirmation() {
 		// initialize class to get dynamic links
 		$d2gAdmin = new D2G_doc_user_profile();
 		$currLang = explode( '_', get_locale() )[0];
@@ -2323,7 +2311,7 @@ class D2gConnect_Shortcodes {
 
 								if ( isset( $appointment->answer_set_id ) ) {
 									// url to load in iframe
-									$questionnaireURLSimple = get_option( 'waiting_room_url' ) . 'answer_set/' . $appointment->answer_set_id . '?client_auth=' . $client_token;
+									$questionnaireURLSimple = get_option( 'd2gc_waiting_room_url' ) . 'answer_set/' . $appointment->answer_set_id . '?client_auth=' . $client_token;
 								}
 
 								$app_id = isset( $_GET['app'] ) ? sanitize_text_field( wp_unslash( $_GET['app'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only query param, no state change.
@@ -2359,7 +2347,7 @@ class D2gConnect_Shortcodes {
 
 	//
 	// shortcode account settings
-	public function d2g_account_settings() {
+	public function d2gc_account_settings() {
 
 		// Verify nonce
 		if ( isset( $_POST['d2g_account_nonce'] ) ) {
@@ -2488,7 +2476,7 @@ class D2gConnect_Shortcodes {
 				</div>
 			</form>
 		</div>
-		<?php if ( ( get_option( 'activate_2fa_link' ) == '1' ) ) { ?>
+		<?php if ( ( get_option( 'd2gc_activate_2fa_link' ) == '1' ) ) { ?>
 			<div class="btn_wrapper">
 				<a class="btn btn-outline-primary" href="/wp/wp-login.php?itsec_after_interstitial=2fa-on-board"><?php esc_html_e( 'configure 2FA', 'doctor2go-connect' ); ?></a>
 			</div>
@@ -2500,7 +2488,7 @@ class D2gConnect_Shortcodes {
 	}
 
 	// shortcode to show liked posts
-	public function d2g_liked_posts() {
+	public function d2gc_liked_posts() {
 		global $cssClass;
 		$cssClass    = 'col-sm-6 col-md-4';
 		$liked_posts = d2g_get_liked_posts();
@@ -2550,7 +2538,7 @@ class D2gConnect_Shortcodes {
 	}
 
 
-	public function d2g_patient_portal() {
+	public function d2gc_patient_portal() {
 		// initialize class to get dynamic links
 		$d2gAdmin = new D2G_doc_user_profile();
 		$currLang = explode( '_', get_locale() )[0];
@@ -2627,8 +2615,8 @@ class D2gConnect_Shortcodes {
 							// doctor image
 							$feat_pic = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumbnail' )[0];
 							if ( $feat_pic == '' ) {
-								if ( get_option( 'd2g_placeholder' ) != '' ) {
-									$feat_pic = wp_get_attachment_image_src( get_option( 'd2g_placeholder' ), 'thumbnail' )[0];
+								if ( get_option( 'd2gc_placeholder' ) != '' ) {
+									$feat_pic = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'thumbnail' )[0];
 								} else {
 									$feat_pic = plugin_dir_url( __FILE__ ) . 'images/doctor-placeholder.jpg';
 
@@ -2636,7 +2624,7 @@ class D2gConnect_Shortcodes {
 							}
 							?>
 							<li class="list-group-item text-center p-0">
-								<a class="p-3 doc_portal_link d-block" href="<?php echo esc_url( $pageData['url'] ); ?>?url=<?php echo urlencode( get_option( 'waiting_room_url' ) . 'portal/' . $tokensAssArray[ $orgKey ] . '?skip_cookie_wall=true&locale=' . $currLang ); ?>&title=<?php echo esc_html( $title ); ?>">
+								<a class="p-3 doc_portal_link d-block" href="<?php echo esc_url( $pageData['url'] ); ?>?url=<?php echo urlencode( get_option( 'd2gc_waiting_room_url' ) . 'portal/' . $tokensAssArray[ $orgKey ] . '?skip_cookie_wall=true&locale=' . $currLang ); ?>&title=<?php echo esc_html( $title ); ?>">
 									<div class="feat_pic"><img class="doc_portal_image rounded-circle" src="<?php echo esc_url( $feat_pic ); ?>"></div>
 									<strong>
 										<?php echo esc_html( $title ); ?>
@@ -2682,11 +2670,11 @@ class D2gConnect_Shortcodes {
 
 		$myTime   = new DateTime();
 		$unixTime = $myTime->format( 'U' );
-		$superKey = get_option( 'wcc_token' );
+		$superKey = get_option( 'd2gc_wcc_token' );
 		$myHash   = hash( 'sha256', $unixTime . '_' . $tokens[0] . '_' . $superKey );
 
 		$response = wp_remote_request(
-			get_option( 'api_url_short' ) . 'doclisting/appointments/client',
+			get_option( 'd2gc_api_url_short' ) . 'doclisting/appointments/client',
 			array(
 				'method'  => 'POST',
 				'timeout' => 20,
@@ -2724,7 +2712,7 @@ class D2gConnect_Shortcodes {
 		}
 
 		$unixTime = time();
-		$superKey = get_option( 'wcc_token' );
+		$superKey = get_option( 'd2gc_wcc_token' );
 		$myHash   = hash( 'sha256', $unixTime . '_' . $tokens[0] . '_' . $superKey );
 
 		$payload = array(
@@ -2736,7 +2724,7 @@ class D2gConnect_Shortcodes {
 		);
 
 		$response = wp_remote_request(
-			get_option( 'api_url_short' ) . 'doclisting/client',
+			get_option( 'd2gc_api_url_short' ) . 'doclisting/client',
 			array(
 				'method'  => 'POST',
 				'headers' => array(

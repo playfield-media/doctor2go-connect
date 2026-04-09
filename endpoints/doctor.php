@@ -22,7 +22,7 @@ $d2gAdmin = new D2G_doc_user_profile();
 $error     = '';
 $user_data = json_decode( file_get_contents( 'php://input' ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-$superKey = get_option( 'wcc_token' );
+$superKey = get_option( 'd2gc_wcc_token' );
 if ( empty( $superKey ) ) {
 	wp_die( 'Server configuration error.', 500 );
 }

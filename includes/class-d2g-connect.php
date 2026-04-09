@@ -215,21 +215,28 @@ class D2gConnect {
 		$this->loader->add_action( 'init', $plugin_public, 'd2g_register_shortcodes' );
 
 		// load more doctors
-		$this->loader->add_action( 'wp_ajax_doctor_call', $plugin_public, 'doctor_call' );
-		$this->loader->add_action( 'wp_ajax_nopriv_doctor_call', $plugin_public, 'doctor_call' );
+		$this->loader->add_action( 'wp_ajax_d2gc_doctor_call', $plugin_public, 'd2gc_doctor_call' );
+		$this->loader->add_action( 'wp_ajax_nopriv_d2gc_doctor_call', $plugin_public, 'd2gc_doctor_call' );
 		$this->loader->add_action( 'wp_ajax_d2g_doctor_count_call', $plugin_public, 'd2g_doctor_count_call' );
 		$this->loader->add_action( 'wp_ajax_nopriv_d2g_doctor_count_call', $plugin_public, 'd2g_doctor_count_call' );
 
-		// single sign on hook for doctors coming from the D2G software
-		$this->loader->add_action( 'template_redirect', $plugin_public, 'd2g_sso' );
+		if(get_option('d2gc_activate_sso', 0) == 1) {
+			// single sign on hook for doctors coming from the D2G software
+			$this->loader->add_action( 'template_redirect', $plugin_public, 'd2g_sso' );
+		}
 
-		// function to override the standard lost password mail
-		$this->loader->add_filter( 'retrieve_password_message', $plugin_public, 'd2g_retrieve_password_message', 10, 4 );
-		$this->loader->add_filter( 'wp_mail_from', $plugin_public, 'd2g_wp_mail_from', 10, 1 );
-		$this->loader->add_filter( 'wp_mail_from_name', $plugin_public, 'd2g_wp_mail_from_name', 10, 1 );
+		if(get_option('d2gc_activate_custom_password_mail', 0) == 1) {
+			// function to override the standard lost password mail
+			$this->loader->add_filter( 'retrieve_password_message', $plugin_public, 'd2g_retrieve_password_message', 10, 4 );
+			$this->loader->add_filter( 'wp_mail_from', $plugin_public, 'd2g_wp_mail_from', 10, 1 );
+			$this->loader->add_filter( 'wp_mail_from_name', $plugin_public, 'd2g_wp_mail_from_name', 10, 1 );
+		}
 
-		// reirect users after login
-		$this->loader->add_filter( 'login_redirect', $plugin_public, 'd2g_login_redirect', 10, 3 );
+		if(get_option('d2gc_activate_custom_login_registration', 0) == 1) {
+			// redirect users after login
+			$this->loader->add_filter( 'login_redirect', $plugin_public, 'd2g_login_redirect', 10, 3 );
+		}
+		
 
 		// ajax function for handling liked posts
 		$this->loader->add_action( 'wp_ajax_handle_like', $plugin_public, 'd2g_handle_like' );

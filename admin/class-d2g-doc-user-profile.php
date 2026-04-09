@@ -20,7 +20,7 @@ class D2G_doc_user_profile {
 		add_action( 'wp_ajax_nopriv_d2g_delete_profile_pic', array( __CLASS__, 'd2g_delete_profile_pic' ) );
 
 		// adds a doctor profile post when creating a user with a doctor role if the option is checked
-		if ( get_option( 'd2g_local_user' ) == 1 ) {
+		if ( get_option( 'd2gc_local_user' ) == 1 ) {
 			add_action( 'user_register', array( __CLASS__, 'd2g_create_doc_profile_locally' ), 10, 2 );
 		}
 
@@ -481,7 +481,7 @@ class D2G_doc_user_profile {
 			$currUser = wp_get_current_user();
 
 			if ( in_array( 'doctor', $currUser->roles ) ) {
-				if ( get_option( 'd2g_admin_access' ) == 1 ) {
+				if ( get_option( 'd2gc_admin_access' ) == 1 ) {
 					return;
 				}
 				$new_url = self::d2g_page_url();

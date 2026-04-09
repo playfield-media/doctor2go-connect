@@ -41,8 +41,8 @@ class D2G_booking_wcc_user {
 		}
 
 		// reCAPTCHA: validate, unslash, sanitize, and also REMOTE_ADDR.
-		if ( get_option( 'd2g_recaptcha_site_key' ) !== '' ) {
-			$secret_key = get_option( 'd2g_recaptcha_secret_key' ); // Your reCAPTCHA secret key.
+		if ( get_option( 'd2gc_recaptcha_site_key' ) !== '' ) {
+			$secret_key = get_option( 'd2gc_recaptcha_secret_key' ); // Your reCAPTCHA secret key.
 
 			$recaptcha_response = isset( $_POST['g-recaptcha-response'] )
 				? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) )
@@ -169,7 +169,7 @@ class D2G_booking_wcc_user {
 
 		$myTime   = new DateTime();
 		$unixTime = $myTime->format( 'U' );
-		$superKey = get_option( 'wcc_token' );
+		$superKey = get_option( 'd2gc_wcc_token' );
 		$myHash   = hash( 'sha256', $unixTime . '_' . $docKey . '_' . $superKey );
 
 		$postfields = array(
@@ -195,14 +195,14 @@ class D2G_booking_wcc_user {
 			),
 		);
 
-		if ( $questionnaire_id == '' && get_option( 'd2g_use_default_questionnaire' ) != 1 ) {
+		if ( $questionnaire_id == '' && get_option( 'd2gc_use_default_questionnaire' ) != 1 ) {
 			$postfields['appointment']['questionnaire_id'] = 'false';
-		} elseif ( $questionnaire_id != '' && get_option( 'd2g_use_default_questionnaire' ) != 1 ) {
+		} elseif ( $questionnaire_id != '' && get_option( 'd2gc_use_default_questionnaire' ) != 1 ) {
 			$postfields['appointment']['questionnaire_id'] = $questionnaire_id;
 		}
 
 		$response = wp_remote_post(
-			get_option( 'api_url_short' ) . 'doclisting/appointments/',
+			get_option( 'd2gc_api_url_short' ) . 'doclisting/appointments/',
 			array(
 				'method'      	=> 'POST',
 				'headers'     	=> array(
@@ -267,7 +267,7 @@ class D2G_booking_wcc_user {
 		$orgKey = get_post_meta( $docObj->ID, 'organisation_key', true );
 
 		$response = wp_remote_request(
-			get_option( 'api_url_short' ) . 'appointments/' . $app_id . '.json',
+			get_option( 'd2gc_api_url_short' ) . 'appointments/' . $app_id . '.json',
 			array(
 				'method'  => 'DELETE',
 				'headers' => array(
@@ -312,7 +312,7 @@ class D2G_booking_wcc_user {
         }
 
         // Validate CAPTCHA.
-        $secret_key = get_option( 'd2g_recaptcha_secret_key' );
+        $secret_key = get_option( 'd2gc_recaptcha_secret_key' );
         if ( '' !== $secret_key ) {
             $recaptcha_response = isset( $_POST['g-recaptcha-response'] )
                 ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) )
@@ -414,12 +414,12 @@ class D2G_booking_wcc_user {
         $docOrgKey = get_post_meta( $wpDocID, 'organisation_key', true );
         $docWCC_ID = get_post_meta( $wpDocID, 'wcc_user_id', true );
         $orgSlug   = get_post_meta( $wpDocID, 'organisation_subdomain', true ) . '.';
-        $baseUrl   = get_option( 'wcc_base_url' );
+        $baseUrl   = get_option( 'd2gc_wcc_base_url' );
         $price     = get_post_meta( $wpDocID, 'written_con_price', true );
         $currency  = get_post_meta( $wpDocID, 'written_con_currency', true );
 
         $unixTime = time();
-        $superKey = get_option( 'wcc_token' );
+        $superKey = get_option( 'd2gc_wcc_token' );
         $myHash   = hash( 'sha256', $unixTime . '_' . $docKey . '_' . $superKey );
 
         $d2gAdmin         = new D2G_doc_user_profile();
@@ -460,7 +460,7 @@ class D2G_booking_wcc_user {
         );
 
         $response = wp_remote_post(
-            get_option( 'api_url_short' ) . 'doclisting/written_consult_complete',
+            get_option( 'd2gc_api_url_short' ) . 'doclisting/written_consult_complete',
             array(
                 'headers' => array(
                     'Content-Type' => 'application/json',
@@ -534,7 +534,7 @@ class D2G_booking_wcc_user {
 		$language = explode( '_', get_locale() )[0];
 
 		$unixTime = time();
-		$superKey = get_option( 'wcc_token' );
+		$superKey = get_option( 'd2gc_wcc_token' );
 		$myHash   = hash( 'sha256', $unixTime . '_' . $docKey . '_' . $superKey );
 
 		$payload = array(
@@ -557,7 +557,7 @@ class D2G_booking_wcc_user {
 		);
 
 		$response = wp_remote_post(
-			get_option( 'api_url_short' ) . 'doclisting/create_client',
+			get_option( 'd2gc_api_url_short' ) . 'doclisting/create_client',
 			array(
 				'headers' => array(
 					'Content-Type' => 'application/json',
@@ -600,7 +600,7 @@ class D2G_booking_wcc_user {
 	protected static function d2g_get_wcc_client_by_mail( $email, $token ) {
 
 		$response = wp_remote_post(
-			get_option( 'api_url_short' ) . 'clients/get_client_by_email',
+			get_option( 'd2gc_api_url_short' ) . 'clients/get_client_by_email',
 			array(
 				'headers' => array(
 					'Authorization' => 'Token token=' . $token,

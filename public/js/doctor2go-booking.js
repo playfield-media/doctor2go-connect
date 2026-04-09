@@ -358,7 +358,7 @@
                         if( response.send_to_payment === true ){
                             answer += '<p>' + d2gBookingVars.i18n.reservation_payment_info + '</p>';
                             answer += '<p>' + d2gBookingVars.i18n.reservation_redirect + '</p>';
-                            answer += '<p><a target="_blank" class="btn btn-default" href="' + d2gBookingVars.waiting_room_url + 'payment/' + response.appointment_id + '?locale=' + d2gBookingVars.locale + '&redirect_url=' + redirectURL + response.appointment_id + '">';
+                            answer += '<p><a target="_blank" class="btn btn-default" href="' + d2gBookingVars.d2gc_waiting_room_url + 'payment/' + response.appointment_id + '?locale=' + d2gBookingVars.locale + '&redirect_url=' + redirectURL + response.appointment_id + '">';
                             answer += d2gBookingVars.i18n.pay_now + '</a></p>';
                         }
 
@@ -367,7 +367,7 @@
 
                         if( response.send_to_payment === true ){
                             setTimeout(function(){
-                                window.location.href = d2gBookingVars.waiting_room_url + 'payment/' + response.appointment_id + '?locale=' + d2gBookingVars.locale + '&redirect_url=' + redirectURL + response.appointment_id;
+                                window.location.href = d2gBookingVars.d2gc_waiting_room_url + 'payment/' + response.appointment_id + '?locale=' + d2gBookingVars.locale + '&redirect_url=' + redirectURL + response.appointment_id;
                             }, 1500);
                         } else {
                             setTimeout(function(){

@@ -18,7 +18,7 @@ jQuery(document).ready(function($){
         }
 
         var data = {
-            'action'                    : 'doctor_call',
+            'action'                    : 'd2gc_doctor_call',
             'template'                  : myShortcodeData.template,
             'page'                      : pageNr,
             'cssClass'					: $('#cssClass').val(),
@@ -121,7 +121,7 @@ jQuery(document).ready(function($){
 
         var ajax_url = myShortcodeDataFilters.ajax_url;
         var data = {
-            'action'                    : 'doctor_call',
+            'action'                    : 'd2gc_doctor_call',
             'specialty'                 : $('#specialty_filter').val(),
             'doctor-language'           : $('#language_filter').val(),
             'country-origin'            : $('#country_filter').val(),

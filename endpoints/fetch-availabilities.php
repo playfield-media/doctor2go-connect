@@ -41,7 +41,7 @@ function myplugin_get_availabilities( WP_REST_Request $request ) {
 	 * 3. Call external API
 	 * ------------------------------------ */
 	$response = wp_remote_request(
-		trailingslashit( get_option( 'api_url_short' ) ) . 'doclisting/availabilities',
+		trailingslashit( get_option( 'd2gc_api_url_short' ) ) . 'doclisting/availabilities',
 		array(
 			'method'  => 'POST',
 			'timeout' => 15,

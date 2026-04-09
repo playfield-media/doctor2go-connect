@@ -1572,14 +1572,14 @@ msgstr ""
 #: admin/partials/d2g-connect-shortcode-help.php:206
 msgid ""
 "Use this shortcode to display a menu form the patient pages. Ideal it is "
-"used with in combination with the following shortcodes: d2g_account_settings "
-"/ d2g_patient_appointments / d2g_liked_posts / d2g_patient_dashbaord . No "
+"used with in combination with the following shortcodes: d2gc_account_settings "
+"/ d2gc_patient_appointments / d2gc_liked_posts / d2gc_patient_dashbaord . No "
 "parameters are required."
 msgstr ""
 "Utilice este shortcode para mostrar un menú de las páginas de pacientes. "
 "Idealmente se utiliza en combinación con los siguientes shortcodes: "
-"d2g_account_settings / d2g_patient_appointments / d2g_liked_posts / "
-"d2g_patient_dashbaord. No se requieren parámetros."
+"d2gc_account_settings / d2gc_patient_appointments / d2gc_liked_posts / "
+"d2gc_patient_dashbaord. No se requieren parámetros."
 
 #: admin/partials/d2g-connect-shortcode-help.php:115
 msgid ""

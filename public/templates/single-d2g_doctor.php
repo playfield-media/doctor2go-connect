@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 
-if ( get_option( 'd2g_single_header_footer' ) != 1 ) {
+if ( get_option( 'd2gc_single_header_footer' ) != 1 ) {
 	get_header();
 }
 
@@ -38,6 +38,6 @@ while ( have_posts() ) :
 
 endwhile; // end of the loop.
 
-if ( get_option( 'd2g_single_header_footer' ) != 1 ) {
+if ( get_option( 'd2gc_single_header_footer' ) != 1 ) {
 	get_footer();
 }

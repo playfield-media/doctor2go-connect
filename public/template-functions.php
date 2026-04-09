@@ -43,7 +43,7 @@ add_filter( 'single_template', 'd2g_redirect_single_template' );
  */
 function d2g_load_single_d2g_doctor_hooks() {
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-	if ( get_option( 'd2g_detail_page_view' ) != 'single-v2' && ! isset( $_GET['view'] ) ) {
+	if ( get_option( 'd2gc_detail_page_view' ) != 'single-v2' && ! isset( $_GET['view'] ) ) {
 		add_action( 'd2g_single_sidebar', 'cb_d2g_single_sidebar', 10, 1 );
 	}
 	add_action( 'd2g_doctor_locations', 'd2g_show_doctor_locations_by_id', 10, 1 );
@@ -76,11 +76,11 @@ function d2g_redirect_single_template( $template ) {
 function d2g_single_d2g_doctor_content() {
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 	$view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : '';
-	if ( get_option( 'd2g_detail_page_view' ) !== 'single-v2' && get_option( 'd2g_detail_page_view' ) !== 'single-v3' && ! $view ) {
+	if ( get_option( 'd2gc_detail_page_view' ) !== 'single-v2' && get_option( 'd2gc_detail_page_view' ) !== 'single-v3' && ! $view ) {
 		include d2g_locate_template( 'content-single-d2g_doctor.php' );
-	} elseif ( get_option( 'd2g_detail_page_view' ) == 'single-v2' || $view == 'v2' ) {
+	} elseif ( get_option( 'd2gc_detail_page_view' ) == 'single-v2' || $view == 'v2' ) {
 		include d2g_locate_template( 'content-single-d2g_doctor-v2.php' );
-	} elseif ( get_option( 'd2g_detail_page_view' ) == 'single-v3' || $view == 'v3' ) {
+	} elseif ( get_option( 'd2gc_detail_page_view' ) == 'single-v3' || $view == 'v3' ) {
 		include d2g_locate_template( 'content-single-d2g_doctor-v3.php' );
 	}
 }
@@ -191,7 +191,7 @@ function d2g_body_class( $classes, $class ) {
 	$currMeta = get_post_meta( $post->ID );
 	if ( is_singular( 'd2g_doctor' ) ) {
 		$classes[] = 'd2g-single-doctor';
-		if ( get_option( 'd2g_detail_page_view' ) != 'single-v2' ) {
+		if ( get_option( 'd2gc_detail_page_view' ) != 'single-v2' ) {
 			$classes[] = 'sidebar-menu';
 		} else {
 			$classes[] = 'full-width';
@@ -377,7 +377,7 @@ function cb_d2g_single_sidebar( $d2g_profile_data = '' ) {
 		global $d2g_profile_data;
 	}
 	$post_id = get_the_ID();
-	if ( get_option( 'd2g_use_imgix' ) == 1 ) {
+	if ( get_option( 'd2gc_use_imgix' ) == 1 ) {
 		$doc_pic = $d2g_profile_data->feat_pic_full . '&w=300&h=300&fit=crop&crop=faces&auto=format,compress';
 	} else {
 		$doc_pic = $d2g_profile_data->feat_pic_square;
@@ -614,7 +614,7 @@ function d2g_show_booking_calendar( $post = '', $only_cal = false, $in_tabs = fa
 	// patient data
 	$patient      = wp_get_current_user();
 	$patient_meta = get_user_meta( $patient->data->ID );
-	$site_key     = get_option( 'd2g_recaptcha_site_key' );
+	$site_key     = get_option( 'd2gc_recaptcha_site_key' );
 	$redirectURL  = get_the_permalink( $post_id ) . '?book=1';
 
 	$d2gAdmin  = new D2G_doc_user_profile();
@@ -735,7 +735,7 @@ function d2g_show_booking_calendar( $post = '', $only_cal = false, $in_tabs = fa
 						<input readonly type="text" id="currency" class="form-control mb-2" value="">
 						<input readonly type="text" id="questionnaire" class="form-control mb-2" value="">
 					</div>
-					<?php if ( get_option( 'd2g_recaptcha_site_key' ) ) { ?>
+					<?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
 						<div class="g-recaptcha my-3" data-sitekey="<?php echo esc_attr( $site_key ); ?>"></div>
 						<div id="captcha_calendar"></div>
 					<?php } ?>
@@ -822,7 +822,7 @@ function d2g_show_walkin_form() {
 		'order'      => 'ASC',
 		'hide_empty' => false,
 	);
-	if ( get_option( 'd2g_pseudo_translations' ) == 1 && $currLang != 'en' ) {
+	if ( get_option( 'd2gc_pseudo_translations' ) == 1 && $currLang != 'en' ) {
 		$argsCountry = array(
 			'taxonomy'   => 'country-origin',
 			'hide_empty' => true,
@@ -835,7 +835,7 @@ function d2g_show_walkin_form() {
 	$allCountries = get_terms( $argsCountry );
 	$allCountriesArray = ( $allCountries !== false ) ? prepMyArray( $allCountries ) : '';
 
-	$site_key = get_option( 'd2g_recaptcha_site_key' );
+	$site_key = get_option( 'd2gc_recaptcha_site_key' );
 	if ( is_user_logged_in() ) {
 		$currUser   = wp_get_current_user();
 		$currUserID = $currUser->ID;
@@ -918,7 +918,7 @@ function d2g_show_walkin_form() {
 							<select name="optie_land">
 								<option value="0"><?php echo esc_html__( 'Country', 'doctor2go-connect' ); ?></option>
 								<?php
-								if ( get_option( 'd2g_pseudo_translations' ) == 1 ) {
+								if ( get_option( 'd2gc_pseudo_translations' ) == 1 ) {
 									foreach ( $allCountries as $country ) {
 										$selected = '';
 										if ( isset( $countriesArray[ $country->slug ] ) ) {
@@ -953,7 +953,7 @@ function d2g_show_walkin_form() {
 						<?php d2g_confirmation_checkboxes( '_wf' ); ?>
 					<?php } ?>
 					<!-- reCAPTCHA Widget -->
-					<?php if ( get_option( 'd2g_recaptcha_site_key' ) ) { ?>
+					<?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
 						<div class="g-recaptcha mb-s" data-sitekey="<?php echo esc_attr( $site_key ); ?>"></div>
 						<div id="captcha_walkin"></div>
 					<?php } ?>
@@ -971,7 +971,7 @@ function d2g_show_walkin_form() {
 function d2g_show_written_con_form() {
 	global $d2g_profile_data;
 
-	if ( get_option( 'd2g_use_imgix' ) == 1 ) {
+	if ( get_option( 'd2gc_use_imgix' ) == 1 ) {
 		$doc_pic = $d2g_profile_data->feat_pic_full . '&w=120&h=120&fit=crop&crop=faces&auto=format,compress';
 	} else {
 		$doc_pic = $d2g_profile_data->feat_pic_square;
@@ -979,7 +979,7 @@ function d2g_show_written_con_form() {
 
 	$type = $d2g_profile_data->doctor_meta['written_con_type'][0];
 
-	$site_key = get_option( 'd2g_recaptcha_site_key' );
+	$site_key = get_option( 'd2gc_recaptcha_site_key' );
 	if ( is_user_logged_in() ) {
 		$currUser   = wp_get_current_user();
 		$currUserID = $currUser->ID;
@@ -1160,7 +1160,7 @@ function d2g_show_written_con_form() {
                 </fieldset>
 				<div class="mb-3">
 					<!-- reCAPTCHA Widget -->
-					<?php if ( get_option( 'd2g_recaptcha_site_key' ) ) { ?>
+					<?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
 						<div class="g-recaptcha mb-s" data-sitekey="<?php echo esc_attr( $site_key ); ?>"></div>
 						<div id="captcha_email"></div>
 					<?php } ?>
@@ -1378,15 +1378,15 @@ function d2g_show_consult_buttons( $template = '', $size = '' ) {
 
 function d2g_single_appointment($appointment, $docObj, $client_token, $timezone, $currLang, $d2gAdmin, $show_intake, $doc_email = ''){
 	// doctor image
-	if(get_option('d2g_use_imgix') == 1){
+	if(get_option('d2gc_use_imgix') == 1){
 		$feat_pic = wp_get_attachment_image_src( get_post_thumbnail_id( $docObj->ID ), 'full' )[0].'&w=200&h=200&fit=crop&crop=faces';
 	} else {
 		$feat_pic = wp_get_attachment_image_src( get_post_thumbnail_id( $docObj->ID ), 'thumbnail' )[0];
 	}
 	
 	if ( $feat_pic == '' ) {
-		if ( get_option( 'd2g_placeholder' ) != '' ) {
-			$feat_pic = wp_get_attachment_image_src( get_option( 'd2g_placeholder' ), 'thumbnail' )[0];
+		if ( get_option( 'd2gc_placeholder' ) != '' ) {
+			$feat_pic = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'thumbnail' )[0];
 		} else {
 			$feat_pic = plugin_dir_url( __FILE__ ) . 'images/doctor-placeholder.jpg';
 
@@ -1419,8 +1419,8 @@ function d2g_single_appointment($appointment, $docObj, $client_token, $timezone,
 	if ( isset( $appointment->answer_set_id ) && $show_intake == true ) {
 		$questionnaireLink = '<a class="btn btn-outline-primary payment_btn w-100 mb-2" target="_blank" href="'.$pageAppConf.'?app='.$appointment->_id.'&client_token='.$client_token.'"><span class="flaticon-medical-information"></span> '.esc_html__( 'intake quesionnaire', 'doctor2go-connect' ).'</a>';
 	}
-	$consultLink 		= '<a class="button btn-primary btn invert mb-2 w-100" target="_blank" href="' . get_option( 'waiting_room_url' ) . 'wachtkamer/' . $appointment->token . '?locale=' . explode( '_', get_locale() )[0] . '"><span class=" icon-videocam-outline"></span> ' . esc_html__( 'go to consultation', 'doctor2go-connect' ) . '</a>';
-	$contactBtn      	= '<a class="prep_cancellation_email btn-outline-secondary btn scroll_to w-100 fancybox_spec " href="#cancellation_form_wrapper" data-app-date="'.$date->format("d/m/Y").' '. esc_html__(' at ', 'doctor2go-connect').' ' .$date->format("H:i").'  ('.$timezone.')" data-app-link="'.get_option('waiting_room_url').'admin/appointments/'.$appointment->_id.'" data-doc-email="'.$doc_email.'" data-doc-name="'.$docObj->post_title.'"><span class=" icon-mail"></span> '. esc_html__('contact doctor', 'doctor2go-connect').'</a>';
+	$consultLink 		= '<a class="button btn-primary btn invert mb-2 w-100" target="_blank" href="' . get_option( 'd2gc_waiting_room_url' ) . 'wachtkamer/' . $appointment->token . '?locale=' . explode( '_', get_locale() )[0] . '"><span class=" icon-videocam-outline"></span> ' . esc_html__( 'go to consultation', 'doctor2go-connect' ) . '</a>';
+	$contactBtn      	= '<a class="prep_cancellation_email btn-outline-secondary btn scroll_to w-100 fancybox_spec " href="#cancellation_form_wrapper" data-app-date="'.$date->format("d/m/Y").' '. esc_html__(' at ', 'doctor2go-connect').' ' .$date->format("H:i").'  ('.$timezone.')" data-app-link="'.get_option('d2gc_waiting_room_url').'admin/appointments/'.$appointment->_id.'" data-doc-email="'.$doc_email.'" data-doc-name="'.$docObj->post_title.'"><span class=" icon-mail"></span> '. esc_html__('contact doctor', 'doctor2go-connect').'</a>';
 	
 	if ( $diffInSeconds <= 0 || $diffInSeconds > 86400 ) {
 		$delBtn 		= '<a class="del_app button btn-danger btn w-100 mb-2" href="#" data-app-id="' . $appointment->_id . '" data-user-id="' . $appointment->user_id . '"><span class=" icon-cancel-circled"></span> ' . esc_html__( 'cancel appointment', 'doctor2go-connect' ) . '<span class="btn-spinner spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span></a>';
@@ -1447,7 +1447,7 @@ function d2g_single_appointment($appointment, $docObj, $client_token, $timezone,
 		
 		$redirectURL 	= '&redirect_url=' . urlencode( $pageAppConf . '?app=' . $appointment->_id . '&client_token=' . $client_token ) ;
 		$payment_info 	= '<p class="payment_needed alert alert-warning m-3 mb-0 icon-info-outline" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="top" data-bs-title="' . esc_attr__( 'Payment may be made in advance or upon arrival at your appointment. Please note that appointments paid upfront cannot be cancelled.', 'doctor2go-connect' ) . '"><strong>' . esc_html__( 'A payment is required for this appointment.', 'doctor2go-connect' ) . '</strong></p>';
-		$payment_link 	= '<a class="icon-cc-mastercard btn btn-secondary payment_btn w-100 mb-2" target="_blank" href="' . get_option( 'waiting_room_url' ) . 'payment/' . $appointment->_id . '?locale=' . explode( '_', get_locale() )[0] . $redirectURL . '"> ' . esc_html__( 'pay now', 'doctor2go-connect' ) . '</a>';
+		$payment_link 	= '<a class="icon-cc-mastercard btn btn-secondary payment_btn w-100 mb-2" target="_blank" href="' . get_option( 'd2gc_waiting_room_url' ) . 'payment/' . $appointment->_id . '?locale=' . explode( '_', get_locale() )[0] . $redirectURL . '"> ' . esc_html__( 'pay now', 'doctor2go-connect' ) . '</a>';
 	}
 
 	// create the appointment rows and save in array to sort them later
@@ -1618,18 +1618,18 @@ function d2g_user_email( $type, $user_email, $user_name ) {
 	$msg = d2g_html_email( $content );
 
 	// set header for confirmation mail (visitor / patient) and send mail
-	$headers = 'From: ' . get_option( 'd2g_sender_name' ) . ' <' . get_option( 'd2g_sender_address' ) . '>' . "\r\n";
+	$headers = 'From: ' . get_option( 'd2gc_sender_name' ) . ' <' . get_option( 'd2gc_sender_address' ) . '>' . "\r\n";
 	wp_mail( $user_email, $title, $msg, $headers );
 
 	// set headers for admin notification mail and send mail
 	$headers = 'From: ' . $user_name . ' <' . $user_email . '>' . "\r\n";
-	wp_mail( get_option( 'd2g_recipient_address' ), $title, $msg, $headers );
+	wp_mail( get_option( 'd2gc_recipient_address' ), $title, $msg, $headers );
 
 	return 'mail send';
 }
 
 function d2g_html_email( $content ) {
-	$feat_pic = wp_get_attachment_image_src( get_option( 'd2g_logo' ), 'full' )[0];
+	$feat_pic = wp_get_attachment_image_src( get_option( 'd2gc_logo' ), 'full' )[0];
 	$msg      = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html>
             <head>
@@ -1717,7 +1717,7 @@ function d2g_programmatic_login( $username ) {
 }
 
 // ✅ reCAPTCHA validation for login form
-if ( get_option( 'd2g_recaptcha_site_key' ) ) {
+if ( get_option( 'd2gc_recaptcha_site_key' ) ) {
 	add_filter(
 		'wp_authenticate_user',
 		function ( $user ) {
@@ -1728,7 +1728,7 @@ if ( get_option( 'd2g_recaptcha_site_key' ) ) {
 			// Only run for POST requests
 			if ( $request_method === 'POST' ) {
 
-				$recaptcha_secret_key = get_option( 'd2g_recaptcha_secret_key' );
+				$recaptcha_secret_key = get_option( 'd2gc_recaptcha_secret_key' );
 
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$recaptcha_response = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : '';

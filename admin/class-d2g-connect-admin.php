@@ -587,37 +587,40 @@ class D2gConnect_Admin {
 	*/
 	public function register_d2g_settings() {
 		$settings_with_callbacks = array(
-			'd2g_detail_page_view'          => array( $this, 'sanitize_detail_page_view' ),
-			'd2g_theme_css'                 => array( $this, 'sanitize_theme_css' ),
-			'd2g_bootstrap_css'                  => 'absint',
-			'wcc_token'                     => array( $this, 'd2g_sanitize_token' ),
-			'api_url_short'                 => 'esc_url_raw',
-			'waiting_room_url'              => 'esc_url_raw',
-			'wcc_base_url'                  => 'sanitize_text_field',
-			'admin_mail'                    => 'sanitize_email',
-			'd2g_local_user'                => 'absint',
-			'd2g_placeholder'               => 'absint',
-			'd2g_recaptcha_site_key'        => array( $this, 'd2g_sanitize_token' ),
-			'd2g_recaptcha_secret_key'      => array( $this, 'd2g_sanitize_token' ),
-			'd2g_admin_access'              => 'absint',
-			'd2g_single_header_footer'      => 'absint',
-			'deactivate_recapctha_script'   => 'absint',
-			'activate_2fa_link'             => 'absint',
-			'under_construction'            => 'absint',
-			'd2g_logo'                      => 'absint',
-			'd2g_sender_address'            => 'sanitize_email',
-			'd2g_recipient_address'         => 'sanitize_email',
-			'd2g_sender_name'               => 'sanitize_text_field',
-			'd2g_pseudo_translations'       => 'absint',
-			'd2g_use_imgix'                 => 'absint',
-			'd2g_use_default_questionnaire' => 'absint',
-			'd2g_load_availability_info'    => 'absint',
-			'd2g_bootstrap_js'				=> 'absint'
+			'd2gc_detail_page_view'          		=> array( $this, 'sanitize_detail_page_view' ),
+			'd2gc_theme_css'                 		=> array( $this, 'sanitize_theme_css' ),
+			'd2gc_bootstrap_css'                  	=> 'absint',
+			'd2gc_wcc_token'                     	=> array( $this, 'd2g_sanitize_token' ),
+			'd2gc_api_url_short'                 	=> 'esc_url_raw',
+			'd2gc_waiting_room_url'              	=> 'esc_url_raw',
+			'd2gc_wcc_base_url'                  	=> 'sanitize_text_field',
+			'd2gc_admin_mail'                    		=> 'sanitize_email',
+			'd2gc_local_user'                		=> 'absint',
+			'd2gc_placeholder'               		=> 'absint',
+			'd2gc_recaptcha_site_key'        		=> array( $this, 'd2g_sanitize_token' ),
+			'd2gc_recaptcha_secret_key'      		=> array( $this, 'd2g_sanitize_token' ),
+			'd2gc_admin_access'              		=> 'absint',
+			'd2gc_single_header_footer'      		=> 'absint',
+			'd2gc_deactivate_recapctha_script'   		=> 'absint',
+			'd2gc_activate_2fa_link'             		=> 'absint',
+			'd2gc_under_construction'            		=> 'absint',
+			'd2gc_logo'                      		=> 'absint',
+			'd2gc_sender_address'            		=> 'sanitize_email',
+			'd2gc_recipient_address'         		=> 'sanitize_email',
+			'd2gc_sender_name'               		=> 'sanitize_text_field',
+			'd2gc_pseudo_translations'      			=> 'absint',
+			'd2gc_use_imgix'                 		=> 'absint',
+			'd2gc_use_default_questionnaire' 		=> 'absint',
+			'd2gc_load_availability_info'    		=> 'absint',
+			'd2gc_bootstrap_js'						=> 'absint',
+			'd2gc_activate_sso'						=> 'absint',
+			'd2gc_activate_custom_password_mail' 	=> 'absint',
+			'd2gc_activate_custom_login_registration' => 'absint'
 		);
 		// registration for the short code activation options
 		foreach ( $settings_with_callbacks as $setting => $callback ) {
 			register_setting(
-				'd2g-option-group',
+				'd2gc-option-group',
 				$setting,
 				array(
 					'sanitize_callback' => $callback,
@@ -630,7 +633,7 @@ class D2gConnect_Admin {
 		$value = trim( wp_unslash( $value ) ); // remove slashes + spaces
 		if ( '' === $value ) {
 			add_settings_error(
-				'wcc_token',
+				'd2gc_wcc_token',
 				'empty_token',
 				__( 'API token cannot be empty.', 'doctor2go-connect' ),
 				'error'

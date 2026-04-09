@@ -28,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
 	<div class="inner">
 		<h2>Basic shortcodes</h2>
 		<p class="mb-l"><?php echo esc_html__( 'Following shortcodes are included in the free version and can be used in pages from your website.', 'doctor2go-connect' ); ?></p>
-		<h3>[d2g_doctors_listing]</h3>
+		<h3>[d2gc_doctors_listing]</h3>
 		<p><?php echo esc_html__( 'Use this shortcode to display a list of doctors on a page. It includes a "Load More Doctors" button that loads additional doctors based on the "posts_per_page" setting.', 'doctor2go-connect' ); ?></p>
 		<h4><?php echo esc_html__( 'Following parameters can be used to change the view from the listing', 'doctor2go-connect' ); ?></h4>
 		<table class="info mb-l">
@@ -96,7 +96,7 @@ if ( ! defined( 'WPINC' ) ) {
 			</tr>
 		</table>
 		
-		<h3>[d2g_profile_edit]</h3>
+		<h3>[d2gc_profile_edit]</h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the form doctors use to create or update their profiles. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
 		<hr>
@@ -106,12 +106,12 @@ if ( ! defined( 'WPINC' ) ) {
 			<?php echo esc_html__( 'Following shortcodes are included only included in the paid version and can be used in pages from your website. Click', 'doctor2go-connect' ); ?>&nbsp;<a href="d2g-connect.doctor2go.online/shop"><?php echo esc_html__( 'here', 'doctor2go-connect' ); ?></a>&nbsp;<?php echo esc_html__( 'to get your paid license now.', 'doctor2go-connect' ); ?>
 		</p>
 
-		<h3>[d2g_search_mask] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_search_mask] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the search form on the doctor overview page. It must be used with the listing shortcode. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
 		
 
-		<h3>[d2g_single_doctor_info] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_single_doctor_info] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p><?php echo esc_html__( 'Use this shortcode to display a single doctor in a compact format, similar to the grid overview on the front end. It can be placed anywhere on your website, such as the sidebar.', 'doctor2go-connect' ); ?></p>
 		<table class="info mb-l">
 			<tr>
@@ -131,7 +131,7 @@ if ( ! defined( 'WPINC' ) ) {
 				</td>
 			</tr>
 		</table>
-		<h3>[d2g_single_doctor_locations] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_single_doctor_locations] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p><?php echo esc_html__( 'Use this shortcode to display a doctor\'s locations, similar to the locations section on the doctor detail page. Ideal for a contact page or website footer.', 'doctor2go-connect' ); ?></p>
 		<table class="info mb-l">
 			<tr>
@@ -160,7 +160,7 @@ if ( ! defined( 'WPINC' ) ) {
 				</td>
 			</tr>
 		</table>
-		<h3>[d2g_single_doctor_calendar] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_single_doctor_calendar] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p><?php echo esc_html__( 'Use this shortcode to display a doctor\'s calendar, similar to the calendar section on the doctor detail page. Ideal for a front page or website sidebar.', 'doctor2go-connect' ); ?></p>
 		<table class="info mb-l">
 			<tr>
@@ -190,37 +190,37 @@ if ( ! defined( 'WPINC' ) ) {
 			</tr>
 		</table>
 		
-		<h3>[d2g_registration_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_registration_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the registration form for patients. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_login_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_login_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the login form. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_lost_password_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_lost_password_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the lost password form. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_reset_password_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_reset_password_form] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the reset password form. No parameters are required.', 'doctor2go-connect' ); ?></p>
 		
-		<h3>[d2g_patient_menu] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
-		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display a menu form the patient pages. Ideal it is used with in combination with the following shortcodes: d2g_account_settings / d2g_patient_appointments / d2g_liked_posts / d2g_patient_dashbaord . No parameters are required.', 'doctor2go-connect' ); ?></p>
+		<h3>[d2gc_patient_menu] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display a menu form the patient pages. Ideal it is used with in combination with the following shortcodes: d2gc_account_settings / d2gc_patient_appointments / d2gc_liked_posts / d2gc_patient_dashbaord . No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_patient_dashbaord] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_patient_dashbaord] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the patient dashboard, the page patients are redirected to after logging in. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_account_settings] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_account_settings] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the search form on the doctor overview page. It must be used with the listing shortcode. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_patient_appointments] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_patient_appointments] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the account settings form, allowing patients to update their email, phone number, and password. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_liked_posts] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_liked_posts] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the liked doctor\'s from a patient. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
 		<h3>[d2g_questionnaires] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the questionnaires for an intake or from a written consultation. No parameters are required.', 'doctor2go-connect' ); ?></p>
 
-		<h3>[d2g_patient_portal] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
+		<h3>[d2gc_patient_portal] <span class="red simple_hide"><?php echo esc_html__( '(PRO version only*)', 'doctor2go-connect' ); ?></span></h3>
 		<p class="mb-l"><?php echo esc_html__( 'Use this shortcode to display the patient portal where the patient can chat with doctors and receive medical documents from, where he/she has a connection with. No parameters are required.', 'doctor2go-connect' ); ?></p>
 	</div>
 </div>

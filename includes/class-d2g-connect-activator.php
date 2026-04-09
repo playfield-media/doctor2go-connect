@@ -31,12 +31,12 @@ class D2gConnect_Activator {
 	 */
 	public static function activate(){		
  		$protectedPages = array(
-			'My profile'            => '[d2g_profile_edit]',
-			'Patient dashboard'     => '[d2g_patient_dashbaord]',
-			'Appointments'          => '[d2g_patient_appointments]',
-			'Account settings'      => '[d2g_account_settings]',
-			'Liked doctors'         => '[d2g_liked_posts]',
-			'Secure patient portal' => '[d2g_patient_portal]',
+			'My profile'            => '[d2gc_profile_edit]',
+			'Patient dashboard'     => '[d2gc_patient_dashbaord]',
+			'Appointments'          => '[d2gc_patient_appointments]',
+			'Account settings'      => '[d2gc_account_settings]',
+			'Liked doctors'         => '[d2gc_liked_posts]',
+			'Secure patient portal' => '[d2gc_patient_portal]',
 
 		);
 		/*
@@ -59,12 +59,12 @@ class D2gConnect_Activator {
 		}
 
 		$otherPages = array(
-			'Doctors'                   => '[d2g_doctors_listing]',
-			'Lost password'             => '[d2g_lost_password_form]',
-			'Reset password'            => '[d2g_reset_password_form]',
-			'Login'                     => '[d2g_login_form]',
-			'Patient registration'      => '[d2g_registration_form]',
-			'Appointment confirmation'  => '[d2g_appointment_confirmation]',
+			'Doctors'                   => '[d2gc_doctors_listing]',
+			'Lost password'             => '[d2gc_lost_password_form]',
+			'Reset password'            => '[d2gc_reset_password_form]',
+			'Login'                     => '[d2gc_login_form]',
+			'Patient registration'      => '[d2gc_registration_form]',
+			'Appointment confirmation'  => '[d2gc_appointment_confirmation]',
 			'Email advice confirmation' => 'Your email advice has been successfully submitted. Our dermatologists will get back to you within two working days.',
 			'Privacy policy'            => 'To be compliant with GDPR you will need to fill this page in.',
 			'Terms and conditions'      => 'Here comes the terms &  conditions from your company.',

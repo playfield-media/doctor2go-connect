@@ -91,7 +91,7 @@ class D2gConnect_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		if ( get_option( 'd2g_bootstrap_css' ) != '1' ) {
+		if ( get_option( 'd2gc_bootstrap_css' ) != '1' ) {
 			wp_enqueue_style( $this->plugin_name . '-bootstrap', plugin_dir_url( __FILE__ ) . 'css/bootstrap.min.css', array(), $this->version, 'all' );
 		}
 		wp_enqueue_style( $this->plugin_name . '-select', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
@@ -102,8 +102,8 @@ class D2gConnect_Public {
 		wp_enqueue_style( $this->plugin_name . '-flaticon-derma', plugin_dir_url( __FILE__ ) . 'fonts/wcc-flaticon2/font/flaticon_derma2go.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . '-cal', plugin_dir_url( __FILE__ ) . 'css/cal-main.min.css', array(), $this->version, 'all' );
 
-		if ( get_option( 'd2g_theme_css' ) != 'no-style' ) {
-			if ( get_option( 'd2g_theme_css' ) == 'light' || get_option( 'd2g_theme_css' ) == '' ) {
+		if ( get_option( 'd2gc_theme_css' ) != 'no-style' ) {
+			if ( get_option( 'd2gc_theme_css' ) == 'light' || get_option( 'd2gc_theme_css' ) == '' ) {
 				wp_enqueue_style( $this->plugin_name . '-d2g-light', plugin_dir_url( __FILE__ ) . 'css/d2g-light.css', array(), $this->version, 'all' );
 			}
 		}
@@ -115,7 +115,7 @@ class D2gConnect_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		if ( get_option( 'd2g_bootstrap_js' ) != '1' ) {
+		if ( get_option( 'd2gc_bootstrap_js' ) != '1' ) {
 			wp_enqueue_script( $this->plugin_name . '-bootstrap', plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, true );
 		}
 		wp_enqueue_script( $this->plugin_name . '-fancybox', plugin_dir_url( __FILE__ ) . 'js/jquery.fancybox.js', array( 'jquery' ), $this->version, true );
@@ -126,8 +126,8 @@ class D2gConnect_Public {
 		wp_enqueue_script( $this->plugin_name . '-full-cal-bundle', plugin_dir_url( __FILE__ ) . 'js/fc-index.global.min.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name . '-connector', plugin_dir_url( __FILE__ ) . 'js/fc-tz-index.global.min.js', array( 'jquery' ), $this->version, true );
 
-		if ( get_option( 'd2g_recaptcha_site_key' ) != '' && get_option( 'deactivate_recapctha_script' ) != 1 ) {
-			$recaptcha_site_key = get_option( 'd2g_recaptcha_site_key' );
+		if ( get_option( 'd2gc_recaptcha_site_key' ) != '' && get_option( 'd2gc_deactivate_recapctha_script' ) != 1 ) {
+			$recaptcha_site_key = get_option( 'd2gc_recaptcha_site_key' );
 			wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?onload=d2gOnloadCallback&render=explicit', array(), $this->version, true );
 			wp_enqueue_script('d2g-recaptcha', plugin_dir_url( __FILE__ ) . 'js/d2g-recaptcha.js', array( 'google-recaptcha' ), '1.0', true);
 			wp_localize_script(
@@ -150,7 +150,7 @@ class D2gConnect_Public {
 		//booking via calendar
 		wp_enqueue_script( $this->plugin_name . '-booking', plugin_dir_url( __FILE__ ) . 'js/doctor2go-booking.js', array( 'jquery' ), $this->version, true );
 
-		$site_key     = get_option( 'd2g_recaptcha_site_key' );
+		$site_key     = get_option( 'd2gc_recaptcha_site_key' );
 		$d2gAdmin     = new D2G_doc_user_profile();
 		$currLang     = explode( '_', get_locale() )[0];
 		$only_cal     = false; // keep your original logic here if needed
@@ -166,7 +166,7 @@ class D2gConnect_Public {
 			'locale'               	=> $currLang,
 			'only_cal'             	=> (bool) $only_cal,
 			'in_tabs'              	=> (bool) $in_tabs,
-			'waiting_room_url'     	=> get_option( 'waiting_room_url' ),
+			'd2gc_waiting_room_url'     	=> get_option( 'd2gc_waiting_room_url' ),
 			'recaptcha_site_key'   	=> (string) $site_key,
 			'd2g_timezone'         	=> ! empty( $patient_meta['p_timezone'][0] ) ? $patient_meta['p_timezone'][0] : '',
 			'is_user_logged_in'    	=> is_user_logged_in(),
@@ -236,13 +236,13 @@ class D2gConnect_Public {
 
 				/* mail sender */
 				'mail' => array(
-					'sender_name'  => get_option( 'd2g_sender_name' ),
-					'sender_email' => get_option( 'd2g_sender_address' ),
+					'sender_name'  => get_option( 'd2gc_sender_name' ),
+					'sender_email' => get_option( 'd2gc_sender_address' ),
 				),
 
 				/* recaptcha */
 				'recaptcha' => array(
-					'enabled' => get_option( 'd2g_recaptcha_site_key' ) ? 1 : 0,
+					'enabled' => get_option( 'd2gc_recaptcha_site_key' ) ? 1 : 0,
 				),
 
 				/* UI messages */
@@ -302,25 +302,27 @@ class D2gConnect_Public {
 	* in this hook all shortcodes are declared
 	*/
 	public function d2g_register_shortcodes() {
-		add_shortcode( 'd2g_profile_edit', array( $this->shortcode_loader, 'd2g_profile_edit' ) );
-		add_shortcode( 'd2g_doctors_listing', array( $this->shortcode_loader, 'd2g_doctors_listing' ) );
-		add_shortcode( 'd2g_single_doctor_info', array( $this->shortcode_loader, 'd2g_single_doctor_info' ) );
-		add_shortcode( 'd2g_single_doctor_locations', array( $this->shortcode_loader, 'd2g_single_doctor_locations' ) );
-		add_shortcode( 'd2g_single_doctor_calendar', array( $this->shortcode_loader, 'd2g_single_doctor_calendar' ) );
-		add_shortcode( 'd2g_login_form', array( $this->shortcode_loader, 'd2g_login_form' ) );
-		add_shortcode( 'd2g_lost_password_form', array( $this->shortcode_loader, 'd2g_lost_password_form' ) );
-		add_shortcode( 'd2g_reset_password_form', array( $this->shortcode_loader, 'd2g_reset_password_form' ) );
-		add_shortcode( 'd2g_registration_form', array( $this->shortcode_loader, 'd2g_registration_form' ) );
-		add_shortcode( 'd2g_account_settings', array( $this->shortcode_loader, 'd2g_account_settings' ) );
-		add_shortcode( 'd2g_patient_appointments', array( $this->shortcode_loader, 'd2g_patient_appointments' ) );
-		add_shortcode( 'd2g_patient_dashbaord', array( $this->shortcode_loader, 'd2g_patient_dashbaord' ) );
-		add_shortcode( 'd2g_patient_menu', array( $this->shortcode_loader, 'd2g_patient_menu' ) );
-		add_shortcode( 'd2g_search_mask', array( $this->shortcode_loader, 'd2g_search_mask' ) );
-		add_shortcode( 'd2g_liked_posts', array( $this->shortcode_loader, 'd2g_liked_posts' ) );
-		add_shortcode( 'd2g_patient_portal', array( $this->shortcode_loader, 'd2g_patient_portal' ) );
-		add_shortcode( 'd2g_public_patient_portal', array( $this->shortcode_loader, 'd2g_public_patient_portal' ) );
-		add_shortcode( 'd2g_appointment_confirmation', array( $this->shortcode_loader, 'd2g_appointment_confirmation' ) );
-		add_shortcode( 'doctor_consultancy_tabs', array( $this->shortcode_loader, 'd2g_single_doctor_consultancy_tabs' ) );
+		add_shortcode( 'd2gc_profile_edit', array( $this->shortcode_loader, 'd2gc_profile_edit' ) );
+		add_shortcode( 'd2gc_doctors_listing', array( $this->shortcode_loader, 'd2gc_doctors_listing' ) );
+		add_shortcode( 'd2gc_single_doctor_info', array( $this->shortcode_loader, 'd2gc_single_doctor_info' ) );
+		add_shortcode( 'd2gc_single_doctor_locations', array( $this->shortcode_loader, 'd2gc_single_doctor_locations' ) );
+		add_shortcode( 'd2gc_single_doctor_calendar', array( $this->shortcode_loader, 'd2gc_single_doctor_calendar' ) );
+		// custom login and registration shortcodes
+		if(get_option('d2gc_activate_custom_login_registration', 0) == 1) {
+			add_shortcode( 'd2gc_login_form', array( $this->shortcode_loader, 'd2gc_login_form' ) );
+			add_shortcode( 'd2gc_lost_password_form', array( $this->shortcode_loader, 'd2gc_lost_password_form' ) );
+			add_shortcode( 'd2gc_reset_password_form', array( $this->shortcode_loader, 'd2gc_reset_password_form' ) );
+			add_shortcode( 'd2gc_registration_form', array( $this->shortcode_loader, 'd2gc_registration_form' ) );
+		}
+		add_shortcode( 'd2gc_account_settings', array( $this->shortcode_loader, 'd2gc_account_settings' ) );
+		add_shortcode( 'd2gc_patient_appointments', array( $this->shortcode_loader, 'd2gc_patient_appointments' ) );
+		add_shortcode( 'd2gc_patient_dashbaord', array( $this->shortcode_loader, 'd2gc_patient_dashbaord' ) );
+		add_shortcode( 'd2gc_patient_menu', array( $this->shortcode_loader, 'd2gc_patient_menu' ) );
+		add_shortcode( 'd2gc_search_mask', array( $this->shortcode_loader, 'd2gc_search_mask' ) );
+		add_shortcode( 'd2gc_liked_posts', array( $this->shortcode_loader, 'd2gc_liked_posts' ) );
+		add_shortcode( 'd2gc_patient_portal', array( $this->shortcode_loader, 'd2gc_patient_portal' ) );
+		add_shortcode( 'd2gc_appointment_confirmation', array( $this->shortcode_loader, 'd2gc_appointment_confirmation' ) );
+		add_shortcode( 'doctor_consultancy_tabs', array( $this->shortcode_loader, 'd2gc_single_doctor_consultancy_tabs' ) );
 	}
 
 
@@ -330,7 +332,7 @@ class D2gConnect_Public {
 	/*
 	* this function loads more doctors in the listing
 	*/
-	public function doctor_call() {
+	public function d2gc_doctor_call() {
 
 		// Verify nonce first
 		if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'doc_call' ) ) {
@@ -606,8 +608,8 @@ class D2gConnect_Public {
 
 	// this overwrites the reset password mail to return the url to the custom password reset form
 	public function d2g_retrieve_password_message( $retrieve_password_message, $key, $user_login, $user_data ) {
-		$wp_lang = isset( $_REQUEST['wp_lang'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['wp_lang'] ) ) : get_locale(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    	$currLang 	= explode( '_', $wp_lang )[0];  // 'ro'
+		$wp_lang  = determine_locale();
+		$currLang = explode( '_', $wp_lang )[0];
 
 		$d2gAdmin = new D2G_doc_user_profile();
 		$pageData = $d2gAdmin::d2g_page_url( $currLang, 'reset_password', true );
@@ -617,12 +619,18 @@ class D2gConnect_Public {
 		$content .= esc_html__( 'User name: ', 'doctor2go-connect' ) . $user_data->data->user_email . "\n\n";
 		$content .= esc_html__( 'If this was not intended, simply ignore this e-mail. Nothing will happen. ', 'doctor2go-connect' ) . "\n\n";
 		$content .= esc_html__( 'To reset your password, visit the following address: ', 'doctor2go-connect' ) . "\n";
-		$content .= $pageData['url'] . '?action=rp&key=' . $key . '&login=' . $user_login . '&wp_lang=' . $wp_lang;
-		$content  = wpautop( $content );
+		$content .= add_query_arg(
+			array(
+				'action'  => 'rp',
+				'key'     => $key,
+				'login'   => $user_login,
+				'wp_lang' => $wp_lang,
+			),
+			$pageData['url']
+		);
+		$content = wpautop( $content );
 
-		$msg = d2g_html_email( $content );
-
-		return $msg;
+		return d2g_html_email( $content );
 	}
 
 
@@ -709,7 +717,7 @@ class D2gConnect_Public {
 		$client_token = isset( $_GET['client_token'] ) ? sanitize_text_field( wp_unslash( $_GET['client_token'] ) ) : '';
 
 		if ( $user_key ) {
-			$super_key = (string) get_option( 'wcc_token' );
+			$super_key = (string) get_option( 'd2gc_wcc_token' );
 			$unix_time = time();
 
 			if ( ! $time || $unix_time - $time > 300000 ) {
@@ -790,7 +798,7 @@ class D2gConnect_Public {
 			exit;
 		}
 
-		if ( isset( $post_meta['d2g_page_accessebility'][0] ) && 'protected_uc' === $post_meta['d2g_page_accessebility'][0] && ! is_user_logged_in() && 1 == get_option( 'under_construction' ) ) {
+		if ( isset( $post_meta['d2g_page_accessebility'][0] ) && 'protected_uc' === $post_meta['d2g_page_accessebility'][0] && ! is_user_logged_in() && 1 == get_option( 'd2gc_under_construction' ) ) {
 			wp_safe_redirect( home_url( '/under-construction' ) );
 			exit;
 		}
@@ -798,6 +806,7 @@ class D2gConnect_Public {
 
 	// redirects are defined for when wp-login.php is triggered
 	public function d2g_login_redirect( $redirect_to, $requested_redirect_to, $user ) {
+	
 
 		if ( isset( $_REQUEST['interim-login'] ) || isset( $_REQUEST['wp-auth-check'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- core WP read-only auth-check flags.
 			return $redirect_to;
