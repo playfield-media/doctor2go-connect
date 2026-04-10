@@ -1,5 +1,3 @@
-Here is your updated readme with Bootstrap 5 added to the “External Services” section:
-
 === Doctor2Go Connect ===
 Contributors: doctor2go (Webcamconsult BV), playfield-media (BV Playfield-Media)
 Tags: online practice, medical websites, doctors, bookings
