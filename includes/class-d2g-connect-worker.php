@@ -4,7 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class D2gConnect_Worker {
-
     public function sync_single_doctor($doctor_id) {
 
         $docKey = get_post_meta($doctor_id, 'user_key', true);
