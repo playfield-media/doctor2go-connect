@@ -30,7 +30,7 @@ function d2gc_meta_box_personal_cb( $post ) {
 
 	);
 	$currencies = array( 'EUR', 'USD', 'GBP', 'ALL', 'MXN', 'AUD', 'INR', 'AZN', 'BYN', 'BGN', 'HRK', 'CZK', 'DKK', 'GEL', 'HUF', 'ISK', 'CHF', 'MKD', 'MDL', 'NOK', 'PLN', 'RON', 'RUB', 'RSD', 'SEK', 'CHF', 'TRY', 'UAH', 'CAD', 'NZD', 'BRL', 'ZAR' );
-	$types	  = array( 'short' => 'Short generic Email Advice', 'derma_email_advice' => 'Dermatology Email Advice' );
+	$types	  = array( 'short' => 'Short generic Email Advice', 'medofenic_advice' => 'Long generic Email Advice (by Medofenic)', 'derma_email_advice' => 'Dermatology Email Advice' );
 
 	wp_nonce_field( 'd2g_meta_box_nonce', 'meta_box_nonce' );
 	?>

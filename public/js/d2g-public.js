@@ -853,69 +853,104 @@ jQuery(document).ready(function ($) {
             if (checker === false) {
                 // Compress images asynchronously
                 const imageInputs = ['image_1', 'image_2', 'image_3'];
-                const promises = imageInputs.map(id => {
+                const imagePromises = imageInputs.map(id => {
                     const file = $('#' + id)[0].files[0];
                     if (!file || !file.type.startsWith('image/')) return Promise.resolve(null);
                     return compressImage(file);
                 });
 
-                Promise.all(promises).then(compressedFiles => {
-                    // Create FormData
-                    var myformData = new FormData($("#written_con_form")[0]);
-                    myformData.append('action', 'd2gc_create_wcc_written_cosnsult');
+                // NEW: base64-encode PDFs asynchronously
+                const pdfInputs = ['file_1', 'file_2', 'file_3'];
+                const pdfPromises = pdfInputs.map(id => {
+                    const el = document.getElementById(id);
+                    if (!el || !el.files || !el.files[0]) return Promise.resolve(null);
+                    const file = el.files[0];
+                    if (file.type !== 'application/pdf') return Promise.resolve(null);
 
-                    // Handle multi-select #veranderd as ; separated string
-                    const veranderdSelect = document.getElementById('veranderd');
-                    if (veranderdSelect) {
-                        const selectedValues = Array.from(veranderdSelect.selectedOptions)
-                            .map(option => option.value.trim())
-                            .filter(Boolean)
-                            .join('; ');
-                        myformData.set('has_changed', selectedValues);
-                    }
-
-                    // Replace original images with compressed ones
-                    imageInputs.forEach((id, index) => {
-                        const compressed = compressedFiles[index];
-                        const hiddenValue = $('#derma_pic_' + (index + 1)).val();
-
-                        if (compressed) {
-                            myformData.set(id, compressed);
-                        } else if (!$('#' + id)[0].files[0] && hiddenValue) {
-                            myformData.set(id, hiddenValue);
-                        }
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result); // data:application/pdf;base64,....
+                        reader.onerror = (err) => reject(err);
+                        reader.readAsDataURL(file);
                     });
-
-                    // Your existing AJAX (show loader already handled in beforeSend)
-                    $.ajax({
-                        type: "POST",
-                        data: myformData,
-                        url: d.ajax.url,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: function() {
-                            $("#loader").show();
-                        },
-                        success: function (response) {
-                            console.log(response);
-                            if (response && response.data && response.data.redirect_url) {
-                                window.location.href = response.data.redirect_url;
-                            }
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            $("#written_consult").toggleClass('loading');
-                            console.log(errorThrown);
-                        },
-                        complete: function() {
-                            $("#loader").hide();
-                        }
-                    });
-                }).catch(error => {
-                    console.error('Image compression failed:', error);
-                    $("#loader").hide();
                 });
+
+                Promise.all(imagePromises)
+                    .then(compressedFiles => {
+                        return Promise.all(pdfPromises).then(pdfBase64s => ({
+                            compressedFiles,
+                            pdfBase64s
+                        }));
+                    })
+                    .then(({ compressedFiles, pdfBase64s }) => {
+                        // Create FormData
+                        var myformData = new FormData($("#written_con_form")[0]);
+                        myformData.append('action', 'd2gc_create_wcc_written_cosnsult');
+
+                        // Handle multi-select #veranderd as ; separated string
+                        const veranderdSelect = document.getElementById('veranderd');
+                        if (veranderdSelect) {
+                            const selectedValues = Array.from(veranderdSelect.selectedOptions)
+                                .map(option => option.value.trim())
+                                .filter(Boolean)
+                                .join('; ');
+                            myformData.set('has_changed', selectedValues);
+                        }
+
+                        // Replace original images with compressed ones
+                        imageInputs.forEach((id, index) => {
+                            const compressed = compressedFiles[index];
+                            const hiddenValue = $('#derma_pic_' + (index + 1)).val();
+
+                            if (compressed) {
+                                myformData.set(id, compressed);
+                            } else if (!$('#' + id)[0].files[0] && hiddenValue) {
+                                myformData.set(id, hiddenValue);
+                            }
+                        });
+
+                        // NEW: attach PDF base64 data (if any)
+                        pdfInputs.forEach((id, index) => {
+                            const b64 = pdfBase64s[index];
+                            if (b64) {
+                                // send as separate fields; name is up to you
+                                myformData.set(id + '_base64', b64);
+                            }
+                        });
+
+                        // Your existing AJAX (show loader already handled in beforeSend)
+                        $.ajax({
+                            type: "POST",
+                            data: myformData,
+                            url: d.ajax.url,
+                            processData: false,
+                            contentType: false,
+                            beforeSend: function() {
+                                $("#loader").show();
+                            },
+                            success: function (response) {
+                                console.log(response);
+                                if (response && response.data && response.data.redirect_url) {
+                                    window.location.href = response.data.redirect_url;
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                $("#written_consult").toggleClass('loading');
+                                console.log(errorThrown);
+                            },
+                            complete: function() {
+                                $("#loader").hide();
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Image/PDF handling failed:', error);
+                        $("#loader").hide();
+                    });
+
             } else {
                 $('#written_con_error').html(checker_message).toggleClass('simple_hide');
+                $('body').scrollTo('#content_wrapper', { duration: 'fast'});
                 return false;
             }
 
