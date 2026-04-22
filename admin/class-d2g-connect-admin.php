@@ -587,45 +587,39 @@ class D2gConnect_Admin {
 	*/
 	public function d2gc_register_d2g_settings() {
 		$settings_with_callbacks = array(
-			'd2gc_detail_page_view'          		=> array( $this, 'd2gc_sanitize_detail_page_view' ),
-			'd2gc_theme_css'                 		=> array( $this, 'd2gc_sanitize_theme_css' ),
-			'd2gc_bootstrap_css'                  	=> 'absint',
-			'd2gc_wcc_token'                     	=> array( $this, 'd2gc_sanitize_token' ),
-			'd2gc_api_url_short'                 	=> 'esc_url_raw',
-			'd2gc_waiting_room_url'              	=> 'esc_url_raw',
-			'd2gc_wcc_base_url'                  	=> 'sanitize_text_field',
-			'd2gc_admin_mail'                    		=> 'sanitize_email',
-			'd2gc_local_user'                		=> 'absint',
-			'd2gc_placeholder'               		=> 'absint',
-			'd2gc_recaptcha_site_key'        		=> array( $this, 'd2gc_sanitize_token' ),
-			'd2gc_recaptcha_secret_key'      		=> array( $this, 'd2gc_sanitize_token' ),
-			'd2gc_admin_access'              		=> 'absint',
-			'd2gc_single_header_footer'      		=> 'absint',
-			'd2gc_deactivate_recapctha_script'   		=> 'absint',
-			'd2gc_activate_2fa_link'             		=> 'absint',
-			'd2gc_under_construction'            		=> 'absint',
-			'd2gc_logo'                      		=> 'absint',
-			'd2gc_sender_address'            		=> 'sanitize_email',
-			'd2gc_recipient_address'         		=> 'sanitize_email',
-			'd2gc_sender_name'               		=> 'sanitize_text_field',
-			'd2gc_pseudo_translations'      			=> 'absint',
-			'd2gc_use_imgix'                 		=> 'absint',
-			'd2gc_use_default_questionnaire' 		=> 'absint',
-			'd2gc_load_availability_info'    		=> 'absint',
-			'd2gc_bootstrap_js'						=> 'absint',
-			'd2gc_activate_sso'						=> 'absint',
-			'd2gc_activate_custom_password_mail' 	=> 'absint',
+			'd2gc_detail_page_view' => array( $this, 'd2gc_sanitize_detail_page_view' ),
+			'd2gc_theme_css' => array( $this, 'd2gc_sanitize_theme_css' ),
+			'd2gc_bootstrap_css' => 'absint',
+			'd2gc_wcc_token' => array( $this, 'd2gc_validate_secret' ),
+			'd2gc_api_url_short' => 'esc_url_raw',
+			'd2gc_waiting_room_url' => 'esc_url_raw',
+			'd2gc_wcc_base_url' => 'sanitize_text_field',
+			'd2gc_admin_mail' => 'sanitize_email',
+			'd2gc_local_user' => 'absint',
+			'd2gc_placeholder' => 'absint',
+			'd2gc_recaptcha_site_key' => array( $this, 'd2gc_validate_secret' ),
+			'd2gc_recaptcha_secret_key' => array( $this, 'd2gc_validate_secret' ),
+			'd2gc_admin_access' => 'absint',
+			'd2gc_single_header_footer' => 'absint',
+			'd2gc_deactivate_recapctha_script' => 'absint',
+			'd2gc_activate_2fa_link' => 'absint',
+			'd2gc_under_construction' => 'absint',
+			'd2gc_logo' => 'absint',
+			'd2gc_sender_address' => 'sanitize_email',
+			'd2gc_recipient_address' => 'sanitize_email',
+			'd2gc_sender_name' => 'sanitize_text_field',
+			'd2gc_pseudo_translations' => 'absint',
+			'd2gc_use_imgix' => 'absint',
+			'd2gc_use_default_questionnaire' => 'absint',
+			'd2gc_load_availability_info' => 'absint',
+			'd2gc_bootstrap_js' => 'absint',
+			'd2gc_activate_sso' => 'absint',
+			'd2gc_activate_custom_password_mail' => 'absint',
 			'd2gc_activate_custom_login_registration' => 'absint'
 		);
-		// registration for the short code activation options
+
 		foreach ( $settings_with_callbacks as $setting => $callback ) {
-			register_setting(
-				'd2gc-option-group',
-				$setting,
-				array(
-					'sanitize_callback' => $callback,
-				)
-			);
+			register_setting( 'd2gc-option-group', $setting, array( 'sanitize_callback' => $callback ) );
 		}
 	}
 
@@ -641,6 +635,17 @@ class D2gConnect_Admin {
 			return '';
 		}
 		return sanitize_textarea_field( $value ); // preserves all characters safely
+	}
+
+	public function d2gc_validate_secret( $value ) {
+		$value = is_string( $value ) ? trim( wp_unslash( $value ) ) : '';
+
+		if ( '' === $value ) {
+			add_settings_error( 'd2gc-option-group', 'empty_secret', __( 'This field cannot be empty.', 'doctor2go-connect' ), 'error' );
+			return '';
+		}
+
+		return $value;
 	}
 
 	/**

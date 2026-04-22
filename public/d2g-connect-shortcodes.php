@@ -2348,44 +2348,38 @@ class D2gConnect_Shortcodes {
 	//
 	// shortcode account settings
 	public function d2gc_account_settings() {
-
-		// Verify nonce
-		if ( isset( $_POST['d2g_account_nonce'] ) ) {
-			$nonce = sanitize_key( wp_unslash( $_POST['d2g_account_nonce'] ) );
-
-			if ( ! wp_verify_nonce( $nonce, 'd2g_account_action' ) ) {
-				echo '<p class="alert alert-danger">' . esc_html__( 'Security check failed. Please refresh the page and try again.', 'doctor2go-connect' ) . '</p>';
-				return;
-			}
+		if ( ! is_user_logged_in() ) {
+			return '';
 		}
 
-		$current_user = wp_get_current_user();
-		$user_id      = $current_user->data->ID;
-		$timezones    = d2gc_timezones();
+		$user_id   = get_current_user_id();
+		$timezones = d2gc_timezones();
+		$errors    = array();
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === wp_unslash( $_SERVER['REQUEST_METHOD'] ) && isset( $_POST['custom_registration'] ) ) {
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === wp_unslash( $_SERVER['REQUEST_METHOD'] ) && isset( $_POST['custom_registration'] )) {
+			if ( ! isset( $_POST['d2g_account_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['d2g_account_nonce'] ) ), 'd2g_account_action') ) {
+				$errors[] = __( 'Security check failed. Please refresh the page and try again.', 'doctor2go-connect' );
+			}
+
 			$email            = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 			$password         = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
 			$confirm_password = isset( $_POST['confirm_password'] ) ? sanitize_text_field( wp_unslash( $_POST['confirm_password'] ) ) : '';
-			$errors           = array();
 
-			// Validate inputs
 			if ( empty( $email ) ) {
 				$errors[] = __( 'All fields are required.', 'doctor2go-connect' );
-			}
-
-			if ( ! empty( $email ) && ! is_email( $email ) ) {
+			} elseif ( ! is_email( $email ) ) {
 				$errors[] = __( 'Please provide a valid email address.', 'doctor2go-connect' );
 			}
 
-			if ( ! empty( $password ) && $password === $confirm_password ) {
-				wp_set_password( $password, $user_id );
+			if ( ! empty( $password ) || ! empty( $confirm_password ) ) {
+				if ( empty( $password ) || empty( $confirm_password ) ) {
+					$errors[] = __( 'Please fill in both password fields.', 'doctor2go-connect' );
+				} elseif ( $password !== $confirm_password ) {
+					$errors[] = __( 'Passwords do not match.', 'doctor2go-connect' );
+				}
 			}
 
-
-			// Update meta if exists
-			if ( isset( $_POST['meta'] ) && is_array( $_POST['meta'] ) ) {
+			if ( empty( $errors ) && isset( $_POST['meta'] ) && is_array( $_POST['meta'] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$meta = wp_unslash( $_POST['meta'] );
 
@@ -2398,91 +2392,110 @@ class D2gConnect_Shortcodes {
 				}
 			}
 
-			// Display messages
-			if ( empty( $errors ) && ! is_wp_error( $user_id ) ) {
-				echo '<p class="success">' . esc_html__( 'Update was successful.', 'doctor2go-connect' ) . ' </p>';
-			} elseif ( ! empty( $errors ) ) {
-				foreach ( $errors as $error ) {
-					echo '<p class="alert alert-danger">' . esc_html( $error ) . '</p>';
-				}
-			} elseif ( is_wp_error( $user_id ) ) {
-				echo '<p class="alert alert-danger">' . esc_html( $user_id->get_error_message() ) . '</p>';
+			if ( empty( $errors ) && ! empty( $password ) ) {
+				wp_set_password( $password, $user_id );
 			}
 		}
 
-		$user_meta = get_user_meta( $user_id );
+		$current_user = wp_get_current_user();
+		$user_meta    = get_user_meta( $user_id );
 
-		// Display the form for the account settings
 		ob_start();
-		//nice_dump($user_meta);
 		?>
 		<div class="d2g_form_wrapper">
+			<?php
+			if ( ! empty( $errors ) ) {
+				foreach ( $errors as $error ) {
+					echo '<p class="alert alert-danger">' . esc_html( $error ) . '</p>';
+				}
+			} elseif (
+				isset( $_SERVER['REQUEST_METHOD'] ) &&
+				'POST' === wp_unslash( $_SERVER['REQUEST_METHOD'] ) &&
+				isset( $_POST['custom_registration'] )
+			) {
+				echo '<p class="success">' . esc_html__( 'Update was successful.', 'doctor2go-connect' ) . '</p>';
+			}
+			?>
+
 			<form id="custom-registration-form" method="post">
 				<?php wp_nonce_field( 'd2g_account_action', 'd2g_account_nonce' ); ?>
+
 				<div class="mb-3">
 					<label for="first_name" class="form-label"><?php echo esc_html__( 'First name', 'doctor2go-connect' ); ?></label>
-					<input type="text" name="meta[first_name]" id="first_name" class="form-control" required value="<?php echo esc_html( $user_meta['first_name'][0] ); ?>">
+					<input type="text" name="meta[first_name]" id="first_name" class="form-control" required value="<?php echo isset( $user_meta['first_name'][0] ) ? esc_attr( $user_meta['first_name'][0] ) : ''; ?>">
 				</div>
+
 				<div class="mb-3">
 					<label for="last_name" class="form-label"><?php echo esc_html__( 'Last name', 'doctor2go-connect' ); ?></label>
-					<input type="text" name="meta[last_name]" id="last_name" class="form-control" required value="<?php echo esc_html( $user_meta['last_name'][0] ); ?>">
+					<input type="text" name="meta[last_name]" id="last_name" class="form-control" required value="<?php echo isset( $user_meta['last_name'][0] ) ? esc_attr( $user_meta['last_name'][0] ) : ''; ?>">
 				</div>
+
 				<div class="mb-3 alert alert-warning">
 					<label for="email" class="form-label"><?php echo esc_html__( 'Email (can not be changed)', 'doctor2go-connect' ); ?></label>
-					<input type="email" readonly class="form-control-plaintext" name="email" id="email" required value="<?php echo esc_html( $current_user->data->user_email ); ?>">
+					<input type="email" readonly class="form-control-plaintext" name="email" id="email" required value="<?php echo esc_attr( $current_user->user_email ); ?>">
 				</div>
+
 				<div class="mb-3">
 					<label for="p_tel" class="form-label"><?php echo esc_html__( 'Phone', 'doctor2go-connect' ); ?></label>
-					<input type="text" name="meta[p_tel]" id="p_tel" class="form-control" required value="<?php echo esc_html( $user_meta['p_tel'][0] ); ?>">
+					<input type="text" name="meta[p_tel]" id="p_tel" class="form-control" required value="<?php echo isset( $user_meta['p_tel'][0] ) ? esc_attr( $user_meta['p_tel'][0] ) : ''; ?>">
 				</div>
+
 				<div class="mb-3">
 					<label class="form-label" for="p_bday"><?php echo esc_html__( 'Date of Birth', 'doctor2go-connect' ); ?></label>
-					<input class="form-control" type="date" name="meta[p_bday]" id="p_bday" value="<?php echo esc_html( $user_meta['p_bday'][0] ); ?>">
+					<input class="form-control" type="date" name="meta[p_bday]" id="p_bday" value="<?php echo isset( $user_meta['p_bday'][0] ) ? esc_attr( $user_meta['p_bday'][0] ) : ''; ?>">
 				</div>
+
 				<div class="mb-3">
 					<label class="form-label" for="p_gender"><?php echo esc_html__( 'Gender', 'doctor2go-connect' ); ?></label>
 					<select name="meta[p_gender]" id="p_gender" class="form-select">
-						<option <?php echo ( '0' == $user_meta['p_gender'][0] ) ? 'selected' : ''; ?> value="0"><?php echo esc_html__( 'make a choice', 'doctor2go-connect' ); ?></option>
-						<option <?php echo ( 'male' == $user_meta['p_gender'][0] ) ? 'selected' : ''; ?> value="male"><?php echo esc_html__( 'male', 'doctor2go-connect' ); ?></option>
-						<option <?php echo ( 'female' == $user_meta['p_gender'][0] ) ? 'selected' : ''; ?> value="female"><?php echo esc_html__( 'female', 'doctor2go-connect' ); ?></option>
-						<option <?php echo ( 'other' == $user_meta['p_gender'][0] ) ? 'selected' : ''; ?> value="other"><?php echo esc_html__( 'other', 'doctor2go-connect' ); ?></option>
+						<option <?php selected( isset( $user_meta['p_gender'][0] ) ? $user_meta['p_gender'][0] : '', '0' ); ?> value="0"><?php echo esc_html__( 'make a choice', 'doctor2go-connect' ); ?></option>
+						<option <?php selected( isset( $user_meta['p_gender'][0] ) ? $user_meta['p_gender'][0] : '', 'male' ); ?> value="male"><?php echo esc_html__( 'male', 'doctor2go-connect' ); ?></option>
+						<option <?php selected( isset( $user_meta['p_gender'][0] ) ? $user_meta['p_gender'][0] : '', 'female' ); ?> value="female"><?php echo esc_html__( 'female', 'doctor2go-connect' ); ?></option>
+						<option <?php selected( isset( $user_meta['p_gender'][0] ) ? $user_meta['p_gender'][0] : '', 'other' ); ?> value="other"><?php echo esc_html__( 'other', 'doctor2go-connect' ); ?></option>
 					</select>
 				</div>
+
 				<div class="mb-3" id="time_zone_wrapper">
 					<label for="p_timezone" class="form-label"><?php echo esc_html__( 'Timezone', 'doctor2go-connect' ); ?></label>
 					<select name="meta[p_timezone]" class="form-select" id="p_timezone">
 						<option value="0"><?php echo esc_html__( 'make a selection', 'doctor2go-connect' ); ?></option>
 						<?php foreach ( $timezones as $group => $zones ) { ?>
-							<optgroup label="<?php echo esc_html( $group ); ?>">
+							<optgroup label="<?php echo esc_attr( $group ); ?>">
 								<?php foreach ( $zones as $key => $name ) { ?>
-									<option <?php echo ( $key == $user_meta['p_timezone'][0] ) ? 'selected' : ''; ?> value="<?php echo esc_html( $key ); ?>"><?php echo esc_html( $name ); ?></option>
+									<option <?php selected( isset( $user_meta['p_timezone'][0] ) ? $user_meta['p_timezone'][0] : '', $key ); ?> value="<?php echo esc_attr( $key ); ?>">
+										<?php echo esc_html( $name ); ?>
+									</option>
 								<?php } ?>
 							</optgroup>
 						<?php } ?>
 					</select>
 				</div>
-				<p class="mb-3 text-warning"><?php echo esc_html__( 'Only fill in the password fields, if you want to change your password. ', 'doctor2go-connect' ); ?></p>
+
+				<p class="mb-3 text-warning"><?php echo esc_html__( 'Only fill in the password fields, if you want to change your password.', 'doctor2go-connect' ); ?></p>
+
 				<div class="mb-3">
 					<label for="password" class="form-label"><?php echo esc_html__( 'Password', 'doctor2go-connect' ); ?></label>
 					<input type="password" name="password" id="password" class="form-control">
 				</div>
+
 				<div class="mb-3">
 					<label for="confirm_password" class="form-label"><?php echo esc_html__( 'Confirm Password', 'doctor2go-connect' ); ?></label>
 					<input type="password" name="confirm_password" id="confirm_password" class="form-control">
 				</div>
+
 				<div class="mb-3">
 					<input type="hidden" name="custom_registration" value="1">
-					<input type="submit" class="btn btn-primary" value="<?php echo esc_html__( 'save', 'doctor2go-connect' ); ?>">
+					<input type="submit" class="btn btn-primary" value="<?php echo esc_attr__( 'save', 'doctor2go-connect' ); ?>">
 				</div>
 			</form>
 		</div>
-		<?php if ( ( get_option( 'd2gc_activate_2fa_link' ) == '1' ) ) { ?>
+
+		<?php if ( '1' === get_option( 'd2gc_activate_2fa_link' ) ) { ?>
 			<div class="btn_wrapper">
 				<a class="btn btn-outline-primary" href="/wp/wp-login.php?itsec_after_interstitial=2fa-on-board"><?php esc_html_e( 'configure 2FA', 'doctor2go-connect' ); ?></a>
 			</div>
 		<?php } ?>
 
-		
 		<?php
 		return ob_get_clean();
 	}
