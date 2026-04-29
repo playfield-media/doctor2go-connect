@@ -1230,8 +1230,8 @@ class D2gConnect_Shortcodes {
 		?>
 
 		<form method="GET" action="<?php echo esc_url( $pageDoc ); ?>">
-			<h3 class="opener special">
-				<?php echo esc_html__( 'Filters', 'doctor2go-connect' ); ?>
+			<h3 class="opener special mb-4">
+				<?php echo esc_html__( 'Find your dermatologist', 'doctor2go-connect' ); ?>
 				<span class="icon-angle-down"></span>
 			</h3>
 			<div class="doctor_filters_outer">
@@ -1337,8 +1337,8 @@ class D2gConnect_Shortcodes {
 				</p>
 
 				<?php if ( 'true' === $a['stand_alone'] ) { ?>
-					<input id="search_submit" type="submit" class="search_submit" value="<?php echo esc_attr__( 'Search', 'doctor2go-connect' ); ?>">
-					<div class="alert alert-danger" id="search_error"></div>
+					<input id="search_submit" type="submit" class="search_submit btn btn-primary" value="<?php echo esc_attr__( 'Search', 'doctor2go-connect' ); ?>">
+					<div class="alert alert-danger simple_hide" id="search_error"></div>
 					<div class="loader simple_hide"></div>
 				<?php } ?>
 
