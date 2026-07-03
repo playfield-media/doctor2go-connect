@@ -790,6 +790,24 @@ class D2gConnect_Shortcodes {
                                                         </div>
                                                     </div>
 
+                                                    <label class="form-label small mt-3">
+                                                        <?php echo esc_html__( 'Standard video consultation price & currency', 'doctor2go-connect' ); ?>*
+                                                    </label>
+                                                    <div class="row g-2 align-items-center">
+                                                        <div class="col-8">
+                                                            <input type="text" class="form-control price_input" id="video_con_price" value="<?php echo esc_html( $doctor_meta['video_con_price'][0] ); ?>" tabindex="1" name="meta[video_con_price]" placeholder="<?php echo esc_html__( 'Video consultation price', 'doctor2go-connect' ); ?>"/>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <select class="form-select" name="meta[video_con_currency]" id="video_con_currency">
+                                                                <?php foreach ( $currencies as $currency ) { ?>
+                                                                    <option <?php echo ( $currency == $doctor_meta['video_con_currency'][0] ) ? 'selected' : ''; ?> value="<?php echo esc_html( $currency ); ?>">
+                                                                        <?php echo esc_html( $currency ); ?>
+                                                                    </option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="mt-3">
                                                         <label class="small"><?php echo esc_html__( 'E-mail consult questionnaire', 'doctor2go-connect' ); ?>*</label>
                                                         <select class="form-control" name="meta[written_con_type]" id="written_con_type">
@@ -800,6 +818,7 @@ class D2gConnect_Shortcodes {
                                                             <?php } ?>
                                                         </select>
                                                     </div>
+                                                    
 
                                                     <p class="mt-3 mb-4 simple_hide">
                                                         <label class="form-check-label">
