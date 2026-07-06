@@ -1139,14 +1139,14 @@ function d2gc_show_consultancy_tabs($post = '', $stand_alone = false){
 		<?php if ( $d2g_profile_data->doctor_meta['written_con_price'][0] != '' ) {?>
 			<div class="tab-pane fade show active" id="email-tab-pane" role="tabpanel" aria-labelledby="email-tab" tabindex="0">
                 <div class="card alert alert-info mb-5" role="alert">
-                    <h3 class="mb-0"><?php echo esc_html__( 'Request e-mail advice from', 'doctor2go-connect' ); ?> <?php the_title(); ?></h3>
+                    <h3 class="mb-0"><?php echo esc_html__( 'Request e-mail advice from:', 'doctor2go-connect' ); ?> <?php the_title(); ?></h3>
                 </div>
 				<?php do_action( 'd2g_doctor_written_con_form' ); ?>
 			</div>
 		<?php } ?>
 		<div class="tab-pane fade" id="calendar-tab-pane" role="tabpanel" aria-labelledby="calendar-tab" tabindex="0">
             <div class="card alert alert-info mb-5" role="alert">
-                <h3 class="mb-0"><?php echo esc_html__( 'Request e-mail advice from', 'doctor2go-connect' ); ?> <?php the_title(); ?></h3>
+                <h3 class="mb-0"><?php echo esc_html__( 'Make an appointment for a video call with:', 'doctor2go-connect' ); ?> <?php the_title(); ?></h3>
             </div>
 			<?php if($stand_alone === true){
 				d2gc_show_booking_calendar( $post, true, true );
@@ -1156,6 +1156,9 @@ function d2gc_show_consultancy_tabs($post = '', $stand_alone = false){
 		</div>
 		<?php if ( $d2g_profile_data->doctor_meta['walk_in_price'][0] != '' ) {?>
 			<div class="tab-pane fade" id="walkin-tab-pane" role="tabpanel" aria-labelledby="walkin-tab" tabindex="0">
+                <div class="card alert alert-info mb-5" role="alert">
+                    <h3 class="mb-0"><?php echo esc_html__( 'You are lucky the doctor is now available for a walk-in consultation:', 'doctor2go-connect' ); ?> <?php the_title(); ?></h3>
+                </div>
 				<?php do_action( 'd2g_doctor_walkin_form' );?>
 			</div>
 		<?php } ?>
