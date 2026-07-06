@@ -331,17 +331,26 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 			?>
 			<li class="<?php echo ($video == true)?esc_html('available'):esc_html__('not_available')  ?> flaticon-wcc flaticon-meeting-schedule list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
 				<div class="ms-2 me-auto">
-					<a href="<?php echo  ($video == true)?get_the_permalink().'?consult=video':'#info_not_available'?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
+                    <?php if($video == true){ ?>
+                        <a href="<?php echo  ($video == true)?get_the_permalink().'?consult=video':'#info_not_available'?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
+                    <?php } ?>
 						<div class="fw-bold"><?php echo esc_html__('Video consult on appointment', 'doctor2go-connect')?></div>
-					</a>
+                    <?php if($video == true){ ?>
+                        </a>
+                    <?php } ?>
+					
                     <span class="form-text"><?php echo  ($video == true)?esc_html__('first availability: ', 'doctor2go-connect').wp_kses_post( $firstAvailibility ):''?></span>
                     
 				</div>
-                <a href="<?php echo  ($video == true)?get_the_permalink().'?consult=video':'#info_not_available'?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
+                <?php if($video == true){ ?>
+                    <a href="<?php echo  ($video == true)?get_the_permalink().'?consult=video':'#info_not_available'?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
+                <?php } ?>
                     <span class="badge text-bg-primary rounded-pill">
                         <?php echo ( $video == true) ? wp_kses_post( $d2g_profile_data->doctor_meta['d2g_tariffs'][0] ):esc_html__('n/a')?>
                     </span>
-                </a>
+                <?php if($video == true){ ?>
+                    </a>
+                <?php } ?>
 			</li>
 			<?php 
 			if( $d2g_profile_data->doctor_meta['written_con_price'][0] != '' ){
@@ -352,16 +361,24 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 			?>
 			<li class="<?php echo ($email == true)?esc_html('available'):esc_html__('not_available')  ?> icon-mail-1 list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
 				<div class="ms-2 me-auto">
-					<a href="<?php echo  ($email == true)?get_the_permalink().'?consult=email':'#info_not_available'?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
+					<?php if($email == true){ ?>
+						<a href="<?php echo  ($email == true)?get_the_permalink().'?consult=email':'#info_not_available'?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
+					<?php } ?>
 						<div class="fw-bold"><?php echo esc_html__('E-mail advice', 'doctor2go-connect')?></div>
-					</a>
+					<?php if($email == true){ ?>
+						</a>
+					<?php } ?>
 					<span class="form-text"><?php echo ($email == true)?esc_html__('available at any time', 'doctor2go-connect'): '' ?></span>
 				</div>
-                <a href="<?php echo  ($email == true)?get_the_permalink().'?consult=email':'#info_not_available'?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
+                <?php if($email == true){ ?>
+                    <a href="<?php echo  ($email == true)?get_the_permalink().'?consult=email':'#info_not_available'?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
+                <?php } ?>
                     <span class="badge text-bg-primary rounded-pill">
                         <?php echo ($email == true) ? esc_html( $d2g_profile_data->doctor_meta['written_con_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['written_con_price'][0] ):esc_html__('n/a')?>
                     </span>
-                </a>
+                <?php if($email == true){ ?>
+                    </a>
+                <?php } ?>
 			</li>
 			<?php 
 			if( $d2g_profile_data->doctor_meta['d2g_walk_in'][0] != '' && $d2g_profile_data->doctor_meta['d2g_walk_in'][0] != 0 && $d2g_profile_data->doctor_meta['walk_in_price'][0] != '' ){
@@ -372,16 +389,24 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 			?>
 			<li class="<?php echo ($walkin == true)?esc_html('available'):esc_html__('not_available')  ?> flaticon-online-meeting flaticon-wcc list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
 				<div class="ms-2 me-auto">
-					<a href="<?php echo  ($walkin == true)?get_the_permalink().'?consult=walkin':'#info_not_available'?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
-						<div class="fw-bold"><?php echo esc_html__('Walkin video consult', 'doctor2go-connect')?></div>
-					</a>
+					<?php if($walkin == true){ ?>
+						<a href="<?php echo  ($walkin == true)?get_the_permalink().'?consult=walkin':'#info_not_available'?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
+                    <?php } ?>
+							<div class="fw-bold"><?php echo esc_html__('Walkin video consult', 'doctor2go-connect')?></div>
+                    <?php if($walkin == true){ ?>
+						</a>
+					<?php } ?>
 					<span class="form-text"><?php echo ($walkin == true)?esc_html__('now available', 'doctor2go-connect'): '' ?></span>
 				</div>
-                <a href="<?php echo  ($walkin == true)?get_the_permalink().'?consult=walkin':'#info_not_available'?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
-                    <span class="badge text-bg-primary rounded-pill">
-                        <?php echo ($walkin == true) ? esc_html( $d2g_profile_data->doctor_meta['walk_in_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['walk_in_price'][0] ):esc_html__('n/a')?>
-                    </span>
-                </a>
+                <?php if($walkin == true){ ?>
+                    <a href="<?php echo  ($walkin == true)?get_the_permalink().'?consult=walkin':'#info_not_available'?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
+                <?php } ?>
+                        <span class="badge text-bg-primary rounded-pill">
+                            <?php echo ($walkin == true) ? esc_html( $d2g_profile_data->doctor_meta['walk_in_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['walk_in_price'][0] ):esc_html__('n/a')?>
+                        </span>
+                <?php if($walkin == true){ ?>
+                    </a>
+                <?php } ?>
 			</li>
 		</ul>
 	<?php }
