@@ -1730,7 +1730,7 @@ class D2gConnect_Shortcodes {
 					<div class="alert alert-danger simple_hide" id="search_error"></div>
 					<div class="loader simple_hide"></div>
 				<?php } ?>
-
+                <input type="hidden" name="use_ai_info" id="use_ai_info" value="<?php echo esc_attr( wp_unslash( $_GET['use_ai_info'] ?? '0' ) ); ?>">
 				<?php wp_nonce_field( 'doctor_filter_action', 'doctor_filter_nonce' ); ?>
 			</div>
 		</form>
@@ -2525,43 +2525,40 @@ class D2gConnect_Shortcodes {
 	}
 
 
-	// shortcode patient menu
 	public function d2gc_patient_menu() {
-		$d2gAdmin = new D2G_doc_user_profile();
-		$currLang = explode( '_', get_locale() )[0];
-		$pages    = array(
+        $d2gAdmin = new D2G_doc_user_profile();
+        $currLang = explode('_', get_locale())[0];
+        $pageData = '';
+        $pages = array(
+            'appointments'          => 'appointments-small.jpg',
+            'liked_doctors'         => 'heart-small.jpg',
+            'secure_patient_portal' => 'patient-small.jpg',
+            'account_settings'      => 'account-small.jpg',
+        );
 
-			'appointments'          => 'appointments-small.jpg',
-			'liked_doctors'         => 'heart-small.jpg',
-			'secure_patient_portal' => 'patient-small.jpg',
-			'account_settings'      => 'account-small.jpg',
-		);
+        $current_url = trailingslashit(home_url(add_query_arg(array(), $GLOBALS['wp']->request)));
 
-		ob_start();
+        ob_start();
+        ?>
+        <ul class="user_menu mt-5 mb-5 nav nav-tabs">
+            <?php foreach ($pages as $page => $image) :
+                
+                $pageData   = $d2gAdmin::d2gc_page_url($currLang, $page, true);
+                $item_url   = trailingslashit($pageData['url']);
+                $is_active  = ($current_url === $item_url);
+                ?>
+                <li class="nav-item">
+                    
+                    <a class="nav-link <?php echo $is_active ? 'active' : ''; ?>" href="<?php echo esc_url($pageData['url']); ?>" <?php echo $is_active ? 'aria-current="page"' : ''; ?>>
+                        <span><?php echo esc_html($pageData['title']); ?></span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php
 
-		?>
-		<ul class="user_menu mt-5 mb-5 nav nav-tabs">
-			<?php
-			foreach ( $pages as $page => $image ) {
-				$pageData = $d2gAdmin::d2gc_page_url( $currLang, $page, true );
-				?>
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo esc_html( $pageData['url'] ); ?>">
-						<span><?php echo esc_html( $pageData['title'] ); ?></span>
-					</a>
-				</li>
-			<?php } ?>
-		</ul>
-		<?php
-		/* Get the buffered content into a var */
-		$sc = ob_get_contents();
-
-		/* Clean buffer */
-		ob_end_clean();
-
-		/* Return the content as usual */
-		return $sc;
-	}
+        return ob_get_clean();
+    }
 
 	//
 	// shortcode patient appointments
@@ -2946,84 +2943,60 @@ class D2gConnect_Shortcodes {
 		} else {
 			?>
 		<div class="alignwide">
-			<div class="row with_right_sidebar">
-				<div class="col-sm-9">
-					<?php
-					// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-					if ( isset( $_GET['url'] ) ) {
-						// Sanitize GET parameters
-						$iframe_url = isset( $_GET['url'] ) ? esc_url_raw( wp_unslash( $_GET['url'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-						$title      = isset( $_GET['title'] ) ? sanitize_text_field( wp_unslash( $_GET['title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+            <h2><?php echo esc_html__( 'Your doctor\'s', 'doctor2go-connect' ); ?></h2>
+            <?php
+            $args = array(
+                'post_type'      => 'd2g_doctor',
+                'posts_per_page' => -1, // or any limit you want
+                'meta_query'     => array(
+                    array(
+                        'key'   => 'organisation_key',
+                        'value' => $orgsArray, // Replace with your actual keys
 
-						?>
-						<h2><?php echo esc_html__( 'Patient portal:', 'doctor2go-connect' ) . ' ' . esc_html( $title );?></h2>
-						<p><?php echo esc_html__( "This secure portal lets you send and receive messages from your doctor and access any documents they've shared with you.", 'doctor2go-connect' );?></p>
-						<iframe 
-							id="patient_portal" 
-							style="width:100%; border:none; height:1200px; overflow-y:scroll;" 
-							src="<?php echo esc_url( $iframe_url ); ?>">
-						</iframe>
-					<?php } else { ?>
-						<h2 class="alert alert-danger">
-							<?php esc_html_e( 'No doctor has been selected yet. Please choose one to proceed.', 'doctor2go-connect' ); ?>
-						</h2>
-					<?php } ?>
-				</div>
-				<div class="col-sm-3">
-					<h2><?php echo esc_html__( 'Your doctor\'s', 'doctor2go-connect' ); ?></h2>
-					<?php
-					$args = array(
-						'post_type'      => 'd2g_doctor',
-						'posts_per_page' => -1, // or any limit you want
-						'meta_query'     => array(
-							array(
-								'key'   => 'organisation_key',
-								'value' => $orgsArray, // Replace with your actual keys
+                    ),
+                ),
+            );
 
-							),
-						),
-					);
+            $query = new WP_Query( $args );
 
-					$query = new WP_Query( $args );
+            if ( $query->have_posts() ) {
+                ?>
+                <div class="doctors_list row"  id="doctors_list">
+                <?php
+                while ( $query->have_posts() ) :
+                    $query->the_post();
+                    $orgKey = get_post_meta( get_the_ID(), 'organisation_key', true );
+                    $title  = get_the_title();
+                    // doctor image
+                    $feat_pic = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumbnail' )[0];
+                    if ( $feat_pic == '' ) {
+                        if ( get_option( 'd2gc_placeholder' ) != '' ) {
+                            $feat_pic = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'thumbnail' )[0];
+                        } else {
+                            $feat_pic = plugin_dir_url( __FILE__ ) . 'images/doctor-placeholder.jpg';
 
-					if ( $query->have_posts() ) {
-						?>
-						<ul class="list-group mb-5  doctors_list"  id="doctors_list">
-						<?php
-						while ( $query->have_posts() ) :
-							$query->the_post();
-							$orgKey = get_post_meta( get_the_ID(), 'organisation_key', true );
-							$title  = get_the_title();
-							// doctor image
-							$feat_pic = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumbnail' )[0];
-							if ( $feat_pic == '' ) {
-								if ( get_option( 'd2gc_placeholder' ) != '' ) {
-									$feat_pic = wp_get_attachment_image_src( get_option( 'd2gc_placeholder' ), 'thumbnail' )[0];
-								} else {
-									$feat_pic = plugin_dir_url( __FILE__ ) . 'images/doctor-placeholder.jpg';
-
-								}
-							}
-							?>
-							<li class="list-group-item text-center p-0">
-								<a class="p-3 doc_portal_link d-block" href="<?php echo esc_url( $pageData['url'] ); ?>?url=<?php echo urlencode( get_option( 'd2gc_waiting_room_url' ) . 'portal/' . $tokensAssArray[ $orgKey ] . '?skip_cookie_wall=true&locale=' . $currLang ); ?>&title=<?php echo esc_html( $title ); ?>">
-									<div class="feat_pic"><img class="doc_portal_image rounded-circle" src="<?php echo esc_url( $feat_pic ); ?>"></div>
-									<strong>
-										<?php echo esc_html( $title ); ?>
-									</strong>
-								</a>
-							</li>
-							<?php
-						endwhile;
-						wp_reset_postdata();
-						?>
-						</ul>
-						<?php
-					} else {
-						echo '<p class="alert alert-danger">No doctors found for the selected organisation.</p>';
-					} ?>
-				</div>
-			</div>
+                        }
+                    }
+                    ?>
+                    <div class="col-sm-4">
+                        <div class="card mb-3">
+                            <a target="_blank" class="p-3 doc_portal_link card-body d-flex align-items-center" href="<?php echo esc_url( get_option( 'd2gc_waiting_room_url' ) . 'portal/' . $tokensAssArray[ $orgKey ] . '?skip_cookie_wall=true&locale=' . $currLang ); ?>">
+                                <div class="feat_pic me-3"><img class="doc_portal_image rounded-circle" src="<?php echo esc_url( $feat_pic ); ?>"></div>
+                                <strong>
+                                    <?php echo esc_html( $title ); ?>
+                                </strong>
+                            </a>
+                        </div>
+                    </div>
+                    <?php
+                endwhile;
+                wp_reset_postdata();
+                ?>
+                </div>
+                <?php
+            } else {
+                echo '<p class="alert alert-danger">No doctors found for the selected organisation.</p>';
+            } ?>
 		</div>
 	<?php }
 		return ob_get_clean();

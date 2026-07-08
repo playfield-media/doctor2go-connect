@@ -25,15 +25,15 @@ if ( is_user_logged_in() ) {
         <div class="row mb-3">
             <div class="col-md-4">
                 <label for="image_1" class="form-label"><?php echo esc_html__( 'Upload image 1', 'doctor2go-connect' ); ?></label>
-                <input class="form-control" type="file" name="image_1" id="image_1" accept="image/*">
+                <input class="form-control" type="file" name="image_1" id="image_1" accept="image/*,android/allowCamera">
             </div>
             <div class="col-md-4">
                 <label for="image_2" class="form-label"><?php echo esc_html__( 'Upload image 2', 'doctor2go-connect' ); ?></label>
-                <input class="form-control" type="file" name="image_2" id="image_2" accept="image/*">
+                <input class="form-control" type="file" name="image_2" id="image_2" accept="image/*,android/allowCamera">
             </div>
             <div class="col-md-4">
                 <label for="image_3" class="form-label"><?php echo esc_html__( 'Upload image 3', 'doctor2go-connect' ); ?></label>
-                <input class="form-control" type="file" name="image_3" id="image_3" accept="image/*">
+                <input class="form-control" type="file" name="image_3" id="image_3" accept="image/*,android/allowCamera">
             </div>
         </div> 
     </fieldset>

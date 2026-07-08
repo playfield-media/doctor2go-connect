@@ -391,7 +391,7 @@ function d2gc_meta_box_page_type_cb( $post ) {
 		'Appointments',
 		'Patient dashboard',
 		'Liked doctors',
-		'Questionnaires',
+		'Secure patient portal',
 		'Disclaimer',
 		'Appointment confirmation',
 		'Email advice confirmation',

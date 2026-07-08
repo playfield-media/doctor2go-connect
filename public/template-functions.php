@@ -332,7 +332,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 			<li class="<?php echo ($video == true)?esc_html('available'):esc_html__('not_available')  ?> flaticon-wcc flaticon-meeting-schedule list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
 				<div class="ms-2 me-auto">
                     <?php if($video == true){ ?>
-                        <a href="<?php echo  ($video == true)?get_the_permalink().'?consult=video':'#info_not_available'?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
+                        <a href="<?php echo $video ? esc_url(add_query_arg(['consult' => 'video', 'use_ai_info' => sanitize_text_field(wp_unslash($_GET['use_ai_info'] ?? '0'))], get_permalink())) : '#info_not_available'; ?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
                     <?php } ?>
 						<div class="fw-bold"><?php echo esc_html__('Video consult on appointment', 'doctor2go-connect')?></div>
                     <?php if($video == true){ ?>
@@ -343,7 +343,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
                     
 				</div>
                 <?php if($video == true){ ?>
-                    <a href="<?php echo  ($video == true)?get_the_permalink().'?consult=video':'#info_not_available'?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
+                    <a href="<?php echo $video ? esc_url(add_query_arg(['consult' => 'video', 'use_ai_info' => sanitize_text_field(wp_unslash($_GET['use_ai_info'] ?? '0'))], get_permalink())) : '#info_not_available'; ?>" class="<?php echo  ($video !== true)?'fancybox':''?>">
                 <?php } ?>
                     <span class="badge text-bg-primary rounded-pill">
                         <?php echo ( $video == true) ? wp_kses_post( $d2g_profile_data->doctor_meta['d2g_tariffs'][0] ):esc_html__('n/a')?>
@@ -362,7 +362,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 			<li class="<?php echo ($email == true)?esc_html('available'):esc_html__('not_available')  ?> icon-mail-1 list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
 				<div class="ms-2 me-auto">
 					<?php if($email == true){ ?>
-						<a href="<?php echo  ($email == true)?get_the_permalink().'?consult=email':'#info_not_available'?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
+						<a href="<?php echo $email ? esc_url(add_query_arg(['consult' => 'email', 'use_ai_info' => sanitize_text_field(wp_unslash($_GET['use_ai_info'] ?? '0'))], get_permalink())) : '#info_not_available'; ?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
 					<?php } ?>
 						<div class="fw-bold"><?php echo esc_html__('E-mail advice', 'doctor2go-connect')?></div>
 					<?php if($email == true){ ?>
@@ -371,7 +371,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 					<span class="form-text"><?php echo ($email == true)?esc_html__('available at any time', 'doctor2go-connect'): '' ?></span>
 				</div>
                 <?php if($email == true){ ?>
-                    <a href="<?php echo  ($email == true)?get_the_permalink().'?consult=email':'#info_not_available'?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
+                    <a href="<?php echo $email ? esc_url(add_query_arg(['consult' => 'email', 'use_ai_info' => sanitize_text_field(wp_unslash($_GET['use_ai_info'] ?? '0'))], get_permalink())) : '#info_not_available'; ?>" class="<?php echo  ($email !== true)?'fancybox':''?>">
                 <?php } ?>
                     <span class="badge text-bg-primary rounded-pill">
                         <?php echo ($email == true) ? esc_html( $d2g_profile_data->doctor_meta['written_con_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['written_con_price'][0] ):esc_html__('n/a')?>
@@ -390,7 +390,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 			<li class="<?php echo ($walkin == true)?esc_html('available'):esc_html__('not_available')  ?> flaticon-online-meeting flaticon-wcc list-group-item d-flex justify-content-between <?php echo esc_html( $liClass ); ?>">
 				<div class="ms-2 me-auto">
 					<?php if($walkin == true){ ?>
-						<a href="<?php echo  ($walkin == true)?get_the_permalink().'?consult=walkin':'#info_not_available'?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
+						<a href="<?php echo $walkin ? esc_url(add_query_arg(['consult' => 'walkin', 'use_ai_info' => sanitize_text_field(wp_unslash($_GET['use_ai_info'] ?? '0'))], get_permalink())) : '#info_not_available'; ?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
                     <?php } ?>
 							<div class="fw-bold"><?php echo esc_html__('Walkin video consult', 'doctor2go-connect')?></div>
                     <?php if($walkin == true){ ?>
@@ -399,7 +399,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 					<span class="form-text"><?php echo ($walkin == true)?esc_html__('now available', 'doctor2go-connect'): '' ?></span>
 				</div>
                 <?php if($walkin == true){ ?>
-                    <a href="<?php echo  ($walkin == true)?get_the_permalink().'?consult=walkin':'#info_not_available'?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
+                    <a href="<?php echo $walkin ? esc_url(add_query_arg(['consult' => 'walkin', 'use_ai_info' => sanitize_text_field(wp_unslash($_GET['use_ai_info'] ?? '0'))], get_permalink())) : '#info_not_available'; ?>" class="<?php echo  ($walkin !== true)?'fancybox':''?>">
                 <?php } ?>
                         <span class="badge text-bg-primary rounded-pill">
                             <?php echo ($walkin == true) ? esc_html( $d2g_profile_data->doctor_meta['walk_in_currency'][0] ).' '. esc_html( $d2g_profile_data->doctor_meta['walk_in_price'][0] ):esc_html__('n/a')?>
@@ -1496,7 +1496,7 @@ function d2gc_cancelation_request_form( $currUser, $user_meta ) {
 			<div class="row mb-3">
 				<div class="col-sm-12">
 					<div>
-						<label for="comment" class="form-label"><?php echo esc_html__( 'Comment (optional)', 'doctor2go-connect' ); ?></label>
+						<label for="comment" class="form-label"><?php echo esc_html__( 'Message', 'doctor2go-connect' ); ?></label>
 						<textarea class="form-control" id="comment" name="comment"></textarea>
 					</div>
 				</div>

@@ -48,41 +48,70 @@
         }
     }
 
-    function d2gRenderBookingConfirmation(){
+    function d2gRenderBookingConfirmation() {
         var data = d2gGetStoredBookingConfirmation();
-        if( ! data || ! data.appointment_id || ! $('#booking_area_wrapper').length ){
+
+        if (!data || !data.appointment_id) {
             return;
         }
 
-        var html = ''
-        + '<div id="booking_confirmation_box" class="d2g-booking-confirmation card">'
-        + '  <div class="card-body"><div class="alert alert-info">'
-        + '    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">'
-        + '      <h3 class="d2g-booking-confirmation__title mb-0">' + d2gEscapeHtml(d2gBookingVars.i18n.video_consultation_title || 'Video consultation') + '</h3>'
-        + '      <span class="d2g-booking-confirmation__badge badge rounded-pill text-primary bg-white px-3 py-2">' + d2gEscapeHtml(d2gBookingVars.i18n.your_appointment || 'Your appointment') + '</span>'
-        + '    </div>'
-        + '    <div class="d-flex flex-column gap-3 mb-4">'
-        + '      <div class="d-flex align-items-center d2g-booking-confirmation__item">'
-        + '        <span class="d2g-booking-confirmation__icon icon-calendar me-3"></span>'
-        + '        <div class="d2g-booking-confirmation__date mb-0"><strong>' + d2gEscapeHtml(data.booking_date) + '</strong></div>'
-        + '      </div>'
-        + '      <div class="d-flex align-items-center d2g-booking-confirmation__item">'
-        + '        <span class="d2g-booking-confirmation__icon icon-clock me-3"></span>'
-        + '        <div class="d2g-booking-confirmation__meta mb-0">at ' + d2gEscapeHtml(data.booking_time) + ' (' + d2gEscapeHtml(data.booking_timezone) + ')</div>'
-        + '      </div>'
-        + '      <div class="d-flex align-items-center d2g-booking-confirmation__item">'
-        + '        <span class="d2g-booking-confirmation__icon icon-plus-circled me-3"></span>'
-        + '        <div class="d2g-booking-confirmation__meta mb-0">' + d2gEscapeHtml(data.doctor_name) + '</div>'
-        + '      </div>'
-        + '    </div>'
-        + '    <div class="d2g-booking-confirmation__text">'
-        + '      <p class="mb-2">' + d2gEscapeHtml(d2gBookingVars.i18n.reservation_success) + '</p>'
-        + '      <p class="mb-0"><a href="' + d2gEscapeHtml(data.appointment_manager_url) + '">' + d2gEscapeHtml(d2gBookingVars.i18n.reservation_link_text) + '</a></p>'
-        + '    </div>'
-        + '  </div></div>'
-        + '</div>';
+        $('#d2gBookingConfirmationModal').remove();
 
-        $('#booking_area_wrapper').html(html);
+        var html = ''
+            + '<div class="modal fade" id="d2gBookingConfirmationModal" tabindex="-1" aria-labelledby="d2gBookingConfirmationModalLabel" aria-hidden="true">'
+            + '  <div class="modal-dialog modal-dialog-centered">'
+            + '    <div class="modal-content">'
+            + '      <div class="modal-header">'
+            + '        <h5 class="modal-title" id="d2gBookingConfirmationModalLabel">'
+            +              d2gEscapeHtml(d2gBookingVars.i18n.video_consultation_title || 'Video consultation confirmation')
+            + '        </h5>'
+            + '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>'
+            + '      </div>'
+            + '      <div class="modal-body">'
+            + '        <div id="booking_confirmation_box" class="d2g-booking-confirmation">'
+            + '          <div class="alert alert-info mb-0">'
+            + '            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">'
+            + '              <div></div>'
+            + '              <a href="' + d2gEscapeHtml(data.appointment_manager_url) + '">'
+            + '                <span class="d2g-booking-confirmation__badge badge rounded-pill text-primary bg-white px-3 py-2">'
+            +                    d2gEscapeHtml(d2gBookingVars.i18n.your_appointment || 'Your appointment')
+            + '                </span>'
+            + '              </a>'
+            + '            </div>'
+            + '            <div class="d-flex flex-column gap-3 mb-4">'
+            + '              <div class="d-flex align-items-center d2g-booking-confirmation__item">'
+            + '                <span class="d2g-booking-confirmation__icon icon-calendar me-3"></span>'
+            + '                <div class="d2g-booking-confirmation__date mb-0"><strong>' + d2gEscapeHtml(data.booking_date) + '</strong></div>'
+            + '              </div>'
+            + '              <div class="d-flex align-items-center d2g-booking-confirmation__item">'
+            + '                <span class="d2g-booking-confirmation__icon icon-clock me-3"></span>'
+            + '                <div class="d2g-booking-confirmation__meta mb-0">at ' + d2gEscapeHtml(data.booking_time) + ' (' + d2gEscapeHtml(data.booking_timezone) + ')</div>'
+            + '              </div>'
+            + '              <div class="d-flex align-items-center d2g-booking-confirmation__item">'
+            + '                <span class="d2g-booking-confirmation__icon icon-plus-circled me-3"></span>'
+            + '                <div class="d2g-booking-confirmation__meta mb-0">' + d2gEscapeHtml(data.doctor_name) + '</div>'
+            + '              </div>'
+            + '            </div>'
+            + '            <div class="d2g-booking-confirmation__text">'
+            + '              <p class="mb-2">' + d2gEscapeHtml(d2gBookingVars.i18n.reservation_success) + '</p>'
+            + '              <p class="mb-0"><a href="' + d2gEscapeHtml(data.appointment_manager_url) + '">' + d2gEscapeHtml(d2gBookingVars.i18n.reservation_link_text) + '</a></p>'
+            + '            </div>'
+            + '          </div>'
+            + '        </div>'
+            + '      </div>'
+            + '    </div>'
+            + '  </div>'
+            + '</div>';
+
+        $('body').append(html);
+
+        var modalElement = document.getElementById('d2gBookingConfirmationModal');
+        var modal = new bootstrap.Modal(modalElement);
+        modal.show();
+
+        modalElement.addEventListener('hidden.bs.modal', function () {
+            $('#d2gBookingConfirmationModal').remove();
+        });
     }
 
     function d2gHandlePrefillFromLocalStorage(){
@@ -514,7 +543,6 @@
                     checker = true;
                     checker_message = d2gBookingVars.i18n.fill_required;
                 }
-                $('body').scrollTo('#booking_form_wrapper', { duration: 'slow', offset: -200 });
             });
 
             if (isEmail(email) === 'notOK') {
@@ -584,30 +612,32 @@
                         if (response !== 'error') {
                             d2gStoreBookingConfirmation(response);
                             d2gRenderBookingConfirmation();
-                            $('#booking_form').addClass('simple_hide');
                             $('#loader_booking').hide();
                         } else {
                             var answer = '<p>' + d2gBookingVars.i18n.error_general + '</p>';
                             $('#error').html(answer).removeClass('simple_hide');
                             $('#loader_booking').hide();
                             $('#booking_form').removeClass('loading');
+                            $('body').scrollTo('#booking_form_wrapper', { duration: 'slow', offset: -260 });
                         }
 
-                        var goal = '#booking_form_wrapper';
-                        $('body').scrollTo(goal, { duration: 'slow', offset: -260 });
+                        
                     }).fail(function () {
                         $('#loader_booking').hide();
                         $('#booking_form').removeClass('loading');
                         $('#error').html('<p>' + d2gBookingVars.i18n.error_general + '</p>').removeClass('simple_hide');
+                        $('body').scrollTo('#booking_form_wrapper', { duration: 'slow', offset: -260 });
                     });
                 }).catch(function(err){
                     console.log(err);
                     $('#loader_booking').hide();
                     $('#booking_form').removeClass('loading');
                     $('#error').html('<p>' + d2gBookingVars.i18n.error_general + '</p>').removeClass('simple_hide');
+                    $('body').scrollTo('#booking_form_wrapper', { duration: 'slow', offset: -260 });
                 });
             } else {
                 $('#error').css('display', 'block').html(checker_message);
+                $('body').scrollTo('#booking_form_wrapper', { duration: 'slow', offset: -260 });
             }
 
             return false;

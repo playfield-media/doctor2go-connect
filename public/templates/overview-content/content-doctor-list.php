@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="inner_wrapper row">
                     <div class="doc_info_short col-md-5">
                         <header>
-                            <a href="<?php echo esc_html( get_the_permalink() ); ?>?>"><h3 class="entry_title text-primary"><?php the_title(); ?></h3></a>
+                            <a href="<?php echo esc_html( get_the_permalink() ); ?>"><h3 class="entry_title text-primary"><?php the_title(); ?></h3></a>
                             <?php if ( $d2g_profile_data->specialties !== false ) { ?>
                                 <h4 class="specialties">
                                     <?php foreach ( $d2g_profile_data->specialties as $specialty ) { ?>

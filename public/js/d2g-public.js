@@ -1087,8 +1087,8 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('change', function () {
             const file = this.files && this.files[0] ? this.files[0] : null;
 
-            if (file && file.size > 5 * 1024 * 1024) {
-                alert('Deze foto is te groot (maximaal 5MB). Gebruik een kleinere foto.');
+            if (file && file.size > 10 * 1024 * 1024) {
+                alert(d2gPublicData.msg.img_to_big);
                 this.value = '';
                 clearPreview(this, preview);
                 return;

@@ -29,6 +29,7 @@ jQuery(document).ready(function($){
             'specialty'                 : $('#specialty_filter').val(),
             'doctor-language'           : $('#language_filter').val(),
             'country-origin'            : $('#country_filter').val(),
+            'use_ai_info'               : $('#use_ai_info').val(),
             'intake'                    : intake_val,
             'sub_title'                 : subtitle_val,
             '_wpnonce'   				: myShortcodeData._wpnonce,  // Inline nonce
@@ -127,6 +128,7 @@ jQuery(document).ready(function($){
             'country-origin'            : $('#country_filter').val(),
             'consult_type'              : $('#consult_type').val() || '',
             'post_id'            		: $('#post_id').val(),
+            'use_ai_info'               : $('#use_ai_info').val(),
             'orderby'					: $('#orderby').val(),
             'order'						: $('#order').val(),
             'meta_key'					: $('#meta_key').val(),
@@ -171,10 +173,19 @@ jQuery(document).ready(function($){
             console.log(response);
             $('#doc_count').html(response);
             $('#doctor_filters').css('opacity', '1');
-            if(response > 0){
-                $('#search_submit').css('display', 'inline-block');	
+            var totalDoctors = parseInt(response, 10) || 0;
+            var postsPerPage = parseInt($('#posts_per_page').val(), 10) || 1;
+
+            if (totalDoctors > 0) {
+                $('#search_submit').css('display', 'inline-block');
             } else {
                 $('#search_error').css('display', 'block').html(myShortcodeDataFilters.str_no_doctors_found);
+            }
+
+            if (totalDoctors <= postsPerPage) {
+                $('.more_doctors').hide();
+            } else {
+                $('.more_doctors').show().attr('data-page', 2);
             }
             
         });

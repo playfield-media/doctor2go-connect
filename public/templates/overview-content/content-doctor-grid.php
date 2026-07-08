@@ -18,7 +18,7 @@
             </figure>
             <div class="entry_content card-text pt-1">
                 <header>
-                    <a href="<?php echo esc_html(get_the_permalink())?>?>">
+                    <a href="<?php echo esc_html(get_the_permalink())?>">
                         <h3 class="member-name mb-2 text-center text-primary font-weight-bold"><?php the_title(); ?></h3>
                     </a>
                     <?php if($d2g_profile_data->specialties !== false){ ?>

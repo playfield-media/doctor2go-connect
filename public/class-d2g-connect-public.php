@@ -238,7 +238,7 @@ class D2gConnect_Public {
                 'not_available'            => esc_html__( 'not available', 'doctor2go-connect' ),
                 'at'                       => esc_html__( 'at', 'doctor2go-connect' ),
                 'video'                    => esc_html__( 'Video', 'doctor2go-connect' ),
-                'video_consultation_title' => esc_html__( 'Video consultation', 'doctor2go-connect' ),
+                'video_consultation_title' => esc_html__( 'Video consultation confirmation', 'doctor2go-connect' ),
                 'your_appointment'         => esc_html__( 'Your appointment', 'doctor2go-connect' ),
                 'fill_required'            => esc_html__( 'Please fill in all marked fields. ', 'doctor2go-connect' ),
                 'invalid_email'            => esc_html__( ' You have entered an invalid e-mail. ', 'doctor2go-connect' ),
@@ -330,6 +330,7 @@ class D2gConnect_Public {
 
 					// written consultation
 					'invalid_email'   => esc_html__( 'You have entered an invalid e-mail.', 'doctor2go-connect' ),
+                    'img_to_big'        => esc_html__( 'The image is too big (max 10MB), please upload a smaller image.', 'doctor2go-connect' ),
 				),
 
 				/* strings used for dynamic form rows */
