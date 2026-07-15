@@ -315,7 +315,7 @@ function d2gc_cb_d2g_info_box( $temp_file, $version, $post = '', $part = '' ) {
 		$success_code 	= '<span class="text-success">&#10004;</span>';
 		?>
         <h4 class="text-primary d-flex <?php echo esc_html( $liClass ); ?> align-items-center mb-2 h4-list-group-item">
-            <span class="flex-grow-1"><?php echo esc_html__('Consultation offers');?>&nbsp;&nbsp;</span>
+            <span class="flex-grow-1"><?php echo esc_html__('Consultation offers', 'doctor2go-connect');?>&nbsp;&nbsp;</span>
             <a href="#info_content" class="fancybox btn btn-outline-primary" data-fancybox data-src="#info_content" data-modal="true">
                 <span class="icon-info"></span>
             </a>
@@ -1521,11 +1521,11 @@ function d2gc_footer_html() {
 		<div class="consult_info_wrapper">
 			<div class="consult_info">
 				<h3><?php echo esc_html__( 'Walk-in Consultation', 'doctor2go-connect' ); ?></h3>
-				<p><?php echo esc_html__( 'A walk-in consultation allows you to have a real-time video consultation with the doctor without a prior appointment. You will enter a virtual waiting room and the doctor will attend to you as soon as they are available.', 'doctor2go-connect' ); ?></p>
+				<p><?php echo esc_html__( 'A walk-in consultation allows you to have a real-time video consultation with the doctor without a prior appointment. You will enter a virtual waiting room, and the dermatologist will attend to you as soon as possible.', 'doctor2go-connect' ); ?></p>
 			</div>
 			<div class="consult_info">
 				<h3><?php echo esc_html__( 'E-mail advice', 'doctor2go-connect' ); ?></h3>
-				<p><?php echo esc_html__( 'An email advice allows you to receive a professional assessment from a certified dermatologist via email within two working days. You will complete a questionnaire describing your skin concern, and the doctor will provide their evaluation and recommendations in writing.', 'doctor2go-connect' ); ?></p>
+				<p><?php echo esc_html__( 'Email advice allows you to receive a professional assessment from a certified dermatologist via email within two working days. Based on your input or AI assessment, the doctor will provide their evaluation and recommendations in writing. Email advice is limited to written guidance. If your situation requires further treatment steps to be arranged, the doctor will recommend a video or walk-in consultation instead.', 'doctor2go-connect' ); ?></p>
 			</div>
 			<div class="consult_info">
 				<h3><?php echo esc_html__( 'Physical Consultation', 'doctor2go-connect' ); ?></h3>
@@ -1533,7 +1533,7 @@ function d2gc_footer_html() {
 			</div>
 			<div class="consult_info">
 				<h3><?php echo esc_html__( 'Video Consultation', 'doctor2go-connect' ); ?></h3>
-				<p><?php echo esc_html__( 'A video consultation enables you to have a remote appointment with the doctor via a secure video platform. This option provides convenience and flexibility, allowing you to discuss your skin concerns from the comfort of your own home.', 'doctor2go-connect' ); ?></p>
+				<p><?php echo esc_html__( 'A video consultation allows you to have a remote appointment with the doctor via a secure video platform, from the comfort of your own home. Because the consultation takes place in real time, the doctor can discuss your skin concern in more detail and arrange any further treatment steps directly during the appointment.', 'doctor2go-connect' ); ?></p>
 			</div>
 		</div>
 	</div>
