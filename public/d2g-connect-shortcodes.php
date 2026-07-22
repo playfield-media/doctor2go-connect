@@ -2496,6 +2496,17 @@ class D2gConnect_Shortcodes {
 		ob_start();
 
 		?>
+        <?php
+        $signup_status = isset( $_GET['signup'] ) ? sanitize_text_field( wp_unslash( $_GET['signup'] ) ) : '';
+
+        if ( 'completed' === $signup_status ) :
+            ?>
+            <div class="alert alert-info mb-5" role="alert">
+                <?php echo esc_html__( 'Your registration was successful! You are now logged in.', 'doctor2go-connect' ); ?>
+            </div>
+            <?php
+        endif;
+        ?>
 		<div class="alignwide p_dashboard mt-5">
 			<div class="row">
 				<?php
@@ -2531,8 +2542,8 @@ class D2gConnect_Shortcodes {
         $pageData = '';
         $pages = array(
             'appointments'          => 'appointments-small.jpg',
-            'liked_doctors'         => 'heart-small.jpg',
             'secure_patient_portal' => 'patient-small.jpg',
+            'liked_doctors'         => 'heart-small.jpg',
             'account_settings'      => 'account-small.jpg',
         );
 
@@ -2938,9 +2949,11 @@ class D2gConnect_Shortcodes {
 		ob_start();
 		?>
 		<?php
-		if ( $tokensCheck == '' ) {
-			echo esc_html__( 'You don\'t have access to a patient portal at this time. This usually means you haven\'t booked a consultation yet. Once you\'ve booked and paid for a consultation with a doctor, your patient portal will become available.', 'doctor2go-connect' );
-		} else {
+		if ( $tokensCheck == '' ) { ?>
+            <div class="alert alert-danger mb-5">
+			    <?php echo esc_html__( 'You are not connected to any doctor yet. You will be able to access the communication portal once you have booked a consultation or requested an email advice.', 'doctor2go-connect' ); ?>
+            </div>
+		<?php } else {
 			?>
 		<div class="alignwide">
             <h2><?php echo esc_html__( 'Your doctor\'s', 'doctor2go-connect' ); ?></h2>
@@ -2995,7 +3008,7 @@ class D2gConnect_Shortcodes {
                 </div>
                 <?php
             } else {
-                echo '<p class="alert alert-danger">No doctors found for the selected organisation.</p>';
+                echo '<p class="alert alert-danger mb-5">'.__('No doctors found. You\'re previously connected doctor\'s are no longer available.', 'doctor2go-connect').'</p>';
             } ?>
 		</div>
 	<?php }
