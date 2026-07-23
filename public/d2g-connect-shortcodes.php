@@ -2089,7 +2089,7 @@ class D2gConnect_Shortcodes {
 
 		?>
 
-		<div class="d2g_form_wrapper  py-4">
+		<div class="d2g_form_wrapper tiny-conatiner py-4">
 			<form id="lostpasswordform" action="<?php echo esc_url( $action_url ); ?>" method="post" class="w-100 w-md-50 mx-auto border rounded-3 p-4 bg-light shadow-sm">
 				<?php wp_nonce_field( 'd2g_lost_password_action', 'd2g_lost_password_nonce' ); ?>
                 <!-- altacha Widget check if shortcode is active -->
