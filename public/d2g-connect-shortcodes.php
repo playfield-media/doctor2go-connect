@@ -1993,7 +1993,12 @@ class D2gConnect_Shortcodes {
 			</div>
 
 			<div class="mb-3">
-				<input type="password" name="pwd" id="user_pass" class="form-control" required placeholder="<?php esc_attr_e( 'Enter your password', 'doctor2go-connect' ); ?>">
+                <div class="input-group">
+                    <input type="password" name="pwd" id="user_pass" class="form-control js-password-field" required placeholder="<?php esc_attr_e( 'Enter your password', 'doctor2go-connect' ); ?>">
+                    <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
 			</div>
 
 			<!-- reCAPTCHA Widget -->
@@ -2203,14 +2208,24 @@ class D2gConnect_Shortcodes {
 					<label for="new_password" class="form-label">
 						<?php echo esc_html__( 'New Password', 'doctor2go-connect' ); ?>
 					</label>
-					<input type="password" name="new_password" id="new_password" class="form-control" required>
+                    <div class="input-group">
+                        <input type="password" name="new_password" id="new_password" class="form-control js-password-field" required>
+                        <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
 				</div>
 
 				<div class="mb-3">
 					<label for="confirm_password" class="form-label">
 						<?php echo esc_html__( 'Confirm New Password', 'doctor2go-connect' ); ?>
 					</label>
-					<input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                    <div class="input-group">
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control js-password-field" required>
+                        <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
 				</div>
 
 				<div class="d-grid">
@@ -2423,17 +2438,32 @@ class D2gConnect_Shortcodes {
 				</div>
 
 				<div class="mb-3">
+                    <div class="alert alert-info">
+                        <?php echo esc_html__( 'Your password must be at least 12 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.', 'doctor2go-connect' ); ?>
+                    </div>
+
 					<label for="pass1" class="form-label">
-						<?php echo esc_html__( 'Password (your password needs to be minimum 8 characters long and it must contain minimum one special character.)', 'doctor2go-connect' ); ?>*
+						<?php echo esc_html__( 'Password', 'doctor2go-connect' ); ?>*
 					</label>
-					<input class="form-control myrequired" type="password" name="password" id="pass1" required>
+					
+                    <div class="input-group">
+                        <input class="form-control myrequired js-password-field pass1" type="password" name="password" id="pass1" required>
+                        <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
 				</div>
 
-				<div id="result" class="info alert alert-danger d-none" style="width:100%!important;"></div>
+				<div id="result" class="info alert alert-danger simple_hide" style="width:100%!important;"></div>
 
 				<div class="mb-3">
 					<label for="pass2" class="form-label"><?php echo esc_html__( 'Confirm Password', 'doctor2go-connect' ); ?>*</label>
-					<input class="form-control myrequired" type="password" name="confirm_password" id="pass2" required>
+					<div class="input-group">
+						<input class="form-control myrequired js-password-field pass2" type="password" name="confirm_password" id="pass2" required>
+						<button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+							<i class="bi bi-eye"></i>
+						</button>
+					</div>
 				</div>
 
 				<?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
@@ -2857,12 +2887,24 @@ class D2gConnect_Shortcodes {
 
                     <div class="mb-3">
                         <label for="password" class="form-label"><?php echo esc_html__( 'Password', 'doctor2go-connect' ); ?></label>
-                        <input type="password" name="password" id="password" class="form-control">
+                        <div class="input-group">
+                            <input type="password" name="password" id="password" class="form-control js-password-field pass1">
+                            <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    <div id="result" class="info alert alert-danger simple_hide" style="width:100%!important;"></div>
 
                     <div class="mb-3">
                         <label for="confirm_password" class="form-label"><?php echo esc_html__( 'Confirm Password', 'doctor2go-connect' ); ?></label>
-                        <input type="password" name="confirm_password" id="confirm_password" class="form-control">
+                        <div class="input-group">
+                            <input type="password" name="confirm_password" id="confirm_password" class="form-control js-password-field pass2">
+                            <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="mb-3">

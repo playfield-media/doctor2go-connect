@@ -4,25 +4,38 @@ function isEmail(email) {
     return regex.test(email) ? 'OK' : 'notOK';
 }
 
-// Helper: password strength text (uses localized password messages)
+
 function checkStrength(password) {
-    if (typeof d2gPublicData === 'undefined') return '';
-
-    var strength = 0;
-
-    if (password.length < 8) {
-        return d2gPublicData.password.short;
+    if (typeof d2gPublicData === 'undefined') {
+        return {
+            check: 'NOK',
+            msg: ''
+        };
     }
 
-    if (password.length > 10) strength += 1;
-    if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1;
-    if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1;
-    if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
-    if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
+    if (!password || password.length < 12) {
+        return {
+            check: 'NOK',
+            msg: d2gPublicData.password.short
+        };
+    }
 
-    if (strength < 2) return d2gPublicData.password.weak;
-    if (strength === 2) return d2gPublicData.password.good;
-    return d2gPublicData.password.strong;
+    var hasLower   = /[a-z]/.test(password);
+    var hasUpper   = /[A-Z]/.test(password);
+    var hasNumber  = /[0-9]/.test(password);
+    var hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+    if (!hasLower || !hasUpper || !hasNumber || !hasSpecial) {
+        return {
+            check: 'NOK',
+            msg: d2gPublicData.password.weak
+        };
+    }
+
+    return {
+        check: 'OK',
+        msg: d2gPublicData.password.strong
+    };
 }
 
 // Helper: compress images client side
@@ -179,6 +192,23 @@ jQuery(document).ready(function ($) {
         }
     });
     $('.fancybox_spec').fancybox();
+
+    //eye toggle for password field
+    $('.js-toggle-password').on('click', function () {
+        var $button = $(this);
+        var $input = $button.siblings('.js-password-field');
+        var $icon = $button.find('i');
+
+        if ($input.attr('type') === 'password') {
+            $input.attr('type', 'text');
+            $icon.removeClass('bi-eye').addClass('bi-eye-slash');
+            $button.attr('aria-label', 'Hide password');
+        } else {
+            $input.attr('type', 'password');
+            $icon.removeClass('bi-eye-slash').addClass('bi-eye');
+            $button.attr('aria-label', 'Show password');
+        }
+    });
 
     // Graphical selects
     $(".d2g_wrapper").find('select').select2();
@@ -543,10 +573,13 @@ jQuery(document).ready(function ($) {
     ==========================================*/
 
     // Password strength indicator in registration form
-    $('#pass1').keyup(function () {
-        $('#result')
-            .css('display', 'block')
-            .html(checkStrength($('#pass1').val()));
+    $('.pass1').keyup(function () {
+        $('#result').css('display', 'block').html(checkStrength($('.pass1').val()).msg);
+        if (checkStrength($('.pass1').val()).check === 'OK') {
+            $('#result').removeClass('alert-danger').addClass('alert-success');
+        } else {
+            $('#result').removeClass('alert-success').addClass('alert-danger');
+        }
     });
 
     // Registration submit validation

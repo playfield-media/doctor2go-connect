@@ -85,7 +85,7 @@
             + '              </div>'
             + '              <div class="d-flex align-items-center d2g-booking-confirmation__item">'
             + '                <span class="d2g-booking-confirmation__icon icon-clock me-3"></span>'
-            + '                <div class="d2g-booking-confirmation__meta mb-0">at ' + d2gEscapeHtml(data.booking_time) + ' (' + d2gEscapeHtml(data.booking_timezone) + ')</div>'
+            + '                <div class="d2g-booking-confirmation__meta mb-0">' + d2gEscapeHtml(data.booking_time) + ' (' + d2gEscapeHtml(data.booking_timezone) + ')</div>'
             + '              </div>'
             + '              <div class="d-flex align-items-center d2g-booking-confirmation__item">'
             + '                <span class="d2g-booking-confirmation__icon icon-plus-circled me-3"></span>'

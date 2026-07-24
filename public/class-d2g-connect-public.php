@@ -664,12 +664,12 @@ class D2gConnect_Public {
 
 	// deprecated
 	public function d2gc_wp_mail_from( $original_email_address ) {
-		return 'no-reply@dermatology2go.online'; // Replace with your desired email
+		return (get_option('d2gc_sender_address') != '') ? get_option('d2gc_sender_address') : 'no-reply@dermatology2go.online'; // Replace with your desired email
 	}
 
 	// deprecated
 	public function d2gc_wp_mail_from_name( $original_email_from ) {
-		return 'Dermatology2Go'; // Replace with desired sender name
+		return (get_option('d2gc_sender_name') != '') ? get_option('d2gc_sender_name') : 'Dermatology2Go'; // Replace with your desired sender name
 	}
 
 
@@ -682,7 +682,7 @@ class D2gConnect_Public {
 		$pageData = $d2gAdmin::d2gc_page_url( $currLang, 'reset_password', true );
 
 		$content  = esc_html__( 'Someone has requested a password reset.', 'doctor2go-connect' ) . "\n\n";
-		$content .= esc_html__( 'Website name: ', 'doctor2go-connect' ) . get_option( 'blogname' ) . "\n";
+		$content .= esc_html__( 'Website name: ', 'doctor2go-connect' ) .' '. get_option( 'blogname' ) . "\n";
 		$content .= esc_html__( 'User name: ', 'doctor2go-connect' ) . $user_data->data->user_email . "\n\n";
 		$content .= esc_html__( 'If this was not intended, simply ignore this e-mail. Nothing will happen. ', 'doctor2go-connect' ) . "\n\n";
 		$content .= esc_html__( 'To reset your password, visit the following address: ', 'doctor2go-connect' ) . "\n";
