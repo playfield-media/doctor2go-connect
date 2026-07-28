@@ -235,7 +235,8 @@ class D2G_booking_wcc_user {
         $body        = wp_remote_retrieve_body( $response );
         $appointment = json_decode( $body, true );
 
-        
+        nice_dump($appointment);
+        die();
 
         if ( isset( $appointment['client']['id'] ) && is_user_logged_in() ) {
             $client = $appointment['client'];

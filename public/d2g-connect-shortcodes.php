@@ -1996,7 +1996,7 @@ class D2gConnect_Shortcodes {
                 <div class="input-group">
                     <input type="password" name="pwd" id="user_pass" class="form-control js-password-field" required placeholder="<?php esc_attr_e( 'Enter your password', 'doctor2go-connect' ); ?>">
                     <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-                        <i class="bi bi-eye"></i>
+                        <i class="icon d2cif-eye"></i>
                     </button>
                 </div>
 			</div>
@@ -2211,7 +2211,7 @@ class D2gConnect_Shortcodes {
                     <div class="input-group">
                         <input type="password" name="new_password" id="new_password" class="form-control js-password-field" required>
                         <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-                            <i class="bi bi-eye"></i>
+                            <i class="icon d2cif-eye"></i>
                         </button>
                     </div>
 				</div>
@@ -2223,7 +2223,7 @@ class D2gConnect_Shortcodes {
                     <div class="input-group">
                         <input type="password" name="confirm_password" id="confirm_password" class="form-control js-password-field" required>
                         <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-                            <i class="bi bi-eye"></i>
+                            <i class="icon d2cif-eye"></i>
                         </button>
                     </div>
 				</div>
@@ -2449,7 +2449,7 @@ class D2gConnect_Shortcodes {
                     <div class="input-group">
                         <input class="form-control myrequired js-password-field pass1" type="password" name="password" id="pass1" required>
                         <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-                            <i class="bi bi-eye"></i>
+                            <i class="icon d2cif-eye"></i>
                         </button>
                     </div>
 				</div>
@@ -2461,7 +2461,7 @@ class D2gConnect_Shortcodes {
 					<div class="input-group">
 						<input class="form-control myrequired js-password-field pass2" type="password" name="confirm_password" id="pass2" required>
 						<button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-							<i class="bi bi-eye"></i>
+							<i class="icon d2cif-eye"></i>
 						</button>
 					</div>
 				</div>
@@ -2513,10 +2513,10 @@ class D2gConnect_Shortcodes {
 		$d2gAdmin = new D2G_doc_user_profile();
 		$currLang = explode( '_', get_locale() )[0];
 		$pages    = array(
-			'account_settings' => 'account.jpg',
-			'appointments'     => 'appointments.jpg',
-			'liked_doctors'    => 'heart.jpg',
-			'secure_patient_portal'   => 'patient.jpg',
+			'account_settings' => 'd2cif-registration-id-card',
+			'appointments'     => 'd2cif-calendar',
+			'liked_doctors'    => 'd2cif-heart-full',
+			'secure_patient_portal'   => 'd2cif-secure-communication',
 
 		);
 
@@ -2551,9 +2551,9 @@ class D2gConnect_Shortcodes {
 					?>
 					<div class="col-sm-3">
 						<div class="card p-5 text-center h-100">
-							<a href="<?php echo esc_url( $pageData['url'] ); ?>">
-								<img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . 'images/' . $image ); ?>">
-								<h3><?php echo esc_html( $pageData['title'] ); ?></h3>
+							<a class="text-decoration-none" href="<?php echo esc_url( $pageData['url'] ); ?>">
+								<span class="icon <?php echo esc_attr( $image ); ?> display-4"></span>
+								<h3 class="card-title text-primary"><?php echo esc_html( $pageData['title'] ); ?></h3>
 							</a>
 						</div>
 					</div>
@@ -2577,10 +2577,11 @@ class D2gConnect_Shortcodes {
         $currLang = explode('_', get_locale())[0];
         $pageData = '';
         $pages = array(
-            'appointments'          => 'appointments-small.jpg',
-            'secure_patient_portal' => 'patient-small.jpg',
-            'liked_doctors'         => 'heart-small.jpg',
-            'account_settings'      => 'account-small.jpg',
+            'patient_dashboard' => 'd2cif-registration-id-card',
+            'appointments'          => 'd2cif-calendar',
+            'secure_patient_portal' => 'd2cif-secure-communication',
+            'liked_doctors'         => 'd2cif-heart-full',
+            'account_settings'      => 'd2cif-registration-id-card',
         );
 
         $current_url = trailingslashit(home_url(add_query_arg(array(), $GLOBALS['wp']->request)));
@@ -2890,7 +2891,7 @@ class D2gConnect_Shortcodes {
                         <div class="input-group">
                             <input type="password" name="password" id="password" class="form-control js-password-field pass1">
                             <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-                                <i class="bi bi-eye"></i>
+                                <i class="icon d2cif-eye"></i>
                             </button>
                         </div>
                     </div>
@@ -2902,7 +2903,7 @@ class D2gConnect_Shortcodes {
                         <div class="input-group">
                             <input type="password" name="confirm_password" id="confirm_password" class="form-control js-password-field pass2">
                             <button class="btn btn-outline-secondary js-toggle-password" type="button" aria-label="Show password">
-                                <i class="bi bi-eye"></i>
+                                <i class="icon d2cif-eye"></i>
                             </button>
                         </div>
                     </div>

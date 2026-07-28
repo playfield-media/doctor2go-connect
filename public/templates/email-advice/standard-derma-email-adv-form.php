@@ -86,7 +86,7 @@ if ( is_user_logged_in() ) {
                         <strong><?php echo esc_html__('About your complaint', 'doctor2go-connect')?></strong>
                     </legend>
                      <?php if ( isset( $_GET['use_ai_info'] ) && '1' === $_GET['use_ai_info'] ) { ?>
-                        <div class="opener"><strong><?php echo esc_html__( 'Edit your information', 'doctor2go-connect' ); ?></strong><span class="icon-down-open text-small"></span><p class="text-small"><?php echo esc_html__( 'Pre-filled from your AI check.', 'doctor2go-connect' ); ?></p></div>
+                        <div class="opener"><strong><?php echo esc_html__( 'Edit your information', 'doctor2go-connect' ); ?></strong><span class="icon d2cif-Arrow-small-down text-small"></span><p class="text-small"><?php echo esc_html__( 'Pre-filled from your AI check.', 'doctor2go-connect' ); ?></p></div>
                     <?php } ?>
                     <fieldset id="complaint_form_wrapper" class="mb-4 <?php echo ($_GET['use_ai_info'] === '1') ? 'simple_hide' : 'show'; ?>">
                         

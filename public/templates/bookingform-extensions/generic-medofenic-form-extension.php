@@ -9,7 +9,7 @@ if ( is_user_logged_in() ) {
 <legend class="fs-5 mb-3">
     <strong><?php echo esc_html__('About your complaint', 'doctor2go-connect')?></strong>
 </legend>
-<p class="opener"><strong><?php echo esc_html__('Click here to provide / update your complaint information', 'doctor2go-connect')?></strong><span class="icon-down-open"></span></p>
+<p class="opener"><strong><?php echo esc_html__('Click here to provide / update your complaint information', 'doctor2go-connect')?></strong><span class="icon d2cif-Arrow-small-down"></span></p>
 <div id="complaint_form_wrapper" class="card <?php echo ($_GET['use_ai_info'] === '1') ? 'simple_hide' : 'show'; ?>">
     <div class="mb-3">
         <label for="beschrijf_de_klacht" class="form-label">

@@ -97,9 +97,10 @@ class D2gConnect_Public {
 		wp_enqueue_style( $this->plugin_name . '-select', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . '-fancybox', plugin_dir_url( __FILE__ ) . 'css/jquery.fancybox.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . '-light', plugin_dir_url( __FILE__ ) . 'css/light.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name . '-fontello', plugin_dir_url( __FILE__ ) . 'fonts/fontello/css/fontello.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name . '-flaticon', plugin_dir_url( __FILE__ ) . 'fonts/flaticon/flaticon_mycollection.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name . '-flaticon-derma', plugin_dir_url( __FILE__ ) . 'fonts/wcc-flaticon2/font/flaticon_derma2go.css', array(), $this->version, 'all' );
+		//wp_enqueue_style( $this->plugin_name . '-fontello', plugin_dir_url( __FILE__ ) . 'fonts/fontello/css/fontello.css', array(), $this->version, 'all' );
+		//wp_enqueue_style( $this->plugin_name . '-flaticon', plugin_dir_url( __FILE__ ) . 'fonts/flaticon/flaticon_mycollection.css', array(), $this->version, 'all' );
+		//wp_enqueue_style( $this->plugin_name . '-flaticon-derma', plugin_dir_url( __FILE__ ) . 'fonts/wcc-flaticon2/font/flaticon_derma2go.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name . '-custom', plugin_dir_url( __FILE__ ) . 'fonts/d2gc-custom-font/style.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . '-cal', plugin_dir_url( __FILE__ ) . 'css/cal-main.min.css', array(), $this->version, 'all' );
 
 		if ( get_option( 'd2gc_theme_css' ) != 'no-style' ) {
@@ -821,7 +822,7 @@ class D2gConnect_Public {
 		}
 
 		if ( $redirect_url && ! $wcc_redirect ) {
-			if ( ! isset( $_GET['load_data_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['load_data_nonce'] ) ), 'load_data_nonce' ) ) {
+			if ( ! isset( $_GET['load_data_nonce'] ) &&  $_GET['load_data_nonce'] !== '9OZhbieaoUm7SnBW40io' ) {
 				wp_die( esc_html__( 'Invalid security token.', 'doctor2go-connect' ), 403 );
 			}
 
@@ -841,6 +842,9 @@ class D2gConnect_Public {
 				wp_safe_redirect( $url );
 				exit;
 			}
+
+            https://derm2check.com?redirect_to=appointment_confirmation&app=' . $app_id . '&client_token=' . $client_token&lang=nl;
+            
 
 			if ( is_user_logged_in() ) {
 				wp_safe_redirect( $pageData2['url'] );

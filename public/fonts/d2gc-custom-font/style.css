@@ -1,0 +1,197 @@
+@font-face {
+  font-family: 'D2C-ico-v11';
+  src:
+    url('fonts/D2C-ico-v11.ttf?9dg7fj') format('truetype'),
+    url('fonts/D2C-ico-v11.woff?9dg7fj') format('woff'),
+    url('fonts/D2C-ico-v11.svg?9dg7fj#D2C-ico-v11') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'D2C-ico-v11' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.d2cif-arrow-down:before {
+  content: "\e933";
+}
+.d2cif-AI-search-2:before {
+  content: "\e910";
+}
+.d2cif-AI-Search:before {
+  content: "\e911";
+}
+.d2cif-AI:before {
+  content: "\e912";
+}
+.d2cif-Arrow-small-down:before {
+  content: "\e913";
+}
+.d2cif-arrow-small-left:before {
+  content: "\e914";
+}
+.d2cif-arrow-small-right:before {
+  content: "\e915";
+}
+.d2cif-Arrow-small-up:before {
+  content: "\e916";
+}
+.d2cif-arrow-up:before {
+  content: "\e917";
+}
+.d2cif-card-payment:before {
+  content: "\e918";
+}
+.d2cif-certified-full:before {
+  content: "\e919";
+}
+.d2cif-certified-line:before {
+  content: "\e91a";
+}
+.d2cif-clock-time:before {
+  content: "\e91b";
+}
+.d2cif-doctor-id-card:before {
+  content: "\e91c";
+}
+.d2cif-earth:before {
+  content: "\e91d";
+}
+.d2cif-eye:before {
+  content: "\e91e";
+}
+.d2cif-flash:before {
+  content: "\e91f";
+}
+.d2cif-heart-full:before {
+  content: "\e920";
+}
+.d2cif-home:before {
+  content: "\e921";
+}
+.d2cif-Image:before {
+  content: "\e922";
+}
+.d2cif-Info-full:before {
+  content: "\e923";
+}
+.d2cif-Info-line:before {
+  content: "\e924";
+}
+.d2cif-laptop-person:before {
+  content: "\e925";
+}
+.d2cif-medical:before {
+  content: "\e926";
+}
+.d2cif-mobile-in:before {
+  content: "\e927";
+}
+.d2cif-mobile-out:before {
+  content: "\e928";
+}
+.d2cif-pay-pal:before {
+  content: "\e929";
+}
+.d2cif-protected:before {
+  content: "\e92a";
+}
+.d2cif-reg-no:before {
+  content: "\e92b";
+}
+.d2cif-registration-id-card:before {
+  content: "\e92c";
+}
+.d2cif-secure-communication:before {
+  content: "\e92d";
+}
+.d2cif-star-full:before {
+  content: "\e92e";
+}
+.d2cif-star-half:before {
+  content: "\e92f";
+}
+.d2cif-star-line:before {
+  content: "\e930";
+}
+.d2cif-stripe:before {
+  content: "\e931";
+}
+.d2cif-Video-waiting:before {
+  content: "\e932";
+}
+.d2cif-waiting:before {
+  content: "\e937";
+}
+.d2cif-warning:before {
+  content: "\e938";
+}
+.d2cif-Zitat-full:before {
+  content: "\e939";
+}
+.d2cif-zitat-line:before {
+  content: "\e93a";
+}
+.d2cif-calendar:before {
+  content: "\e93b";
+}
+.d2cif-x:before {
+  content: "\e900";
+}
+.d2cif-youtube:before {
+  content: "\e901";
+}
+.d2cif-tiktok:before {
+  content: "\e902";
+}
+.d2cif-linked-in:before {
+  content: "\e903";
+}
+.d2cif-instagram:before {
+  content: "\e904";
+}
+.d2cif-facebook:before {
+  content: "\e905";
+}
+.d2cif-arrow-left:before {
+  content: "\e906";
+}
+.d2cif-arrow-right:before {
+  content: "\e907";
+}
+.d2cif-bubble:before {
+  content: "\e908";
+}
+.d2cif-heart:before {
+  content: "\e909";
+}
+.d2cif-landmark:before {
+  content: "\e90a";
+}
+.d2cif-magnify:before {
+  content: "\e90b";
+}
+.d2cif-mail:before {
+  content: "\e90c";
+}
+.d2cif-secure-login:before {
+  content: "\e90d";
+}
+.d2cif-user:before {
+  content: "\e90e";
+}
+.d2cif-video:before {
+  content: "\e90f";
+}

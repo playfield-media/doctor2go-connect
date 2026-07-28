@@ -218,8 +218,8 @@ jQuery(document).ready(function ($) {
     $('.opener').click(function () {
         $(this).next().slideToggle('slow');
         $(this).toggleClass('active');
-        $(this).find('span').toggleClass('icon-down-open');
-        $(this).find('span').toggleClass('icon-up-open');
+        $(this).find('span').toggleClass('d2cif-Arrow-small-down');
+        $(this).find('span').toggleClass('d2cif-Arrow-small-up');
     });
 
     // Scroll to anchor links
