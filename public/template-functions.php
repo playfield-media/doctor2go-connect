@@ -1147,7 +1147,7 @@ function d2gc_show_consultancy_tabs($post = '', $stand_alone = false){
 			<li class="nav-item" role="presentation">
 				<button class="nav-link active" id="email-tab" data-bs-toggle="tab" data-bs-target="#email-tab-pane" type="button" role="tab" aria-controls="email-tab-pane" aria-selected="true">
                     <span class="icon d2cif-mail font-medium"></span>
-                    <span class="not_mobile"><?php echo esc_html__( 'E-mail advice', 'doctor2go-connect' ); ?></span>
+                    <span class="not_mobile me-2"><?php echo esc_html__( 'E-mail advice', 'doctor2go-connect' ); ?></span>
 					<strong><?php echo esc_html( $d2g_profile_data->doctor_meta['written_con_currency'][0] . ' ' . $d2g_profile_data->doctor_meta['written_con_price'][0] ); ?></strong>
 				</button>
 			</li>
@@ -1155,7 +1155,7 @@ function d2gc_show_consultancy_tabs($post = '', $stand_alone = false){
 		<li class="nav-item calendar_button simple_hide" role="presentation">
 			<button class="nav-link" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar-tab-pane" type="button" role="tab" aria-controls="calendar-tab-pane" aria-selected="false">
                 <span class="icon d2cif-video font-medium"></span>
-                <span class="not_mobile"><?php echo esc_html__( 'Video consult', 'doctor2go-connect' ); ?></span>
+                <span class="not_mobile me-2"><?php echo esc_html__( 'Video consult', 'doctor2go-connect' ); ?></span>
 				<strong class="fillup_<?php echo esc_html( $post_ID ); ?>"><?php echo  wp_kses_post($d2g_profile_data->doctor_meta['d2g_tariffs'][0]) ; ?></strong>
 			</button>
 		</li>
@@ -1163,7 +1163,7 @@ function d2gc_show_consultancy_tabs($post = '', $stand_alone = false){
 			<li class="nav-item  walk_in_button simple_hide" role="presentation">
 				<button class="nav-link" id="walkin-tab" data-bs-toggle="tab" data-bs-target="#walkin-tab-pane" type="button" role="tab" aria-controls="walkin-tab-pane" aria-selected="false">
                     <span class="icon d2cif-Video-waiting font-medium"></span>
-                    <span class="not_mobile"><?php echo esc_html__( 'Walk-in consult', 'doctor2go-connect' ); ?></span>
+                    <span class="not_mobile me-2"><?php echo esc_html__( 'Walk-in consult', 'doctor2go-connect' ); ?></span>
 					<strong><?php echo esc_html( $d2g_profile_data->doctor_meta['walk_in_currency'][0] . ' ' . $d2g_profile_data->doctor_meta['walk_in_price'][0] ); ?></strong>
 				</button>
 			</li>
