@@ -821,7 +821,7 @@ function d2gc_show_booking_calendar( $post = '', $only_cal = false, $in_tabs = f
                             <span class="me-3"><strong><?php echo esc_html__( 'Video consult', 'doctor2go-connect' ); ?></strong></span>
                             <span class="price_wrapper">
                                 <span id="pay_cur2"></span> <span id="pay_price2"></span> <br>
-                                <small class="text-muted">(excl. VAT)</small>
+                                <small class="text-muted"><?php echo esc_html__( '(excl. VAT)', 'doctor2go-connect' ); ?></small>
                             </span>
                         </p>
                         <p class="text-muted mt-3"><?php echo esc_html__( '* These are mandatory fields', 'doctor2go-connect' ); ?></p>
@@ -1062,7 +1062,7 @@ function d2gc_show_walkin_form() {
                     <span class="me-3"><strong><?php echo esc_html__( 'Walk-in consult', 'doctor2go-connect' ); ?></strong></span>
                     <span class="price_wrapper">
                         <strong><?php echo esc_html( $d2g_profile_data->doctor_meta['walk_in_currency'][0] . ' ' . $d2g_profile_data->doctor_meta['walk_in_price'][0] ); ?></strong><br>
-                        <small class="text-muted">(excl. VAT)</small>
+                        <small class="text-muted"><?php echo esc_html__( '(excl. VAT)', 'doctor2go-connect' ); ?></small>
                     </span>
                 </p>
 

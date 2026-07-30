@@ -199,7 +199,7 @@ if ( is_user_logged_in() ) {
                         <span class="me-3"><strong><?php echo esc_html__( 'E-mail advice', 'doctor2go-connect' ); ?></strong></span>
                         <span class="price_wrapper">
                             <strong><?php echo esc_html( $d2g_profile_data->doctor_meta['written_con_currency'][0] . ' ' . $d2g_profile_data->doctor_meta['written_con_price'][0] ); ?></strong><br>
-                            <small class="text-muted">(excl. VAT)</small>
+                            <small class="text-muted"><?php echo esc_html__( '(excl. VAT)', 'doctor2go-connect' ); ?></small>
                         </span>
                     </p>
                     <?php if ( get_option( 'd2gc_recaptcha_site_key' ) ) { ?>
