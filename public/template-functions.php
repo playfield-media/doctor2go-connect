@@ -1381,7 +1381,7 @@ function d2gc_single_appointment($appointment, $docObj, $client_token, $timezone
 		$questionnaireLink = '<a class="btn btn-outline-primary payment_btn w-100 mb-2" target="_blank" href="'.$pageAppConf.'?app='.$appointment->_id.'&client_token='.$client_token.'"><span class="flaticon-medical-information"></span> '.esc_html__( 'intake quesionnaire', 'doctor2go-connect' ).'</a>';
 	}
 	$consultLink 		= '<a class="button btn-primary btn invert mb-2 w-100" target="_blank" href="' . get_option( 'd2gc_waiting_room_url' ) . 'wachtkamer/' . $appointment->token . '?locale=' . explode( '_', get_locale() )[0] . '">' . esc_html__( 'go to consultation', 'doctor2go-connect' ) . '</a>';
-	$contactBtn      	= '<a class="prep_cancellation_email contact_link scroll_to w-100 fancybox_spec " href="#cancellation_form_wrapper" data-app-date="'.$date->format("d/m/Y").' '. esc_html__(' at ', 'doctor2go-connect').' ' .$date->format("H:i").'  ('.$timezone.')" data-app-link="'.get_option('d2gc_waiting_room_url').'admin/appointments/'.$appointment->_id.'" data-doc-email="'.$doc_email.'" data-doc-name="'.$docObj->post_title.'"><span class=" icon-mail"></span> '. esc_html__('contact doctor', 'doctor2go-connect').'</a>';
+	$contactBtn      	= '<a class="prep_cancellation_email contact_link scroll_to w-100 fancybox_spec " href="#cancellation_form_wrapper" data-app-date="'.$date->format("d/m/Y").' '. esc_html__(' at ', 'doctor2go-connect').' ' .$date->format("H:i").'  ('.$timezone.')" data-app-link="'.get_option('d2gc_waiting_room_url').'admin/appointments/'.$appointment->_id.'" data-doc-email="'.$doc_email.'" data-doc-name="'.$docObj->post_title.'"><span class="d2cif-mail icon"></span> '. esc_html__('contact doctor', 'doctor2go-connect').'</a>';
 	
 	if ( $diffInSeconds <= 0 || $diffInSeconds > 86400 ) {
 		$delBtn 		= '<a class="del_app button btn-danger btn w-100 mb-2" href="#" data-app-id="' . $appointment->_id . '" data-user-id="' . $appointment->user_id . '"><span class=" icon-cancel-circled"></span> ' . esc_html__( 'cancel appointment', 'doctor2go-connect' ) . '<span class="btn-spinner spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span></a>';
@@ -1418,7 +1418,7 @@ function d2gc_single_appointment($appointment, $docObj, $client_token, $timezone
 			<div class="content_outer p-3">
 				<div class="content">
 					<p class="consult_type"><strong>' . esc_html__( 'Physical consultation', 'doctor2go-connect' ) . '</strong></p>
-					<h3 class="mb-1">' . $date->format( 'd/m/Y' ) . '<br><span class="thin">' . esc_html__( ' at ', 'doctor2go-connect' ) . ' ' . $date->format( 'H:i' ) . ' (' . $timezone . ')</span></h3>
+					<h3 class="mb-1"><span class="icon me-2 d2cif-calendar"></span> ' . $date->format( 'd/m/Y' ) . '<br><span class="icon me-2 d2cif-clock-time"></span> <span class="thin">' . $date->format( 'H:i' ) . ' (' . $timezone . ')</span></h3>
 					<a href="' . get_the_permalink( $docObj->ID ) . '"><h4>' . $docObj->post_title . '</h4></a>
 					<p class="address">' . $appointment->location_to_go->location_name . ': ' . $appointment->location_to_go->location_full_adress_url . '</p>
                     ' . $contactBtn . '
@@ -1432,7 +1432,7 @@ function d2gc_single_appointment($appointment, $docObj, $client_token, $timezone
 			<div class="content_outer p-3">
 				<div class="content">
 					<p class="consult_type"><strong>' . esc_html__( 'Online consultation', 'doctor2go-connect' ) . '</strong></p>
-					<h3 class="mb-1">' . $date->format( 'd/m/Y' ) . '<br><span class="thin">' . esc_html__( ' at ', 'doctor2go-connect' ) . ' ' . $date->format( 'H:i' ) . ' (' . $timezone . ')</span></h3>
+					<h3 class="mb-1"><span class="icon me-2 d2cif-calendar"></span> ' . $date->format( 'd/m/Y' ) . '<br><span class="icon me-2 d2cif-clock-time"></span> <span class="thin">' . $date->format( 'H:i' ) . ' (' . $timezone . ')</span></h3>
 					<a href="' . get_the_permalink( $docObj->ID ) . '"><h4>' . $docObj->post_title . '</h4></a>
                     ' . $contactBtn . '
 				</div> 	

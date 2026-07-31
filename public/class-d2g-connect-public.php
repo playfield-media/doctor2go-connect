@@ -781,7 +781,7 @@ class D2gConnect_Public {
 		$user_key     = isset( $_GET['user_key'] ) ? sanitize_text_field( wp_unslash( $_GET['user_key'] ) ) : '';
 		$time         = isset( $_GET['time'] ) ? absint( wp_unslash( $_GET['time'] ) ) : 0;
 		$hash         = isset( $_GET['hash'] ) ? sanitize_text_field( wp_unslash( $_GET['hash'] ) ) : '';
-		$app_id       = isset( $_GET['app'] ) ? absint( wp_unslash( $_GET['app'] ) ) : 0;
+		$app_id       = isset( $_GET['app'] ) ? sanitize_text_field( wp_unslash( $_GET['app'] ) ) : 0;
 		$client_token = isset( $_GET['client_token'] ) ? sanitize_text_field( wp_unslash( $_GET['client_token'] ) ) : '';
 
 		if ( $user_key ) {
@@ -843,8 +843,11 @@ class D2gConnect_Public {
 				exit;
 			}
 
-            https://derm2check.com?redirect_to=appointment_confirmation&app=' . $app_id . '&client_token=' . $client_token&lang=nl;
-            
+            if ( $redirect_url === 'doctors' ) {
+				$url = $d2gAdmin::d2gc_page_url( $lang, $redirect_url, false );
+				wp_safe_redirect( $url );
+				exit;
+			}
 
 			if ( is_user_logged_in() ) {
 				wp_safe_redirect( $pageData2['url'] );
