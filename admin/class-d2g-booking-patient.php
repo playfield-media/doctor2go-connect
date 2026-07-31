@@ -437,8 +437,8 @@ class D2G_booking_wcc_user {
             }
 
             if ( ! empty( $docOrgKey ) && ! isset( $tokens[ $docOrgKey ] ) ) {
-                $ids[ $docOrgKey ]    = $client['id'];
-                $tokens[ $docOrgKey ] = $client['authentication_token'];
+                $ids[ $docOrgKey ]    = $client->id;
+                $tokens[ $docOrgKey ] = $client->authentication_token;
 
                 update_user_meta( $currUser->ID, 'ids', $ids );
                 update_user_meta( $currUser->ID, 'tokens', $tokens );
@@ -630,6 +630,7 @@ class D2G_booking_wcc_user {
 
 		$response_body = json_decode( wp_remote_retrieve_body( $response ) );
 
+
 		if ( isset( $response_body->client->id ) && is_user_logged_in() ) {
 			$client = $response_body->client;
 
@@ -645,8 +646,8 @@ class D2G_booking_wcc_user {
             }
 
             if ( ! empty( $docOrgKey ) && ! isset( $tokens[ $docOrgKey ] ) ) {
-                $ids[ $docOrgKey ]    = $client['id'];
-                $tokens[ $docOrgKey ] = $client['authentication_token'];
+                $ids[ $docOrgKey ]    = $client->id;
+                $tokens[ $docOrgKey ] = $client->authentication_token;
 
                 update_user_meta( $currUser->ID, 'ids', $ids );
                 update_user_meta( $currUser->ID, 'tokens', $tokens );
