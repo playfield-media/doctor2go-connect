@@ -656,7 +656,7 @@ class D2G_booking_wcc_user {
 
 		if ( isset( $response_body->url ) ) {
 			$questionnaire_url = 'https://' . $orgSlug . $baseUrl . $response_body->url;
-			$redirect_url      = $questionnaire_url . '?redirect_url=' . urlencode( $confirmation_url ) . '&booked_consult=email&skip_cookie_wall=true';
+			$redirect_url      = $questionnaire_url . '?redirect_url=' . urlencode( $confirmation_url ) . '&booked_consult=email&skip_cookie_wall=true&locale=' . $currLang;
 
 			wp_send_json_success(
 				array(
