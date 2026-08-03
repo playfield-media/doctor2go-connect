@@ -2560,6 +2560,12 @@ class D2gConnect_Shortcodes {
 				<?php } ?>
 			</div>
 		</div>
+        <?php if ( '1' === get_option( 'd2gc_activate_2fa_link' ) ) { ?>
+			<div class="btn_wrapper alignwide mt-5 mb-5 alert alert-info">
+                <h4 class="h4"><?php esc_html_e( 'For your security, we recommend that you enable two-factor authentication (2FA) for your account.', 'doctor2go-connect' ); ?></h4>
+				<a class="btn btn-primary" href="/wp/wp-login.php?itsec_after_interstitial=2fa-on-board"><?php esc_html_e( 'configure 2FA', 'doctor2go-connect' ); ?></a>
+			</div>
+		<?php } ?>
 		<?php
 		/* Get the buffered content into a var */
 		$sc = ob_get_contents();
@@ -2917,8 +2923,9 @@ class D2gConnect_Shortcodes {
 		</div>
 
 		<?php if ( '1' === get_option( 'd2gc_activate_2fa_link' ) ) { ?>
-			<div class="btn_wrapper">
-				<a class="btn btn-outline-primary" href="/wp/wp-login.php?itsec_after_interstitial=2fa-on-board"><?php esc_html_e( 'configure 2FA', 'doctor2go-connect' ); ?></a>
+			<div class="btn_wrapper alignwide mt-5 mb-5 alert alert-info">
+                <h4 class="h4"><?php esc_html_e( 'For your security, we recommend that you enable two-factor authentication (2FA) for your account.', 'doctor2go-connect' ); ?></h4>
+				<a class="btn btn-primary" href="/wp/wp-login.php?itsec_after_interstitial=2fa-on-board"><?php esc_html_e( 'configure 2FA', 'doctor2go-connect' ); ?></a>
 			</div>
 		<?php } ?>
 

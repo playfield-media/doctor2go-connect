@@ -783,6 +783,8 @@ class D2gConnect_Public {
 		$hash         = isset( $_GET['hash'] ) ? sanitize_text_field( wp_unslash( $_GET['hash'] ) ) : '';
 		$app_id       = isset( $_GET['app'] ) ? sanitize_text_field( wp_unslash( $_GET['app'] ) ) : 0;
 		$client_token = isset( $_GET['client_token'] ) ? sanitize_text_field( wp_unslash( $_GET['client_token'] ) ) : '';
+        $client_id    = isset( $_GET['client_id'] ) ? sanitize_text_field( wp_unslash( $_GET['client_id'] ) ) : 0;
+		$client_auth = isset( $_GET['client_auth'] ) ? sanitize_text_field( wp_unslash( $_GET['client_auth'] ) ) : '';
 
 		if ( $user_key ) {
 			$super_key = (string) get_option( 'd2gc_wcc_token' );
@@ -836,6 +838,20 @@ class D2gConnect_Public {
 					array(
 						'app'          => $app_id,
 						'client_token' => $client_token,
+					),
+					$url
+				);
+				wp_safe_redirect( $url );
+				exit;
+			}
+
+
+            if ( $redirect_url === 'patient_registration' ) {
+				$url = $d2gAdmin::d2gc_page_url( $lang, $redirect_url, false );
+				$url = add_query_arg(
+					array(
+                        'client_id'   => $client_id,
+						'client_auth' => $client_auth,
 					),
 					$url
 				);
