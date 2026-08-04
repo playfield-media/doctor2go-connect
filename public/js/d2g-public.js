@@ -829,6 +829,9 @@ jQuery(document).ready(function ($) {
         $(document).on('click', '.start_written_con', function (event) {
             event.preventDefault();
 
+            var $btn = $(this);
+            $btn.prop('disabled', true); // deactivate the button
+
             var checker_message = '';
             var checker = false;
 

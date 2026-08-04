@@ -514,6 +514,9 @@
         $('#submit_booking').off('click').on('click', function (e) {
             e.preventDefault();
 
+            var $btn = $(this);
+            $btn.prop('disabled', true); // deactivate the button
+
             if ($('#tel_number').is(':checked')) {
                 return false;
             }
@@ -613,6 +616,8 @@
                             d2gStoreBookingConfirmation(response);
                             d2gRenderBookingConfirmation();
                             $('#loader_booking').hide();
+                            $btn.prop('disabled', false); // deactivate the button
+                            $('#booking_form_wrapper').addClass('simple_hide');
                         } else {
                             var answer = '<p>' + d2gBookingVars.i18n.error_general + '</p>';
                             $('#error').html(answer).removeClass('simple_hide');
