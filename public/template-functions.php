@@ -102,6 +102,95 @@ function d2gc_setup_profile_data( $post ) {
 }
 
 
+/**
+ * Build a schema.org Physician array from a doctor's profile data object.
+ *
+ * @param D2G_ProfileData $profile_data Doctor profile data (e.g. global $d2g_profile_data).
+ * @return array|false Physician schema data, or false when there's no doctor to describe.
+ */
+function d2gc_get_doctor_physician_schema( $profile_data ) {
+	if ( ! $profile_data || empty( $profile_data->doctor ) ) {
+		return false;
+	}
+
+	$meta  = $profile_data->doctor_meta;
+	$title = trim( $meta['d2g_emp_title'][0] ?? '' );
+	if ( $title !== '' && substr( $title, -1 ) !== '.' ) {
+		$title .= '.';
+	}
+	$name = trim( $title . ' ' . ( $meta['d2g_first_name'][0] ?? '' ) . ' ' . ( $meta['d2g_last_name'][0] ?? '' ) );
+	if ( $name === '' ) {
+		$name = get_the_title( $profile_data->doctor );
+	}
+
+	$schema = array(
+		'@type' => 'Physician',
+		'name'  => $name,
+		'url'   => get_permalink( $profile_data->doctor ),
+	);
+
+	if ( ! empty( $profile_data->feat_pic_full ) ) {
+		$schema['image'] = $profile_data->feat_pic_full;
+	}
+
+	if ( is_array( $profile_data->specialties ) ) {
+		// Not schema.org's fixed MedicalSpecialty enum: our specialty terms are freeform
+		// clinic labels (e.g. "Mohs surgery"), so knowsAbout is the valid, unrestricted fit.
+		$schema['knowsAbout'] = wp_list_pluck( $profile_data->specialties, 'name' );
+	}
+
+	if ( is_array( $profile_data->languages ) ) {
+		// availableLanguage isn't a recognized Physician property; it belongs on a ContactPoint.
+		$schema['contactPoint'] = array(
+			'@type'             => 'ContactPoint',
+			'availableLanguage' => wp_list_pluck( $profile_data->languages, 'name' ),
+		);
+	}
+
+	if ( is_array( $profile_data->countries ) && ! empty( $profile_data->countries[0]->slug ) ) {
+		$schema['address'] = array(
+			'@type'          => 'PostalAddress',
+			'addressCountry' => strtoupper( $profile_data->countries[0]->slug ),
+		);
+	}
+
+	$offers = array();
+
+	if ( ! empty( $meta['written_con_price'][0] ) ) {
+		$offers[] = array(
+			'@type'         => 'Offer',
+			'name'          => __( 'Email dermatology advice', 'doctor2go-connect' ),
+			'price'         => $meta['written_con_price'][0],
+			'priceCurrency' => $meta['written_con_currency'][0] ?? 'EUR',
+			'availability'  => 'https://schema.org/InStock',
+		);
+	}
+
+	if ( ! empty( $meta['walk_in_price'][0] ) ) {
+		$offers[] = array(
+			'@type'         => 'Offer',
+			'name'          => __( 'Walk-in video consultation', 'doctor2go-connect' ),
+			'price'         => $meta['walk_in_price'][0],
+			'priceCurrency' => $meta['walk_in_currency'][0] ?? 'EUR',
+			'availability'  => ! empty( $meta['d2g_walk_in'][0] ) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+		);
+	}
+
+	if ( ! empty( $offers ) ) {
+		$schema['makesOffer'] = $offers;
+	}
+
+	// worksFor is a Person property; Physician is typed as an Organization, so use parentOrganization instead.
+	$schema['parentOrganization'] = array(
+		'@type' => 'MedicalOrganization',
+		'name'  => get_bloginfo( 'name' ),
+		'url'   => home_url( '/' ),
+	);
+
+	return $schema;
+}
+
+
 /*
 *retrives the template file
 */
