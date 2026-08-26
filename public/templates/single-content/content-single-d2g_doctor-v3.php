@@ -94,5 +94,16 @@ $post_ID		 = $d2g_profile_data->doctor_profile_ID;
 		</div>  
 	</div>
 </article>
-
-
+<?php
+$d2g_physician_schema = function_exists( 'd2gc_get_doctor_physician_schema' ) ? d2gc_get_doctor_physician_schema( $d2g_profile_data ) : false;
+if ( $d2g_physician_schema ) :
+    ?>
+    <script type="application/ld+json">
+        <?php
+        echo wp_json_encode(
+            array_merge( array( '@context' => 'https://schema.org' ), $d2g_physician_schema ),
+            JSON_UNESCAPED_SLASHES
+        );
+        ?>
+    </script>
+<?php endif; ?>

@@ -147,10 +147,41 @@ function d2gc_get_doctor_physician_schema( $profile_data ) {
 		);
 	}
 
+	$address = array( '@type' => 'PostalAddress' );
+
+	if ( ! empty( $meta['d2g_address'][0] ) ) {
+		$address['streetAddress'] = $meta['d2g_address'][0];
+	}
+
+	if ( ! empty( $meta['d2g_zip'][0] ) ) {
+		$address['postalCode'] = $meta['d2g_zip'][0];
+	}
+
+	if ( ! empty( $meta['d2g_city'][0] ) ) {
+		$address['addressLocality'] = $meta['d2g_city'][0];
+	}
+
 	if ( is_array( $profile_data->countries ) && ! empty( $profile_data->countries[0]->slug ) ) {
-		$schema['address'] = array(
-			'@type'          => 'PostalAddress',
-			'addressCountry' => strtoupper( $profile_data->countries[0]->slug ),
+		$address['addressCountry'] = strtoupper( $profile_data->countries[0]->slug );
+	} elseif ( ! empty( $meta['reg_country'][0] ) ) {
+		$address['addressCountry'] = $meta['reg_country'][0];
+	}
+
+	if ( count( $address ) > 1 ) {
+		$schema['address'] = $address;
+	}
+
+	if ( ! empty( $meta['tel'][0] ) ) {
+		$schema['telephone'] = $meta['tel'][0];
+	} elseif ( ! empty( $meta['d2g_mobile'][0] ) ) {
+		$schema['telephone'] = $meta['d2g_mobile'][0];
+	}
+
+	if ( ! empty( $meta['reg_nr'][0] ) ) {
+		$schema['identifier'] = array(
+			'@type' => 'PropertyValue',
+			'name'  => __( 'Medical registration number', 'doctor2go-connect' ),
+			'value' => $meta['reg_nr'][0],
 		);
 	}
 
@@ -173,6 +204,19 @@ function d2gc_get_doctor_physician_schema( $profile_data ) {
 			'price'         => $meta['walk_in_price'][0],
 			'priceCurrency' => $meta['walk_in_currency'][0] ?? 'EUR',
 			'availability'  => ! empty( $meta['d2g_walk_in'][0] ) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+		);
+	}
+
+	// d2g_tariffs is a pre-formatted "CUR 12.34" display string (see d2gc_cb_d2g_info_box()),
+	// gated on d2g_availability_check since that's what turns scheduled video booking on.
+	if ( ! empty( $meta['d2g_availability_check'][0] ) && ! empty( $meta['d2g_tariffs'][0] )
+		&& preg_match( '/^([A-Z]{3})\s*([\d.,]+)$/', trim( $meta['d2g_tariffs'][0] ), $tariff_match ) ) {
+		$offers[] = array(
+			'@type'         => 'Offer',
+			'name'          => __( 'Video consultation', 'doctor2go-connect' ),
+			'price'         => $tariff_match[2],
+			'priceCurrency' => $tariff_match[1],
+			'availability'  => 'https://schema.org/InStock',
 		);
 	}
 
