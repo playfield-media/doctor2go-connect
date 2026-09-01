@@ -826,6 +826,16 @@ jQuery(document).ready(function ($) {
 
     if (d && d.ajax && d.msg && d.recaptcha) {
 
+        // Shows an error in #written_con_error and re-activates the submit button so the
+        // user can retry - either after fixing invalid fields, or after a failed request.
+        function showWrittenConError($btn, message) {
+            $btn.prop('disabled', false);
+            $('#written_con_error')
+                .html(message || 'Something went wrong while sending your request. Please try again.')
+                .removeClass('simple_hide');
+            $('body').scrollTo('#written_con_error', { duration: 'fast', offset: -180 });
+        }
+
         $(document).on('click', '.start_written_con', function (event) {
             event.preventDefault();
 
@@ -980,10 +990,19 @@ jQuery(document).ready(function ($) {
                                 console.log(response);
                                 if (response && response.data && response.data.redirect_url) {
                                     window.location.href = response.data.redirect_url;
+                                    // Leave the button disabled: we're navigating away.
+                                    return;
                                 }
+
+                                // The backend responds with a bare "0"/no redirect_url on failure
+                                // (nonce/recaptcha/validation failures all just return false server-side),
+                                // so treat "no redirect_url" as an error rather than doing nothing.
+                                var serverMessage = response && response.data && response.data.message;
+                                showWrittenConError($btn, serverMessage);
                             },
                             error: function (xhr, textStatus, errorThrown) {
                                 console.log(errorThrown);
+                                showWrittenConError($btn);
                             },
                             complete: function () {
                                 $('#loader').hide();
@@ -993,15 +1012,11 @@ jQuery(document).ready(function ($) {
                     .catch(function (error) {
                         console.error('Image/PDF handling failed:', error);
                         $('#loader').hide();
-                        $('#written_con_error')
-                            .html('An error occurred while processing the files.')
-                            .removeClass('simple_hide');
+                        showWrittenConError($btn, 'An error occurred while processing the files.');
                     });
 
             } else {
-                $('#written_con_error').html(checker_message).removeClass('simple_hide');
-                $('body').scrollTo('#written_con_error', { duration: 'fast', offset: -180});
-                return false;
+                showWrittenConError($btn, checker_message);
             }
 
             return false;

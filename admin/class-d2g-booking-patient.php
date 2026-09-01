@@ -459,6 +459,9 @@ class D2G_booking_wcc_user {
 
 		// Verify nonce early and bail on failure.
 		if ( ! isset( $_POST['email_advice_form_nonce'] )|| ! wp_verify_nonce(sanitize_text_field( wp_unslash( $_POST['email_advice_form_nonce'] ) ), 'email_advice_form_action')) {
+			if ( get_option( 'd2g_debug' ) == 1 ) {
+				error_log( 'D2GC written consult: nonce missing or invalid.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging.
+			}
 			return false; // stop processing immediately
 		}
 
@@ -481,12 +484,18 @@ class D2G_booking_wcc_user {
 			);
 
 			if ( is_wp_error( $recaptcha_verify ) ) {
+				if ( get_option( 'd2g_debug' ) == 1 ) {
+					error_log( 'D2GC written consult: reCAPTCHA request failed: ' . $recaptcha_verify->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging.
+				}
 				return false;
 			}
 
 			$recaptcha_result = json_decode( wp_remote_retrieve_body( $recaptcha_verify ) );
 
 			if ( empty( $recaptcha_result ) || empty( $recaptcha_result->success ) ) {
+				if ( get_option( 'd2g_debug' ) == 1 ) {
+					error_log( 'D2GC written consult: reCAPTCHA verification unsuccessful: ' . print_r( $recaptcha_result, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Debug logging.
+				}
 				return false;
 			}
 		}
@@ -625,6 +634,9 @@ class D2G_booking_wcc_user {
 		);
 
 		if ( is_wp_error( $response ) ) {
+			if ( get_option( 'd2g_debug' ) == 1 ) {
+				error_log( 'D2GC written consult: WCC API request failed: ' . $response->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging.
+			}
 			wp_die( esc_html__( 'There has been an error.', 'doctor2go-connect' ) );
 		}
 
@@ -665,6 +677,9 @@ class D2G_booking_wcc_user {
 			);
 		}
 
+		if ( get_option( 'd2g_debug' ) == 1 ) {
+			error_log( 'D2GC written consult: WCC API responded without a url. Response body: ' . wp_remote_retrieve_body( $response ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging.
+		}
 		wp_die( esc_html__( 'There has been an error.', 'doctor2go-connect' ) );
 	}
 

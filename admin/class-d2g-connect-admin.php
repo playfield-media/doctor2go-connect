@@ -615,7 +615,8 @@ class D2gConnect_Admin {
 			'd2gc_bootstrap_js' => 'absint',
 			'd2gc_activate_sso' => 'absint',
 			'd2gc_activate_custom_password_mail' => 'absint',
-			'd2gc_activate_custom_login_registration' => 'absint'
+			'd2gc_activate_custom_login_registration' => 'absint',
+			'd2g_debug' => 'absint',
 		);
 
 		foreach ( $settings_with_callbacks as $setting => $callback ) {
